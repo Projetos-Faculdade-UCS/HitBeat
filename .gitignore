@@ -1,0 +1,3 @@
+target/classes/hitbeat/*
+target/test-classes/hitbeat/*
+.vscode/*
