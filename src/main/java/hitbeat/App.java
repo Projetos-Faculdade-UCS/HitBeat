@@ -1,18 +1,14 @@
 package hitbeat;
-import javafx.application.Application;
-import javafx.stage.Stage;
+
+import hitbeat.gui.Index;
 /**
  * Hello world!
  *
  */
-public class App extends Application
+public class App
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
+        Index.main(args);
     }
-    
-    @Override     
-    public void start(Stage primaryStage) throws Exception {      
-    }    
 }
