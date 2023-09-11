@@ -1,6 +1,5 @@
 package hitbeat;
 
-import hitbeat.gui.Index;
 /**
  * Hello world!
  *

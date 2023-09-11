@@ -1,4 +1,4 @@
-package hitbeat.gui;
+package hitbeat;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -12,8 +12,9 @@ public class Index extends Application{
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root, 300, 250);
 
-        // scene.getStylesheets().add(
-        //     getClass().getResource("index.css").toExternalForm());
+        
+        String path_name = getClass().getResource("css/index.css").toExternalForm();
+        System.out.printf("path do css: %s", path_name);
 
         primaryStage.setTitle("HitBeat");
         primaryStage.setScene(scene);
