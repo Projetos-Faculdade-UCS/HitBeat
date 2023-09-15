@@ -12,9 +12,8 @@ public class Index extends Application{
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root, 300, 250);
 
-        
-        String path_name = getClass().getResource("css/index.css").toExternalForm();
-        System.out.printf("path do css: %s", path_name);
+        scene.getStylesheets().add(
+            getClass().getResource("css/index.css").toExternalForm());
 
         primaryStage.setTitle("HitBeat");
         primaryStage.setScene(scene);
