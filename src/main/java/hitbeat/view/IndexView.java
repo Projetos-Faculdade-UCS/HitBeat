@@ -32,10 +32,13 @@ public class IndexView extends Application {
         // Content area
         CenterOne content = new CenterOne();
 
+        Footer footer = new Footer();
+
         root.setLeft(sidebar);
         root.setCenter(content);
+        root.setBottom(footer);
 
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 800, 700);
         scene.getStylesheets().add(
             getClass().getResource("/hitbeat/css/index.css").toExternalForm());
         MFXThemeManager.addOn(scene, Themes.DEFAULT);
