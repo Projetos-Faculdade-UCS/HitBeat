@@ -1,20 +1,20 @@
 package hitbeat;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.css.themes.MFXThemeManager;
+import io.github.palexdev.materialfx.css.themes.Themes;
 import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
-import javafx.stage.Stage;
 import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 public class Index extends Application{
     
     @Override
     public void start(Stage primaryStage) throws Exception {
-        BorderPane root = new BorderPane();
+        Group root = new Group();
         Scene scene = new Scene(root, 300, 250);
+        MFXThemeManager.addOn(scene, Themes.DEFAULT, Themes.DEFAULT);
 
         scene.getStylesheets().add(
             getClass().getResource("css/index.css").toExternalForm());
@@ -23,13 +23,9 @@ public class Index extends Application{
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        String source = getClass().getResource("media/HitBeat.mp4").toString();
-        Media media = new Media(source);
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setAutoPlay(true);
 
-        MediaView mediaView = new MediaView(mediaPlayer);
-        ((Group) scene.getRoot()).getChildren().add(mediaView);
+        MFXButton button = new MFXButton("Play");
+        root.getChildren().add(button);
     }
 
     public static void main(String[] args) {
