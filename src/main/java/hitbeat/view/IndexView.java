@@ -90,7 +90,7 @@ public class IndexView extends Application {
 
     private MFXButton createBackButton() {
         ImageView backButtonImageView = new ImageView(
-            new Image(getClass().getResourceAsStream("/hitbeat/png/back-button.png"))
+            new Image(getClass().getResourceAsStream("/hitbeat/images/back-button.png"))
         );
 
         backButtonImageView.setFitHeight(BACK_BUTTON_HEIGHT);

@@ -4,8 +4,8 @@ import hitbeat.styles.Styles;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.shape.SVGPath;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.SVGPath;
 
 public class PlayPauseBtn extends MFXButton{
     

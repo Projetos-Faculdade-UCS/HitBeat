@@ -2,18 +2,14 @@ package hitbeat.view.footer;
 
 import hitbeat.styles.Styles;
 import io.github.palexdev.materialfx.controls.MFXButton;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
-import javafx.util.Duration;
 
 
 public class Footer extends HBox{
