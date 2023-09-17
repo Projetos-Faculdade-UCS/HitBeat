@@ -7,27 +7,36 @@ import javafx.scene.layout.Pane;
 
 public class CenterOne extends Widget {
 
-    private Label contentLabel;
+    private static final String CONTENT_LABEL_STYLE = "-fx-font-size: 20px; -fx-text-fill: #2195f3;";
 
-    public CenterOne() {
-        contentLabel = new Label("Welcome to the CenterOne!");
-    }
+    private Label contentLabel;
 
     @Override
     public Node build() {
-        contentLabel.setStyle("-fx-font-size: 20px; -fx-text-fill: #2195f3;");
+        getLabel().setStyle(CONTENT_LABEL_STYLE);
 
-        Pane container = new Pane(contentLabel);
+        Pane container = new Pane(getLabel());
 
-        contentLabel.layoutXProperty().bind(
-                container.widthProperty().subtract(contentLabel.widthProperty()).divide(2));
-        contentLabel.layoutYProperty().bind(
-                container.heightProperty().subtract(contentLabel.heightProperty()).divide(2));
+        centerLabelInPane(container);
 
         return container;
     }
 
+    private Label getLabel() {
+        if (contentLabel == null) {
+            contentLabel = new Label("Welcome to the CenterOne!");
+        }
+        return contentLabel;
+    }
+
+    private void centerLabelInPane(Pane container) {
+        contentLabel.layoutXProperty().bind(
+                container.widthProperty().subtract(contentLabel.widthProperty()).divide(2));
+        contentLabel.layoutYProperty().bind(
+                container.heightProperty().subtract(contentLabel.heightProperty()).divide(2));
+    }
+
     public void setContentText(String text) {
-        contentLabel.setText(text);
+        getLabel().setText(text);
     }
 }

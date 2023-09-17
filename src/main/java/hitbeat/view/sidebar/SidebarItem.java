@@ -1,4 +1,4 @@
-package hitbeat.view.base.widgets.sidebar;
+package hitbeat.view.sidebar;
 
 import hitbeat.styles.Styles;
 import hitbeat.view.base.widgets.Widget;
@@ -7,9 +7,11 @@ import javafx.scene.Node;
 
 public class SidebarItem extends Widget {
 
-    private String text;
-    private Node icon;
-    private Runnable onClick;
+    private static final double BUTTON_MIN_WIDTH = 200;
+
+    private final String text;
+    private final Node icon;
+    private final Runnable onClick;
 
     public SidebarItem(String text, Node icon, Runnable onClick) {
         this.text = text;
@@ -19,11 +21,14 @@ public class SidebarItem extends Widget {
 
     @Override
     public Node build() {
+        return setupButton();
+    }
+
+    private MFXButton setupButton() {
         MFXButton button = new MFXButton(text, icon);
-        button.setMinWidth(200);
+        button.setMinWidth(BUTTON_MIN_WIDTH);
         button.setStyle(Styles.SIDEBAR_BUTTONS);
         button.setOnAction(e -> onClick.run());
         return button;
     }
-
 }

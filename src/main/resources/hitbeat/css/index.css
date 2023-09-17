@@ -3,7 +3,6 @@
     -fx-text-fill: blue;
 }
 
-/* grey dark background for scene */
 .root {
     -fx-background-color: #212121;
 }

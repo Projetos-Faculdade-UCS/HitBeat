@@ -4,8 +4,8 @@ import hitbeat.styles.Styles;
 import hitbeat.view.base.mementos.ContentCaretaker;
 import hitbeat.view.base.mementos.ContentMemento;
 import hitbeat.view.base.widgets.Widget;
-import hitbeat.view.base.widgets.sidebar.Sidebar;
 import hitbeat.view.footer.Footer;
+import hitbeat.view.sidebar.Sidebar;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.css.themes.MFXThemeManager;
 import io.github.palexdev.materialfx.css.themes.Themes;
@@ -23,20 +23,18 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class IndexView extends Application {
+    private static final double BACK_BUTTON_HEIGHT = 30;
+    private static final double BACK_BUTTON_WIDTH = 30;
+
     private BorderPane root;
     private Scene scene;
     private Sidebar sidebar;
     private Node content;
-
     private ContentCaretaker caretaker = new ContentCaretaker();
-
-    public IndexView() {
-        super();
-        content = new StartPage().build();
-    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        content = new StartPage().build();
         root = new BorderPane();
 
         // Sidebar
@@ -67,9 +65,6 @@ public class IndexView extends Application {
         primaryStage.setScene(scene);
         primaryStage.setTitle("Index Page");
         primaryStage.show();
-
-        // Activate MaterialFX
-        activateMaterialFX();
     }
 
     public void restoreLastState() {
@@ -78,45 +73,52 @@ public class IndexView extends Application {
     }
 
     public void setContent(Widget contentWidget) {
-        ContentMemento memento = saveToMemento(root.getCenter());
-        caretaker.addMemento(memento);
+        caretaker.addMemento(saveToMemento(root.getCenter()));
 
         this.content = contentWidget.build();
+        root.setCenter(wrapContentWithBackButton());
+    }
 
-        // Wrap content in StackPane
-        StackPane contentWrapper = new StackPane();
-        contentWrapper.getChildren().add(this.content);
+    private StackPane wrapContentWithBackButton() {
+        StackPane contentWrapper = new StackPane(this.content);
+        MFXButton backButton = createBackButton();
 
-        // Create the back button with the icon
-        Image backButtonImage = new Image(getClass().getResourceAsStream("/hitbeat/png/back-button.png"));
-        ImageView backButtonImageView = new ImageView(backButtonImage);
-        backButtonImageView.setFitHeight(30); // Adjust size as needed
-        backButtonImageView.setFitWidth(30); // Adjust size as needed
+        contentWrapper.getChildren().add(backButton);
 
-        // Change the color of the icon
-        ColorAdjust colorAdjust = new ColorAdjust();
-        // set to white
-        colorAdjust.setHue(0);
-        backButtonImageView.setEffect(colorAdjust);
+        return contentWrapper;
+    }
+
+    private MFXButton createBackButton() {
+        ImageView backButtonImageView = new ImageView(
+            new Image(getClass().getResourceAsStream("/hitbeat/png/back-button.png"))
+        );
+
+        backButtonImageView.setFitHeight(BACK_BUTTON_HEIGHT);
+        backButtonImageView.setFitWidth(BACK_BUTTON_WIDTH);
+        adjustIconColor(backButtonImageView);
 
         MFXButton backButton = new MFXButton("");
         backButton.setGraphic(backButtonImageView);
-        backButton.setStyle("-fx-background-color: transparent;"); // Transparent background
+        backButton.setStyle("-fx-background-color: transparent;"); 
         StackPane.setAlignment(backButton, Pos.TOP_LEFT);
-        StackPane.setMargin(backButton, new Insets(10, 10, 10, 10));
+        StackPane.setMargin(backButton, new Insets(10));
 
         backButton.setOnAction(e -> restoreLastState());
 
-        contentWrapper.getChildren().add(backButton); // Add the button to the content wrapper
-
-        root.setCenter(contentWrapper);
+        return backButton;
     }
 
-    public ContentMemento saveToMemento(Node state) {
+    private void adjustIconColor(ImageView icon) {
+        ColorAdjust colorAdjust = new ColorAdjust();
+        colorAdjust.setHue(0);
+        icon.setEffect(colorAdjust);
+    }
+
+    private ContentMemento saveToMemento(Node state) {
         return new ContentMemento(state);
     }
 
-    public static Node restoreFromMemento(ContentMemento memento) {
+    private static Node restoreFromMemento(ContentMemento memento) {
         return memento.getContentState();
     }
 
@@ -127,5 +129,4 @@ public class IndexView extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
 }
