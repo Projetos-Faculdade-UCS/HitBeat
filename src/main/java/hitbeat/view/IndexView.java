@@ -59,7 +59,6 @@ public class IndexView extends Application {
 
         root.setLeft(sidebar);
         root.setCenter(content);
-        root.setBottom(footer);
 
         Scene scene = new Scene(root, 800, 700);
         scene.getStylesheets().add(
