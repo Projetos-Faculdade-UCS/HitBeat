@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import hitbeat.view.base.widgets.Widget;
+import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 
@@ -22,8 +23,15 @@ public class Sidebar extends Widget {
         VBox sidebar = new VBox(10);
         sidebar.getChildren().add(new SidebarTitle(title).build());
         addTopicsToSidebar(sidebar);
+        
+        // Wrap the sidebar in a MaterialFX scroll pane
+        MFXScrollPane scrollableSidebar = new MFXScrollPane();
+        scrollableSidebar.setContent(sidebar);
+        scrollableSidebar.setPrefWidth(250);
+        // set background color
+        scrollableSidebar.setStyle("-fx-background-color: #1e1e1e;");
 
-        return sidebar;
+        return scrollableSidebar;
     }
 
     private void addTopicsToSidebar(VBox sidebar) {
