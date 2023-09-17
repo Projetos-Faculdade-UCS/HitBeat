@@ -34,6 +34,7 @@ public class IndexView extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        root = new BorderPane();
         content = new StartPage().build();
         root = new BorderPane();
 
@@ -63,7 +64,7 @@ public class IndexView extends Application {
                 getClass().getResource("/hitbeat/css/index.css").toExternalForm());
 
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Index Page");
+        primaryStage.setTitle("HitBeat");
         primaryStage.show();
     }
 
