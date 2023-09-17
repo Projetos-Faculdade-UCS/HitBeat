@@ -11,3 +11,33 @@
 .center-one {
     -fx-background-color: #302f2f;
 }
+
+/* Estilo para o rótulo minValueLabel */
+.min-value-label {
+    font-size: 14px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #fff;
+}
+
+/* Estilo para o rótulo maxValueLabel */
+.max-value-label {
+    font-size: 14px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #fff;
+}
+
+.progress-slider {
+    -fx-padding: 0;
+    -fx-pref-width: 400px;
+}
+.progress-bar-div{
+    -fx-background-color: #2195f300;
+    -fx-alignment: center;
+    -fx-padding: 0 10px;
+}
+.footer{
+    -fx-background-color: #2195f300;
+    -fx-alignment: center;
+    -fx-pref-height: 80px;
+    -fx-pref-width: 100%;
+}

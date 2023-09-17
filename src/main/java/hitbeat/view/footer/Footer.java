@@ -1,7 +1,9 @@
-package hitbeat.view;
+package hitbeat.view.footer;
 
 import hitbeat.styles.Styles;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -9,6 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 
 public class Footer extends HBox{
@@ -20,12 +23,6 @@ public class Footer extends HBox{
         MediaPlayer mediaPlayer = new MediaPlayer(new Media(path2Song));
 
         //-----------------imagens------------------
-        Image imagePlay = new Image(getClass().getResourceAsStream("/hitbeat/static/play-circle.png"));
-        ImageView PlayView = new ImageView(imagePlay);
-
-        Image imagePause = new Image(getClass().getResourceAsStream("/hitbeat/static/pause-circle.png"));
-        ImageView PauseView = new ImageView(imagePause);
-
         Image imageReset = new Image(getClass().getResourceAsStream("/hitbeat/static/reset.png"));
         ImageView ResetView = new ImageView(imageReset);
 
@@ -33,30 +30,24 @@ public class Footer extends HBox{
         ImageView volumeView = new ImageView(imagVolume);
 
         //---------------botoes---------------------
-        MFXButton playBtn = new MFXButton("", PlayView);
-        playBtn.setOnAction(event -> {mediaPlayer.play();});
-
-        MFXButton pauseBtn = new MFXButton("", PauseView);
-        pauseBtn.setOnAction(event -> {mediaPlayer.pause();});
+        PlayPauseBtn playPauseBtn = new PlayPauseBtn(mediaPlayer);
 
         MFXButton resetBtn = new MFXButton("", ResetView);
         resetBtn.setOnAction(event -> {mediaPlayer.seek(mediaPlayer.getStartTime());});
  
-        Slider slider = new Slider(0, 1, 0.5);
-        slider.setPrefWidth(150);
-        mediaPlayer.volumeProperty().bind(slider.valueProperty());
+        //---------------sliders---------------------
+        Slider volumeSlider = new Slider(0, 1, 0.5);
+        volumeSlider.setPrefWidth(100);
+        mediaPlayer.volumeProperty().bind(volumeSlider.valueProperty());
 
+        ProgressBarDiv progressBar = new ProgressBarDiv(mediaPlayer);
+        
         //---------------estilos & layout---------------------
-        playBtn.setStyle(Styles.PLAYER_BUTTONS); 
-        pauseBtn.setStyle(Styles.PLAYER_BUTTONS);
         resetBtn.setStyle(Styles.PLAYER_BUTTONS); 
 
-        getChildren().addAll(playBtn, pauseBtn, resetBtn, volumeView, slider);
+        getChildren().addAll(playPauseBtn, resetBtn, progressBar, volumeView, volumeSlider);
 
-        setPrefHeight(70);
-        setHgrow(this, Priority.ALWAYS);
-        setStyle("-fx-alignment: center;");
-
+        this.getStyleClass().add("footer");
     }
 
     

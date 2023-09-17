@@ -1,6 +1,7 @@
 package hitbeat.view;
 
 import hitbeat.styles.Styles;
+import hitbeat.view.footer.Footer;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.css.themes.MFXThemeManager;
 import io.github.palexdev.materialfx.css.themes.Themes;
