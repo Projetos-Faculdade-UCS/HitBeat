@@ -5,12 +5,12 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
-public class CenterOne extends Widget {
+public class StartPage extends Widget {
 
     private Label contentLabel;
 
-    public CenterOne() {
-        contentLabel = new Label("Welcome to the CenterOne!");
+    public StartPage() {
+        contentLabel = new Label("Welcome to the HitBeat!");
     }
 
     @Override
