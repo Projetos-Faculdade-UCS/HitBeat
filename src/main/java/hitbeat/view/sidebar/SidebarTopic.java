@@ -21,7 +21,8 @@ public class SidebarTopic extends Widget {
 
     @Override
     public Node build() {
-        VBox sidebarTopic = new VBox(10);
+        VBox sidebarTopic = new VBox(0);
+        sidebarTopic.setFillWidth(true);
         
         sidebarTopic.getChildren().add(createTitlePane());
         items.forEach(item -> sidebarTopic.getChildren().add(item.build()));
@@ -32,7 +33,7 @@ public class SidebarTopic extends Widget {
     private BorderPane createTitlePane() {
         BorderPane textPane = new BorderPane();
         textPane.setCenter(createTitleText());
-        textPane.setPadding(new Insets(0, 0, 0, 10));
+        textPane.setPadding(new Insets(0, 0, 0, 0));
         return textPane;
     }
 
