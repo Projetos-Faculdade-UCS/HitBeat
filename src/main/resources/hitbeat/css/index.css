@@ -11,18 +11,11 @@
     -fx-background-color: #302f2f;
 }
 
-/* Estilo para o rótulo minValueLabel */
-.min-value-label {
-    font-size: 14px;
-    -fx-font-size: 14px;
-    -fx-text-fill: #fff;
-}
-
-/* Estilo para o rótulo maxValueLabel */
-.max-value-label {
-    font-size: 14px;
-    -fx-font-size: 14px;
-    -fx-text-fill: #fff;
+.sidebar-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-fill: white;
+    -fx-text-alignment: center;
 }
 
 .progress-slider {
