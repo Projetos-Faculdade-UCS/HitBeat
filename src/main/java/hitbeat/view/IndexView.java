@@ -3,6 +3,7 @@ package hitbeat.view;
 import hitbeat.styles.Styles;
 import hitbeat.view.base.mementos.ContentCaretaker;
 import hitbeat.view.base.mementos.ContentMemento;
+import hitbeat.view.base.widgets.SVGWidget;
 import hitbeat.view.base.widgets.Widget;
 import hitbeat.view.footer.Footer;
 import hitbeat.view.sidebar.Sidebar;
@@ -14,17 +15,14 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.effect.ColorAdjust;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class IndexView extends Application {
-    private static final double BACK_BUTTON_HEIGHT = 30;
-    private static final double BACK_BUTTON_WIDTH = 30;
+    private static final double BACK_BUTTON_SIZE = 30;
 
     private BorderPane root;
     private Scene scene;
@@ -90,29 +88,17 @@ public class IndexView extends Application {
     }
 
     private MFXButton createBackButton() {
-        ImageView backButtonImageView = new ImageView(
-            new Image(getClass().getResourceAsStream("/hitbeat/images/back-button.png"))
-        );
-
-        backButtonImageView.setFitHeight(BACK_BUTTON_HEIGHT);
-        backButtonImageView.setFitWidth(BACK_BUTTON_WIDTH);
-        adjustIconColor(backButtonImageView);
+        SVGWidget backButtonIcon = new SVGWidget("/hitbeat/svg/back-button.svg", BACK_BUTTON_SIZE, Color.WHITE);
 
         MFXButton backButton = new MFXButton("");
-        backButton.setGraphic(backButtonImageView);
-        backButton.setStyle("-fx-background-color: transparent;"); 
+        backButton.setGraphic(backButtonIcon.build());
+        backButton.setStyle("-fx-background-color: transparent;");
         StackPane.setAlignment(backButton, Pos.TOP_LEFT);
         StackPane.setMargin(backButton, new Insets(10));
 
         backButton.setOnAction(e -> restoreLastState());
 
         return backButton;
-    }
-
-    private void adjustIconColor(ImageView icon) {
-        ColorAdjust colorAdjust = new ColorAdjust();
-        colorAdjust.setHue(0);
-        icon.setEffect(colorAdjust);
     }
 
     private ContentMemento saveToMemento(Node state) {
