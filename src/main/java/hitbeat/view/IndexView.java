@@ -42,7 +42,6 @@ public class IndexView extends Application {
         root.setBottom(footer);
 
         setupScene(primaryStage);
-        activateMaterialFX();
     }
 
     private Sidebar setupSidebar() {
@@ -72,6 +71,10 @@ public class IndexView extends Application {
         scene = new Scene(root, 800, 600);
         scene.getStylesheets().add(getClass().getResource("/hitbeat/css/index.css").toExternalForm());
 
+        // set border radius
+        scene.setFill(Color.TRANSPARENT);
+
+        MFXThemeManager.addOn(scene, Themes.DEFAULT, Themes.LEGACY);
         primaryStage.setScene(scene);
         primaryStage.setTitle("HitBeat");
         primaryStage.show();
@@ -118,10 +121,6 @@ public class IndexView extends Application {
 
     private static Node restoreFromMemento(ContentMemento memento) {
         return memento.getContentState();
-    }
-
-    private void activateMaterialFX() {
-        MFXThemeManager.addOn(scene, Themes.DEFAULT);
     }
 
     public static void main(String[] args) {
