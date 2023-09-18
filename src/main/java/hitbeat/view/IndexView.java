@@ -29,6 +29,7 @@ public class IndexView extends Application {
     private Sidebar sidebar;
     private Node content;
     private ContentCaretaker caretaker = new ContentCaretaker();
+    private StartPage startPage = new StartPage();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
