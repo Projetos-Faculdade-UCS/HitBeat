@@ -18,6 +18,30 @@
     -fx-text-alignment: center;
 }
 
+.sidebar-topic {
+    -fx-font-size: 18px;
+    font-size: 18px;
+    -fx-font-weight: bold;
+    font-weight: bold;
+    -fx-fill: white;
+    fill: white;
+    -fx-text-alignment: left;
+}
+
+/* Estilo para o rótulo minValueLabel */
+.min-value-label {
+    font-size: 14px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #fff;
+}
+
+/* Estilo para o rótulo maxValueLabel */
+.max-value-label {
+    font-size: 14px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #fff;
+}
+
 .progress-slider {
     -fx-padding: 0;
     -fx-pref-width: 400px;

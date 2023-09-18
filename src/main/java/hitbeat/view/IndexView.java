@@ -1,12 +1,13 @@
 package hitbeat.view;
 
-import hitbeat.styles.Styles;
 import hitbeat.view.base.mementos.ContentCaretaker;
 import hitbeat.view.base.mementos.ContentMemento;
 import hitbeat.view.base.widgets.SVGWidget;
 import hitbeat.view.base.widgets.Widget;
 import hitbeat.view.footer.Footer;
 import hitbeat.view.sidebar.Sidebar;
+import hitbeat.view.sidebar.SidebarItem;
+import hitbeat.view.sidebar.SidebarTopic;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.css.themes.MFXThemeManager;
 import io.github.palexdev.materialfx.css.themes.Themes;
@@ -17,7 +18,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -29,38 +29,48 @@ public class IndexView extends Application {
     private Sidebar sidebar;
     private Node content;
     private ContentCaretaker caretaker = new ContentCaretaker();
-    private StartPage startPage = new StartPage();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         root = new BorderPane();
         content = new StartPage().build();
-        root = new BorderPane();
-
-        // Sidebar
-        VBox sidebar = new VBox(10);
-        MFXButton button1 = new MFXButton("Sidebar Item 1");
-        MFXButton button2 = new MFXButton("Sidebar Item 2");
-        // button colors
-        button1.setMinWidth(200);
-        button2.setMinWidth(200);
-
-        button1.setStyle(Styles.SIDEBAR_BUTTONS); 
-        button2.setStyle(Styles.SIDEBAR_BUTTONS); 
-        
-        sidebar.getChildren().addAll(button1, button2);
-
-        // Content area
-        CenterOne content = new CenterOne();
-
+        sidebar = setupSidebar();
         Footer footer = new Footer();
 
-        root.setLeft(sidebar);
         root.setCenter(content);
+        root.setLeft(sidebar.build());
+        root.setBottom(footer);
 
-        Scene scene = new Scene(root, 800, 700);
-        scene.getStylesheets().add(
-                getClass().getResource("/hitbeat/css/index.css").toExternalForm());
+        setupScene(primaryStage);
+        activateMaterialFX();
+    }
+
+    private Sidebar setupSidebar() {
+        return new Sidebar(
+                "HitBeat",
+                new SidebarTopic(
+                        "Menu 1",
+                        new SidebarItem("Index", null, this::loadStartPage),
+                        new SidebarItem("Center One", null, this::loadCenterOne)),
+                new SidebarTopic(
+                        "Menu 2",
+                        new SidebarItem("Index", null, this::loadStartPage),
+                        new SidebarItem("Center One", null, this::loadCenterOne)));
+    }
+
+    private void loadStartPage() {
+        StartPage startPage = new StartPage();
+        setContent(startPage);
+    }
+
+    private void loadCenterOne() {
+        CenterOne centerOne = new CenterOne();
+        setContent(centerOne);
+    }
+
+    private void setupScene(Stage primaryStage) {
+        scene = new Scene(root, 800, 600);
+        scene.getStylesheets().add(getClass().getResource("/hitbeat/css/index.css").toExternalForm());
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("HitBeat");

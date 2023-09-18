@@ -1,9 +1,6 @@
 package hitbeat.view.footer;
 
 
-import java.io.File;
-import java.net.URL;
-
 import hitbeat.styles.Styles;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
