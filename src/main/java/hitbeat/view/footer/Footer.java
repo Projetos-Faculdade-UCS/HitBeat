@@ -23,18 +23,20 @@ public class Footer extends HBox{
         MediaPlayer mediaPlayer = new MediaPlayer(new Media(path2Song));
 
         //-----------------imagens------------------
-        Image imageReset = new Image(getClass().getResourceAsStream("/hitbeat/static/reset.png"));
+        Image imageReset = new Image(getClass().getResourceAsStream("/hitbeat/images/reset.png"));
         ImageView ResetView = new ImageView(imageReset);
 
-        Image imagVolume = new Image(getClass().getResourceAsStream("/hitbeat/static/volume.png"));
-        ImageView volumeView = new ImageView(imagVolume);
+        Image imageVolume = new Image(getClass().getResourceAsStream("/hitbeat/images/volume.png"));
+        ImageView volumeView = new ImageView(imageVolume);
 
         //---------------botoes---------------------
         PlayPauseBtn playPauseBtn = new PlayPauseBtn(mediaPlayer);
+        RepeatBtn repeatBtn = new RepeatBtn(mediaPlayer);
 
         MFXButton resetBtn = new MFXButton("", ResetView);
         resetBtn.setOnAction(event -> {mediaPlayer.seek(mediaPlayer.getStartTime());});
- 
+
+
         //---------------sliders---------------------
         Slider volumeSlider = new Slider(0, 1, 0.5);
         volumeSlider.setPrefWidth(100);
@@ -45,7 +47,7 @@ public class Footer extends HBox{
         //---------------estilos & layout---------------------
         resetBtn.setStyle(Styles.PLAYER_BUTTONS); 
 
-        getChildren().addAll(playPauseBtn, resetBtn, progressBar, volumeView, volumeSlider);
+        getChildren().addAll(playPauseBtn, resetBtn, repeatBtn, progressBar, volumeView, volumeSlider);
 
         this.getStyleClass().add("footer");
     }

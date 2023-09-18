@@ -13,10 +13,10 @@ public class PlayPauseBtn extends MFXButton{
     public PlayPauseBtn(MediaPlayer mediaPlayer) {
         super("");
 
-        Image imagePlay = new Image(getClass().getResourceAsStream("/hitbeat/static/play-circle.png"));
+        Image imagePlay = new Image(getClass().getResourceAsStream("/hitbeat/images/play-circle.png"));
         ImageView PlayView = new ImageView(imagePlay);
         
-        Image imagePause = new Image(getClass().getResourceAsStream("/hitbeat/static/pause-circle.png"));
+        Image imagePause = new Image(getClass().getResourceAsStream("/hitbeat/images/pause-circle.png"));
         ImageView PauseView = new ImageView(imagePause);
 
         this.setGraphic(PlayView);
