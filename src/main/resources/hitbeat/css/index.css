@@ -54,6 +54,7 @@
     -fx-padding: 0;
     padding: 0;
     -fx-pref-width: 400px;
+    -fx-min-width: 200px;
 }
 .progress-bar-div{
     -fx-background-color: #2195f300;
@@ -69,8 +70,11 @@
     -fx-background-color: #302f2f;
     background-color: #302f2f;
 }
-.repeat-btn{
-    -fx-background-color: #2195f300;
-    background-color: #2195f300;
-    -fx-text-fill: red;
+.actions-tab{
+    -fx-alignment: center;
+}
+.side-box{
+    -fx-alignment: center;
+    -fx-pref-width: 120px;
+    padding: 0 10px;
 }

@@ -10,7 +10,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.SVGPath;
 
 
 public class RepeatBtn extends Button{
@@ -19,7 +18,7 @@ public class RepeatBtn extends Button{
     public RepeatBtn(MediaPlayer mediaPlayer){
         super("");
 
-        SVGWidget svgRepeat = new SVGWidget("/hitbeat/svg/repeat.svg", 18, Color.WHITE);
+        SVGWidget svgRepeat = new SVGWidget("/hitbeat/svg/repeat.svg", 17, Color.WHITE);
         Node repeatNode = svgRepeat.build();
         
         Circle repeatIndicator = new Circle(2);
@@ -40,7 +39,10 @@ public class RepeatBtn extends Button{
                 repeat = true;
                 repeatIndicator.setVisible(true);
                 repeatIndicator.setFill(Color.GREEN);
-                // svgRepeat.setColor(Color.GREEN);
+
+                svgRepeat.setColor(Color.GREEN);
+                setNewRepeat(stack, svgRepeat.build());
+
                 mediaPlayer.setOnEndOfMedia(() -> {
                     mediaPlayer.seek(mediaPlayer.getStartTime());
                     mediaPlayer.play();
@@ -49,9 +51,17 @@ public class RepeatBtn extends Button{
                 repeat = false;
                 repeatIndicator.setVisible(false);
                 repeatIndicator.setFill(Color.WHITE);
-                svgRepeat.setColor(Color.GREEN);
+
+                svgRepeat.setColor(Color.WHITE);
+                setNewRepeat(stack, svgRepeat.build());
+
                 mediaPlayer.setOnEndOfMedia(() -> {});
             }
         });
     }
+
+    private void setNewRepeat(StackPane stack, Node repeatNode) {
+        stack.getChildren().set(0, repeatNode);
+    }
+
 }

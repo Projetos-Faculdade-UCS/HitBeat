@@ -6,7 +6,6 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.SVGPath;
 
 public class PlayPauseBtn extends MFXButton{
     
@@ -15,8 +14,8 @@ public class PlayPauseBtn extends MFXButton{
     public PlayPauseBtn(MediaPlayer mediaPlayer) {
         super("");
 
-        SVGWidget svgPlay = new SVGWidget("/hitbeat/svg/play.svg", 25, Color.WHITE);
-        SVGWidget svgPause = new SVGWidget("/hitbeat/svg/pause.svg", 25, Color.WHITE);
+        SVGWidget svgPlay = new SVGWidget("/hitbeat/svg/play.svg", 30, Color.WHITE);
+        SVGWidget svgPause = new SVGWidget("/hitbeat/svg/pause.svg", 30, Color.WHITE);
 
         this.setGraphic(svgPlay.build());
         this.setStyle(Styles.PLAYER_BUTTONS);
