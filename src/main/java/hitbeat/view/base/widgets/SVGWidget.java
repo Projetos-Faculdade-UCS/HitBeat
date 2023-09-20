@@ -113,4 +113,8 @@ public class SVGWidget extends Widget {
         return paths;
     }
 
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
 }
