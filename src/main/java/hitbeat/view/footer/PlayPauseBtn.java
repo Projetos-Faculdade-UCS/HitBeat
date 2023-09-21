@@ -3,7 +3,6 @@ package hitbeat.view.footer;
 import hitbeat.styles.Styles;
 import hitbeat.view.base.widgets.SVGWidget;
 import io.github.palexdev.materialfx.controls.MFXButton;
-import javafx.scene.layout.StackPane;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 

@@ -4,10 +4,8 @@ import hitbeat.styles.Styles;
 import hitbeat.view.base.widgets.SVGWidget;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.geometry.Pos;
-import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -35,27 +33,18 @@ public class Footer extends HBox{
         MFXButton resetBtn = new MFXButton("", svgReset.build());
         resetBtn.setOnAction(event -> {mediaPlayer.seek(mediaPlayer.getStartTime());});
 
-
         //---------------sliders---------------------
-        Slider volumeSlider = new Slider(0, 1, 0.5);
-        volumeSlider.setPrefWidth(100);
-        mediaPlayer.volumeProperty().bind(volumeSlider.valueProperty());
-
         ProgressBarDiv progressBar = new ProgressBarDiv(mediaPlayer);
         
-        //---------------estilos & layout---------------------
-        resetBtn.setStyle(Styles.PLAYER_BUTTONS); 
-        HBox actionsTab = new HBox(10);
-        actionsTab.getChildren().addAll(resetBtn, svgPrevious.build(), playPauseBtn, svgNext.build(), repeatBtn);
-        actionsTab.getStyleClass().add("actions-tab");
-
-        VBox mediaPlayerBox = new VBox(5);
-        mediaPlayerBox.getChildren().addAll(actionsTab, progressBar);
-
+        //---------------layout---------------------
         VolumeBox volumeBox = new VolumeBox(mediaPlayer);
         HBox spacer = new HBox();
-        volumeBox.getStyleClass().add("side-box");
-        spacer.getStyleClass().add("side-box");
+
+        HBox actionsTab = new HBox(10);
+        actionsTab.getChildren().addAll(
+            resetBtn, svgPrevious.build(), playPauseBtn, svgNext.build(), repeatBtn);
+        VBox mediaPlayerBox = new VBox(5);
+        mediaPlayerBox.getChildren().addAll(actionsTab, progressBar);
 
         HBox.setHgrow(spacer, Priority.NEVER);
         HBox.setHgrow(mediaPlayerBox, Priority.ALWAYS);
@@ -67,6 +56,11 @@ public class Footer extends HBox{
 
         getChildren().addAll(spacer, mediaPlayerBox,  volumeBox);
 
+        //---------------estilos---------------------
+        resetBtn.setStyle(Styles.PLAYER_BUTTONS); 
+        actionsTab.getStyleClass().add("actions-tab");
+        volumeBox.getStyleClass().add("side-box");
+        spacer.getStyleClass().add("side-box");
         this.getStyleClass().add("footer");
     }
 

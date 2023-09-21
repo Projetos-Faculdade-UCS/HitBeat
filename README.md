@@ -18,7 +18,7 @@ Projeto para a disciplina "Projeto Temático I" da Universidade de Caxias do Sul
 
 ## Instruções para execução
 
-*instalar dependencias de sistema
+* instalar dependencias de sistema
 
 ```bash
     sudo apt install ffmpeg
