@@ -1,9 +1,9 @@
 package hitbeat.view;
 
-import hitbeat.view.base.mementos.ContentCaretaker;
+import hitbeat.controller.IndexController;
+// ... Other imports ...
 import hitbeat.view.base.mementos.ContentMemento;
 import hitbeat.view.base.widgets.SVGWidget;
-import hitbeat.view.base.widgets.Widget;
 import hitbeat.view.footer.Footer;
 import hitbeat.view.sidebar.Sidebar;
 import hitbeat.view.sidebar.SidebarItem;
@@ -21,14 +21,16 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+
 public class IndexView extends Application {
     private static final double BACK_BUTTON_SIZE = 30;
-
+    
+    
     private BorderPane root;
     private Scene scene;
     private Sidebar sidebar;
     private Node content;
-    private ContentCaretaker caretaker = new ContentCaretaker();
+    private final IndexController controller = new IndexController(this);
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -49,29 +51,18 @@ public class IndexView extends Application {
                 "HitBeat",
                 new SidebarTopic(
                         "Menu 1",
-                        new SidebarItem("Index", null, this::loadStartPage),
-                        new SidebarItem("Center One", null, this::loadCenterOne)),
+                        new SidebarItem("Index", null, controller::loadStartPage),
+                        new SidebarItem("Gêneros", null, controller::loadGenresView)),
                 new SidebarTopic(
                         "Menu 2",
-                        new SidebarItem("Index", null, this::loadStartPage),
-                        new SidebarItem("Center One", null, this::loadCenterOne)));
-    }
-
-    private void loadStartPage() {
-        StartPage startPage = new StartPage();
-        setContent(startPage);
-    }
-
-    private void loadCenterOne() {
-        CenterOne centerOne = new CenterOne();
-        setContent(centerOne);
+                        new SidebarItem("Index", null, controller::loadStartPage)));
     }
 
     private void setupScene(Stage primaryStage) {
         scene = new Scene(root, 800, 600);
         scene.getStylesheets().add(getClass().getResource("/hitbeat/css/index.css").toExternalForm());
 
-        // set border radius
+        // Set border radius
         scene.setFill(Color.TRANSPARENT);
 
         MFXThemeManager.addOn(scene, Themes.DEFAULT, Themes.LEGACY);
@@ -80,23 +71,37 @@ public class IndexView extends Application {
         primaryStage.show();
     }
 
-    public void restoreLastState() {
-        content = restoreFromMemento(caretaker.getLastMemento());
-        root.setCenter(content);
+    public void updateContent(Node newContent) {
+        this.content = newContent;
+        root.setCenter(wrapContentWithBackButton());
+    }
+    
+
+    public ContentMemento saveToMemento() {
+        return new ContentMemento(unwrapContent(root.getCenter()));
     }
 
-    public void setContent(Widget contentWidget) {
-        caretaker.addMemento(saveToMemento(root.getCenter()));
+    public static Node restoreFromMemento(ContentMemento memento) {
+        return memento.getContentState();
+    }
 
-        this.content = contentWidget.build();
-        root.setCenter(wrapContentWithBackButton());
+    private Node unwrapContent(Node content) {
+        if (content instanceof StackPane) {
+            return ((StackPane) content).getChildren().get(0);
+        }
+        return content;
     }
 
     private StackPane wrapContentWithBackButton() {
         StackPane contentWrapper = new StackPane(this.content);
-        MFXButton backButton = createBackButton();
 
-        contentWrapper.getChildren().add(backButton);
+        // Check if there are any saved mementos before adding the back button
+        if (controller.hasMemento()) {
+            // set the content with a top padding of the size of the back button
+            content.setStyle("-fx-padding: " + 2* BACK_BUTTON_SIZE + " 0 0 0;");
+            MFXButton backButton = createBackButton();
+            contentWrapper.getChildren().add(backButton);
+        }
 
         return contentWrapper;
     }
@@ -110,17 +115,9 @@ public class IndexView extends Application {
         StackPane.setAlignment(backButton, Pos.TOP_LEFT);
         StackPane.setMargin(backButton, new Insets(10));
 
-        backButton.setOnAction(e -> restoreLastState());
+        backButton.setOnAction(e -> controller.restoreLastState());
 
         return backButton;
-    }
-
-    private ContentMemento saveToMemento(Node state) {
-        return new ContentMemento(state);
-    }
-
-    private static Node restoreFromMemento(ContentMemento memento) {
-        return memento.getContentState();
     }
 
     public static void main(String[] args) {
