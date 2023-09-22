@@ -36,7 +36,7 @@ public class ProgressBarDiv extends HBox{
 
         // ------atualizador do tempo---------
         Timeline sliderUpdater = new Timeline(
-            new KeyFrame(Duration.seconds(1), event -> {
+            new KeyFrame(Duration.seconds(.01), event -> {
                 progressSlider.setValue(mediaPlayer.getCurrentTime().toSeconds());
                 minValueLabel.setText(this.formatTime(progressSlider.getValue()));
             })
