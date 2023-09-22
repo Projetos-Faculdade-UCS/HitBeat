@@ -10,7 +10,7 @@ import hitbeat.view.IndexView;
 public class App {
     public static void main(String[] args) {
         GenreDAO.init();
-        GenreDAO.mockData();
+        // GenreDAO.mockData();
         IndexView.main(args);
         GenreDAO.close();
     }

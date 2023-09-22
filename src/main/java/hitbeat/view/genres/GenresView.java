@@ -1,52 +1,56 @@
 package hitbeat.view.genres;
 
-import hitbeat.dao.GenreDAO;
+import java.util.function.Function;
+
+import hitbeat.controller.genres.GenresController;
 import hitbeat.model.Genre;
 import hitbeat.view.base.widgets.Widget;
-import javafx.collections.FXCollections;
+import hitbeat.view.base.widgets.listview.ListView;
+import io.github.palexdev.materialfx.controls.MFXListView;
+import io.github.palexdev.materialfx.controls.cell.MFXListCell;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.ListView;
-import javafx.scene.layout.VBox;
 
 public class GenresView extends Widget {
 
-    private VBox root;
-    private ListView<Genre> genreListView;
+    private ListView<Genre> root;
+    @FXML
     private ObservableList<Genre> genres;
-    private final GenreDAO genreDAO = new GenreDAO();
-
-    public GenresView() {
-        initialize();
-    }
-
-    private void initialize() {
-    }
-
-    public Node getView() {
-        return root;
-    }
+    private final GenresController controller = new GenresController();
 
     @Override
     public Node build() {
-        root = new VBox(10);
-        genreListView = new ListView<>();
-        genres = FXCollections.observableArrayList(genreDAO.getAllGenres());  // Fetch genres from DAO
+        
+        genres = controller.fetchAllGenres();
+        root = new ListView<Genre>(genres);
 
-        genreListView.setItems(genres);
-        genreListView.setCellFactory(lv -> new javafx.scene.control.ListCell<Genre>() {
-            @Override
-            protected void updateItem(Genre genre, boolean empty) {
-                super.updateItem(genre, empty);
-                if (empty || genre == null) {
-                    setText(null);
-                } else {
-                    setText(genre.getName());
-                }
+        Function<Genre, MFXListCell<Genre>> cellFactory = genre -> {
+            return new GenreCellFactory(root.getListView(), genre);
+        };
+
+        root.setCellFactory(cellFactory);
+        
+        return root.build();
+    }
+
+    private static class GenreCellFactory extends MFXListCell<Genre> {
+        public GenreCellFactory(MFXListView<Genre> listView, Genre data) {
+            super(listView, data);
+        }
+
+        @Override
+        protected void render(Genre genre) {
+            if (genre == null) {
+                return;
             }
-        });
-
-        root.getChildren().add(genreListView);
-        return root;
+            
+            this.setOnMouseClicked(event -> {
+                System.out.println("GenreCell: " + genre.getName() + " clicked");
+            });
+            
+            GenreCell genreCell = new GenreCell(genre);
+            this.getChildren().add(genreCell.build());
+        }
     }
 }
