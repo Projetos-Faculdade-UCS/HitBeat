@@ -12,4 +12,8 @@ public class ContentCaretaker {
     public ContentMemento getLastMemento() {
         return mementos.pop();
     }
+
+    public boolean hasMemento() {
+        return !mementos.isEmpty();
+    }
 }
