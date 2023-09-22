@@ -76,5 +76,5 @@
 .side-box{
     -fx-alignment: center;
     -fx-pref-width: 120px;
-    padding: 0 10px;
+    -fx-padding: 0 10px;
 }

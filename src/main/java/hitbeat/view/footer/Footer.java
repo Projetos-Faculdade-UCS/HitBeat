@@ -57,7 +57,7 @@ public class Footer extends HBox{
         getChildren().addAll(spacer, mediaPlayerBox,  volumeBox);
 
         //---------------estilos---------------------
-        resetBtn.setStyle(Styles.PLAYER_BUTTONS); 
+        resetBtn.setStyle(Styles.GENERIC_BUTTON); 
         actionsTab.getStyleClass().add("actions-tab");
         volumeBox.getStyleClass().add("side-box");
         spacer.getStyleClass().add("side-box");

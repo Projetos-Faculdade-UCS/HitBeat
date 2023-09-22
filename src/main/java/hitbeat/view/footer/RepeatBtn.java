@@ -33,7 +33,7 @@ public class RepeatBtn extends Button{
         stack.getChildren().addAll(repeatNode, repeatIndicator);
 
         this.setGraphic(stack);
-        this.setStyle(Styles.PLAYER_BUTTONS);
+        this.setStyle(Styles.GENERIC_BUTTON);
         this.setOnAction(event -> {
             if (repeat == false) {
                 repeat = true;

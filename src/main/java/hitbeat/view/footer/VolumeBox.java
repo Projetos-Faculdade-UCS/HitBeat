@@ -44,7 +44,7 @@ public class VolumeBox extends HBox{
                 }
             });
 
-            muteBtn.setStyle(Styles.PLAYER_BUTTONS);
+            muteBtn.setStyle(Styles.GENERIC_BUTTON);
             this.getChildren().addAll(muteBtn, volumeSlider);
         }
 }
