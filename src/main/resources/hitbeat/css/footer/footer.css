@@ -1,0 +1,13 @@
+#playPauseBtn {
+    -fx-background-color: transparent;
+    background-color: transparent;
+    -fx-background-radius: 50%;
+    -fx-border-radius: 50%;
+    border-radius: 50%;
+    -fx-padding: 0px;
+    padding: 0px;
+}
+
+#playPauseBtn .mfx-ripple-generator {
+	-mfx-auto-clip: true;
+}

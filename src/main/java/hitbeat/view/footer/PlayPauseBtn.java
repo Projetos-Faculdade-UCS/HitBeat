@@ -1,6 +1,5 @@
 package hitbeat.view.footer;
 
-import hitbeat.styles.Styles;
 import hitbeat.view.base.widgets.SVGWidget;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.scene.media.MediaPlayer;
@@ -28,6 +27,8 @@ public class PlayPauseBtn extends MFXButton{
                 mediaPlayer.pause();
             }
         });
-        this.setStyle(Styles.PLAY_BUTTON);
+        this.setId("playPauseBtn");
+
+        this.getStylesheets().add(getClass().getResource("/hitbeat/css/footer/footer.css").toExternalForm());
     }
 }
