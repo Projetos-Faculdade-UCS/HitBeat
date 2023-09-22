@@ -15,9 +15,6 @@ public class ListView<T> extends Widget {
     private ObservableList<T> items;
     private Function<T, MFXListCell<T>> cellFactory;
 
-    public ListView() {
-    }
-
     public ListView(ObservableList<T> items) {
         this.items = items;
     }

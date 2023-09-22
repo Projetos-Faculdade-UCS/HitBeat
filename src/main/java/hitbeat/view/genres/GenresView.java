@@ -10,7 +10,11 @@ import io.github.palexdev.materialfx.controls.MFXListView;
 import io.github.palexdev.materialfx.controls.cell.MFXListCell;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 
 public class GenresView extends Widget {
 
@@ -45,12 +49,23 @@ public class GenresView extends Widget {
                 return;
             }
             
+            VBox vbox = new VBox();
+        vbox.setPadding(new Insets(10, 0, 10, 0)); 
+
+            
             this.setOnMouseClicked(event -> {
                 System.out.println("GenreCell: " + genre.getName() + " clicked");
             });
             
-            GenreCell genreCell = new GenreCell(genre);
-            this.getChildren().add(genreCell.build());
+            Node genreCell = new GenreCell(genre).build();
+            HBox.setHgrow(genreCell, Priority.SOMETIMES);
+            VBox.setVgrow(genreCell, Priority.SOMETIMES);
+            vbox.getChildren().addAll(genreCell);
+
+            VBox.setVgrow(this, Priority.SOMETIMES);
+            HBox.setHgrow(this, Priority.SOMETIMES);
+            this.getChildren().setAll(vbox);
+        
         }
     }
 }
