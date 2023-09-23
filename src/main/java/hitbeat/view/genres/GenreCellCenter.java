@@ -2,8 +2,6 @@ package hitbeat.view.genres;
 
 import hitbeat.view.base.widgets.Widget;
 import javafx.scene.Node;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class GenreCellCenter extends Widget {
@@ -16,20 +14,19 @@ public class GenreCellCenter extends Widget {
     @Override
     public Node build() {
         final String genreName = this.genreName;
-        final String genreNameStyle = "-fx-font-size: 20px; -fx-font-weight: bold; -fx-fill: white;";
 
-        Node text = createText(genreName, genreNameStyle);
+        Text text = createText(genreName);
+        text.setId("genreCenterName");
+        text.setY(50);
 
-        VBox.setVgrow(text, javafx.scene.layout.Priority.SOMETIMES);
-        HBox.setHgrow(text, javafx.scene.layout.Priority.SOMETIMES);
+        text.prefHeight(50);
 
         return text;
     }
 
-    private Node createText(String text, String style) {
+    private Text createText(String text) {
         return new Text() {{
             setText(text);
-            setStyle(style);
         }};
     }
     

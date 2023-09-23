@@ -12,7 +12,4 @@ public class GenresController {
     public ObservableList<Genre> fetchAllGenres() {
         return FXCollections.observableArrayList(genreDAO.getAllGenres());
     }
-
-    // Other potential methods related to genres (e.g., save, delete) can be added here.
 }
-

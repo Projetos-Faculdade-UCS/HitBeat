@@ -43,6 +43,9 @@ public class IndexView extends Application {
         root.setLeft(sidebar.build());
         root.setBottom(footer);
 
+        root.applyCss();
+        root.layout();
+
         setupScene(primaryStage);
     }
 
