@@ -42,6 +42,9 @@ public class GenresView extends Widget {
                         vbox.getChildren().add(genreCell);
         
                         setGraphic(vbox);
+                        setOnMouseClicked(event -> {
+                            System.out.println("Clicked on " + genre.getName());
+                        });
                     }
                 }
             };
