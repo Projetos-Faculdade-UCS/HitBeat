@@ -1,16 +1,17 @@
 package hitbeat.view.footer;
 
+import hitbeat.view.base.wrappers.Slider;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
-public class ProgressBarDiv extends HBox{
+
+public class ProgressBarBox extends HBox{
     
-    public ProgressBarDiv(MediaPlayer mediaPlayer) {
+    public ProgressBarBox(MediaPlayer mediaPlayer) {
         super(1);
 
         // ------infos de duracao---------

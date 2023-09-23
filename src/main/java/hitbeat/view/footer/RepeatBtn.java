@@ -1,18 +1,17 @@
 package hitbeat.view.footer;
 
 
-import hitbeat.styles.Styles;
 import hitbeat.view.base.widgets.SVGWidget;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 
-public class RepeatBtn extends Button{
+public class RepeatBtn extends MFXButton{
     private boolean repeat = false;
 
     public RepeatBtn(MediaPlayer mediaPlayer){
@@ -33,7 +32,6 @@ public class RepeatBtn extends Button{
         stack.getChildren().addAll(repeatNode, repeatIndicator);
 
         this.setGraphic(stack);
-        this.setStyle(Styles.GENERIC_BUTTON);
         this.setOnAction(event -> {
             if (repeat == false) {
                 repeat = true;

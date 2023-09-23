@@ -28,7 +28,5 @@ public class PlayPauseBtn extends MFXButton{
             }
         });
         this.setId("playPauseBtn");
-
-        this.getStylesheets().add(getClass().getResource("/hitbeat/css/footer/footer.css").toExternalForm());
     }
 }
