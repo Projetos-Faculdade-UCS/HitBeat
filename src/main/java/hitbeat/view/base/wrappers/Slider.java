@@ -14,6 +14,11 @@ public class Slider extends MFXSlider{
         super(min, max, value);
     }
 
+    @Override
+    protected Skin<?> createDefaultSkin() {
+        return new MySkin(this);
+    }
+
     class MySkin extends MFXSliderSkin {
         public MySkin(MFXSlider slider) {
             super(slider);
@@ -21,10 +26,5 @@ public class Slider extends MFXSlider{
         @Override
         protected void showPopup() {
         }
-    }
-
-    @Override
-    protected Skin<?> createDefaultSkin() {
-        return new MySkin(this);
     }
 }

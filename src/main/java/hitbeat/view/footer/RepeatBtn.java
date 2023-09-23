@@ -36,9 +36,9 @@ public class RepeatBtn extends MFXButton{
             if (repeat == false) {
                 repeat = true;
                 repeatIndicator.setVisible(true);
-                repeatIndicator.setFill(Color.GREEN);
+                repeatIndicator.setFill(Color.PURPLE);
 
-                svgRepeat.setColor(Color.GREEN);
+                svgRepeat.setColor(Color.PURPLE);
                 setNewRepeat(stack, svgRepeat.build());
 
                 mediaPlayer.setOnEndOfMedia(() -> {

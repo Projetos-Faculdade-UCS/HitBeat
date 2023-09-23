@@ -9,9 +9,9 @@ import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
 
-public class ProgressBarBox extends HBox{
+public class ProgressBar extends HBox{
     
-    public ProgressBarBox(MediaPlayer mediaPlayer) {
+    public ProgressBar(MediaPlayer mediaPlayer) {
         super(1);
 
         // ------infos de duracao---------
@@ -29,11 +29,10 @@ public class ProgressBarBox extends HBox{
         });
 
         // ------estilos---------
-        minValueLabel.getStyleClass().add("min-value-label");
-        maxValueLabel.getStyleClass().add("max-value-label");
+        minValueLabel.getStyleClass().addAll("label", "px-2");
+        maxValueLabel.getStyleClass().addAll("label", "px-1");
         progressSlider.getStyleClass().add("progress-slider");
-        this.getStyleClass().add("progress-bar-div");
-
+        this.setId("progress-bar");
 
         // ------atualizador do tempo---------
         Timeline sliderUpdater = new Timeline(

@@ -1,6 +1,5 @@
 package hitbeat.view.footer;
 
-import hitbeat.styles.Styles;
 import hitbeat.view.base.widgets.SVGWidget;
 import hitbeat.view.base.wrappers.Slider;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -14,11 +13,11 @@ public class VolumeBox extends HBox{
     double volume = 0.5;
     
     public VolumeBox(MediaPlayer mediaPlayer) {
-        super(0);
+        super(15);
 
         Slider volumeSlider = new Slider(0, 1, volume);
         volumeSlider.setDecimalPrecision(2);
-        volumeSlider.setPrefWidth(100);
+        volumeSlider.getStyleClass().add("volume-slider");
         mediaPlayer.volumeProperty().bind(volumeSlider.valueProperty());
 
         SVGWidget svgMute = new SVGWidget("/hitbeat/svg/volume-mute.svg", 15, Color.WHITE);
@@ -45,7 +44,7 @@ public class VolumeBox extends HBox{
             }
         });
 
-        muteBtn.setStyle(Styles.GENERIC_BUTTON);
+        this.setId("side-box");
         this.getChildren().addAll(muteBtn, volumeSlider);
     }
 }

@@ -15,25 +15,22 @@ public class Footer extends HBox{
         MediaPlayer mediaPlayer = new MediaPlayer(new Media(path2Song));
 
         //---------------layout---------------------
-        
-        HBox spacer = new HBox();
+        MusicBox musicBox = new MusicBox();
         MediaPlayerBox mediaPlayerBox = new MediaPlayerBox(mediaPlayer);
         VolumeBox volumeBox = new VolumeBox(mediaPlayer);
 
-        HBox.setHgrow(spacer, Priority.NEVER);
+        HBox.setHgrow(musicBox, Priority.NEVER);
         HBox.setHgrow(mediaPlayerBox, Priority.ALWAYS);
         HBox.setHgrow(volumeBox, Priority.NEVER);
 
         volumeBox.setAlignment(Pos.CENTER_RIGHT);
         mediaPlayerBox.setAlignment(Pos.CENTER);
-        spacer.setAlignment(Pos.CENTER_LEFT);
+        musicBox.setAlignment(Pos.CENTER_LEFT);
 
-        getChildren().addAll(spacer, mediaPlayerBox,  volumeBox);
+        getChildren().addAll(musicBox, mediaPlayerBox,  volumeBox);
 
         //---------------estilos---------------------
-        volumeBox.getStyleClass().add("side-box");
-        spacer.getStyleClass().add("side-box");
-        this.getStyleClass().add("footer");
+        this.setId("footer");
         this.getStylesheets().add(getClass().getResource("/hitbeat/css/footer/footer.css").toExternalForm());
     }
 
