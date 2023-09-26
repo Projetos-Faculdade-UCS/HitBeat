@@ -7,44 +7,36 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 public class ListTile extends HBox {
-    private boolean isResizing = false;
-
     public ListTile(Node leading, Node title, Node subtitle, Node trailing) {
-        // ContentBox for holding title and subtitle
-        VBox contentBox = new VBox();
-        contentBox.setSpacing(5); // Spacing between title and subtitle
+        // Initialize ContentBox for title and subtitle
+        VBox contentBox = new VBox(5); 
+        if (title != null) contentBox.getChildren().add(title);
+        if (subtitle != null) contentBox.getChildren().add(subtitle);
 
-        // Add title and subtitle nodes to contentBox
-        if (title != null) {
-            contentBox.getChildren().add(title);
-        }
-
-        if (subtitle != null) {
-            contentBox.getChildren().add(subtitle);
-        }
-
-        // Create spacers to position elements
+        // Create and add spacer for positioning
         Pane spacer = new Pane();
-        HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS); 
+        HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
 
-        // Add to the main HBox
-        if (leading != null) {
-            this.getChildren().add(leading);
-        }
+        // Build the HBox
+        if (leading != null) this.getChildren().add(leading);
+        this.getChildren().addAll(contentBox, spacer);
+        if (trailing != null) this.getChildren().add(trailing);
 
-        this.getChildren().addAll(contentBox, spacer);  // Spacer1 is added before contentBox and spacer2 is added after contentBox
+        // Styling
+        styleHBox();
 
-        if (trailing != null) {
-            this.getChildren().add(trailing);
-        }
+        // Add listener to parentProperty
+        addParentPropertyListener();
+    }
 
-        // Styling and layout
-        this.setSpacing(10); // Spacing between nodes
-        this.setPadding(new Insets(10, 10, 10, 10)); // Padding around the HBox
-
+    private void styleHBox() {
+        this.setSpacing(10);
+        this.setPadding(new Insets(10));
         VBox.setVgrow(this, javafx.scene.layout.Priority.ALWAYS);
         HBox.setHgrow(this, javafx.scene.layout.Priority.ALWAYS);
+    }
 
+    private void addParentPropertyListener() {
         this.parentProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) { // If attached to a new parent
                 // Listen to width changes of the new parent
@@ -59,10 +51,7 @@ public class ListTile extends HBox {
     }
 
     private void adjustWidthBasedOnParent(double parentWidth) {
-        if (!isResizing && parentWidth > 0) {
-            isResizing = true;
-            this.setPrefWidth(parentWidth);
-            isResizing = false;
-        }
+        if (parentWidth <= 0) return; 
+        this.setPrefWidth(parentWidth);
     }
 }
