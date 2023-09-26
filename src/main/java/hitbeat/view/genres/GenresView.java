@@ -12,8 +12,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 public class GenresView extends Widget {
-
-    private Node root;
     private ObservableList<Genre> genres;
     private final GenresController controller = new GenresController();
 
@@ -25,9 +23,6 @@ public class GenresView extends Widget {
 
         lv.setCellFactory(genre -> {
             return new ListCell<Genre>() {
-        
-                // Create components here if needed
-        
                 @Override
                 protected void updateItem(Genre genre, boolean empty) {
                     super.updateItem(genre, empty);
@@ -41,6 +36,8 @@ public class GenresView extends Widget {
                         HBox.setHgrow(genreCell, Priority.ALWAYS);
                         vbox.getChildren().add(genreCell);
         
+                        HBox.setHgrow(vbox, Priority.ALWAYS);
+                        
                         setGraphic(vbox);
                         setOnMouseClicked(event -> {
                             System.out.println("Clicked on " + genre.getName());
@@ -49,9 +46,7 @@ public class GenresView extends Widget {
                 }
             };
         });
-        
-        root = lv;
 
-        return root;
+        return lv;
     }
 }

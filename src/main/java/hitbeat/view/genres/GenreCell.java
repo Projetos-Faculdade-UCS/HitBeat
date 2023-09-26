@@ -1,42 +1,39 @@
 package hitbeat.view.genres;
 
 import hitbeat.model.Genre;
-import javafx.geometry.Insets;
+import hitbeat.view.base.widgets.ListTile;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-public class GenreCell extends HBox {
+public class GenreCell extends Pane {
     private Genre genre;
-    
+
     public GenreCell(Genre genre) {
         this.genre = genre;
-        VBox contentBox = new VBox();
-        contentBox.setSpacing(5); // Spacing between title and subtitle
 
-        // Create Leading - It can be an ImageView or any other node.
-        Node leading = new GenreCellCenter("lead").build(); // Assuming this method returns a Node that you want to use as leading.
+        // Create Leading
+        Node leading = new GenreCellCenter("lead").build();
 
         // Create Title
-        Label titleLabel = new Label(genre.getName());
-        titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16; -fx-text-fill: white;"); // Adjust styling as needed
+        Label titleLabel = new Label(this.genre.getName());
+        titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16; -fx-text-fill: white;");
 
         // Create Subtitle
-        Label subtitleLabel = new Label("Subtitle text here"); // Replace with actual subtitle
-        subtitleLabel.setStyle("-fx-font-size: 14; -fx-text-fill: white;"); // Adjust styling as needed
+        Label subtitleLabel = new Label("Subtitle text here");
+        subtitleLabel.setStyle("-fx-font-size: 14; -fx-text-fill: white;");
 
-        contentBox.getChildren().addAll(titleLabel, subtitleLabel);
+        // Create Trailing
+        Label trailingLabel = new Label("Trail");
+        trailingLabel.setStyle("-fx-font-size: 14; -fx-text-fill: white;");
 
-        // Construct the ListTile-like layout
-        this.setSpacing(10); // Spacing between leading and the content box
-        this.setPadding(new Insets(10, 10, 10, 10)); // Padding around the this
-
-        this.getChildren().addAll(leading, contentBox);
-
-        HBox.setHgrow(this, javafx.scene.layout.Priority.ALWAYS);
-        VBox.setVgrow(this, javafx.scene.layout.Priority.ALWAYS);
+        ListTile listTile = new ListTile(leading, titleLabel, subtitleLabel, trailingLabel);
+        
+        this.getChildren().add(listTile);
+        VBox.setVgrow(this, Priority.ALWAYS);
+        HBox.setHgrow(this, Priority.ALWAYS);
     }
-
 }
-
