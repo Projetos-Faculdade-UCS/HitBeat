@@ -29,6 +29,9 @@ public class GenresView extends Widget {
                     if (genre == null || empty) {
                         setText(null);
                         setGraphic(null);
+                        // hide the cell
+                        setId("hidden-list-cell");
+                        return;
                     } else {        
                         VBox vbox = new VBox();
                         Node genreCell = new GenreCell(genre);
@@ -42,6 +45,7 @@ public class GenresView extends Widget {
                         setOnMouseClicked(event -> {
                             System.out.println("Clicked on " + genre.getName());
                         });
+                        setId("list-cell");
                     }
                 }
             };
