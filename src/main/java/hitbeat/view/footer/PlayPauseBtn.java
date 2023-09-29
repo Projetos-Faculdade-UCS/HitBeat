@@ -7,26 +7,35 @@ import javafx.scene.paint.Color;
 
 public class PlayPauseBtn extends MFXButton{
     
-    private boolean paused = true;
+    private boolean paused;
+    private MediaPlayer mediaPlayer;
+    SVGWidget svgPlay;
+    SVGWidget svgPause;
 
     public PlayPauseBtn(MediaPlayer mediaPlayer) {
         super("");
+        this.mediaPlayer = mediaPlayer;
 
-        SVGWidget svgPlay = new SVGWidget("/hitbeat/svg/play.svg", 30, Color.WHITE);
-        SVGWidget svgPause = new SVGWidget("/hitbeat/svg/pause.svg", 30, Color.WHITE);
+        svgPlay = new SVGWidget("/hitbeat/svg/play.svg", 30, Color.WHITE);
+        svgPause = new SVGWidget("/hitbeat/svg/pause.svg", 30, Color.WHITE);
 
-        this.setGraphic(svgPlay.build());
+        
         this.setOnAction(event -> {
-            if (paused == true) {
-                paused = false;
-                this.setGraphic(svgPause.build());
-                mediaPlayer.play();
-            } else {
-                paused = true;
-                this.setGraphic(svgPlay.build());
-                mediaPlayer.pause();
-            }
+            this.setPaused(!paused);
         });
+
+        this.setPaused(true);
         this.setId("playPauseBtn");
     }
+
+    private void setPaused(boolean paused) {
+        this.paused = paused;
+         if (paused) {
+            this.setGraphic(svgPause.build());
+            mediaPlayer.play();
+        } else {
+            this.setGraphic(svgPlay.build());
+            mediaPlayer.pause();
+        }
+    } 
 }

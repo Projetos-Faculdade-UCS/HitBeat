@@ -17,7 +17,7 @@ public class RepeatBtn extends MFXButton{
     public RepeatBtn(MediaPlayer mediaPlayer){
         super("");
 
-        SVGWidget svgRepeat = new SVGWidget("/hitbeat/svg/repeat.svg", 17, Color.WHITE);
+        SVGWidget svgRepeat = new SVGWidget("/hitbeat/svg/repeat.svg", 16, Color.WHITE);
         Node repeatNode = svgRepeat.build();
         
         Circle repeatIndicator = new Circle(2);
@@ -26,7 +26,7 @@ public class RepeatBtn extends MFXButton{
 
         StackPane.setAlignment(repeatNode, Pos.CENTER);
         StackPane.setAlignment(repeatIndicator, Pos.BOTTOM_CENTER);
-        repeatIndicator.setStyle("-fx-translate-y: 10px;");
+        repeatIndicator.setStyle("-fx-translate-y: 8px;");
 
         StackPane stack = new StackPane();
         stack.getChildren().addAll(repeatNode, repeatIndicator);
@@ -36,9 +36,9 @@ public class RepeatBtn extends MFXButton{
             if (repeat == false) {
                 repeat = true;
                 repeatIndicator.setVisible(true);
-                repeatIndicator.setFill(Color.PURPLE);
+                repeatIndicator.setFill(Color.BLUEVIOLET);
 
-                svgRepeat.setColor(Color.PURPLE);
+                svgRepeat.setColor(Color.BLUEVIOLET);
                 setNewRepeat(stack, svgRepeat.build());
 
                 mediaPlayer.setOnEndOfMedia(() -> {
