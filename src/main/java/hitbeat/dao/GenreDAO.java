@@ -14,14 +14,15 @@ public class GenreDAO extends BaseDAO<Genre> {
         super(Genre.class);
     }
 
-    public void mockData() {
+    public static void mockData() {
         Genre genre = new Genre("Rock");
+        GenreDAO genreDAO = new GenreDAO();
 
-        this.save(genre);
+        genreDAO.save(genre);
         genre = new Genre("Pop");
-        this.save(genre);
+        genreDAO.save(genre);
         genre = new Genre("Jazz");
-        this.save(genre);
+        genreDAO.save(genre);
     }
 
     public List<Genre> getGenresByName(String name) {

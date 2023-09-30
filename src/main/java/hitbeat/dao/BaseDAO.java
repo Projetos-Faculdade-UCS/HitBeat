@@ -11,36 +11,71 @@ import hitbeat.util.HibernateUtil;
 
 public abstract class BaseDAO<T extends BaseModel> {
     private Class<T> modelClass;
+    private String className;
 
     public BaseDAO(Class<T> modelClass){
         this.modelClass = modelClass;
+        this.className = modelClass.getSimpleName();
     }
     
     public List<T> getAll() {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-        try (Session session = sessionFactory.openSession()) {
-            String hql = "FROM Genre";
+        Session session = null;
+        try  {
+            session = sessionFactory.openSession();
+            String hql = String.format("FROM %s", this.className);
             Query<T> query = session.createQuery(hql, modelClass);
             return query.list();
+        }  catch (Exception e) {
+            if (session != null && session.getTransaction() != null) {
+                session.getTransaction().rollback();
+            }
+            throw e;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
     }
 
     public T get(Long id){
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-        try (Session session = sessionFactory.openSession()) {
-            String hql = String.format("FROM %s g WHERE g.id = :id", modelClass.getSimpleName());
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
+            String hql = String.format("FROM %s g WHERE g.id = :id", this.className);
             Query<T> query = session.createQuery(hql, modelClass);
-            query.setParameter("name", id);
+            query.setParameter("id", id);
             return query.uniqueResult();
+        }  catch (Exception e) {
+            if (session != null && session.getTransaction() != null) {
+                session.getTransaction().rollback();
+            }
+            throw e;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
     }
 
     public void save(T objectT) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-        try (Session session = sessionFactory.openSession()) {
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
             session.beginTransaction();
             session.merge(objectT);
             session.getTransaction().commit();
+        } catch (Exception e) {
+            if (session != null && session.getTransaction() != null) {
+                session.getTransaction().rollback();
+            }
+            throw e;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
     }
 }

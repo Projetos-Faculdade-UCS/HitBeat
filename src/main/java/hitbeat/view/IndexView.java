@@ -55,6 +55,7 @@ public class IndexView extends Application {
                 new SidebarTopic(
                         "Menu 1",
                         new SidebarItem("Index", null, controller::loadStartPage),
+                        new SidebarItem("Músicas", null, controller::loadTracksView),
                         new SidebarItem("Gêneros", null, controller::loadGenresView)),
                 new SidebarTopic(
                         "Menu 2",

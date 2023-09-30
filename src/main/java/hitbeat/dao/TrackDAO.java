@@ -12,14 +12,17 @@ public class TrackDAO extends BaseDAO<Track>{
         super(Track.class);
     }
     
-    public void mockData(){
-        GenreDAO genreDAO = new GenreDAO();
-        Genre genre = genreDAO.get(Long.valueOf(1));
+    public static void mockData(){
+        Genre genre = new Genre("Rock");
         Date dataAtual = new Date();
 
         Track track = new Track("Track 1", dataAtual, 100, "picturePath", "filePath", false, false, genre);
-        this.save(track);
-        
+        TrackDAO trackDAO = new TrackDAO();
+        try {
+            trackDAO.save(track);
+        }
+        catch (Exception e) {
+        }
     }
 
 }

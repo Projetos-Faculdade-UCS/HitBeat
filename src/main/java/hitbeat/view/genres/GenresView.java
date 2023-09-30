@@ -18,7 +18,7 @@ public class GenresView extends Widget {
     @Override
     public Node build() {
 
-        genres = controller.fetchAllGenres();
+        genres = controller.fetchAll();
         ListView<Genre> lv = new ListView<Genre>(genres);
 
         lv.setCellFactory(genre -> {

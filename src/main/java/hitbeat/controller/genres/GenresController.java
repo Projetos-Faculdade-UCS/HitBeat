@@ -1,15 +1,11 @@
 package hitbeat.controller.genres;
 
+import hitbeat.controller.ModelController;
 import hitbeat.dao.GenreDAO;
 import hitbeat.model.Genre;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
-public class GenresController {
-    
-    private final GenreDAO genreDAO = new GenreDAO();
-
-    public ObservableList<Genre> fetchAllGenres() {
-        return FXCollections.observableArrayList(genreDAO.getAll());
+public class GenresController extends ModelController<Genre> {
+    public GenresController() {
+        super(new GenreDAO());
     }
 }
