@@ -24,7 +24,7 @@ public class PlayPauseBtn extends MFXButton{
             this.setPaused(!paused);
         });
 
-        this.setPaused(true);
+        this.setPaused(false);
         this.setId("playPauseBtn");
     }
 
