@@ -7,7 +7,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "genre")
-public class Genre {
+public class Genre extends BaseModel{
     @Id
     @GeneratedValue
     private Long id;

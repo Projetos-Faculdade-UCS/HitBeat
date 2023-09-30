@@ -1,16 +1,17 @@
 package hitbeat.view.footer;
 
+import hitbeat.view.base.wrappers.Slider;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
-public class ProgressBarDiv extends HBox{
+
+public class ProgressBar extends HBox{
     
-    public ProgressBarDiv(MediaPlayer mediaPlayer) {
+    public ProgressBar(MediaPlayer mediaPlayer) {
         super(1);
 
         // ------infos de duracao---------
@@ -28,11 +29,10 @@ public class ProgressBarDiv extends HBox{
         });
 
         // ------estilos---------
-        minValueLabel.getStyleClass().add("min-value-label");
-        maxValueLabel.getStyleClass().add("max-value-label");
+        minValueLabel.getStyleClass().addAll("label", "px-2");
+        maxValueLabel.getStyleClass().addAll("label", "px-1");
         progressSlider.getStyleClass().add("progress-slider");
-        this.getStyleClass().add("progress-bar-div");
-
+        this.setId("progress-bar");
 
         // ------atualizador do tempo---------
         Timeline sliderUpdater = new Timeline(

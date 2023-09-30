@@ -10,6 +10,6 @@ public class GenresController {
     private final GenreDAO genreDAO = new GenreDAO();
 
     public ObservableList<Genre> fetchAllGenres() {
-        return FXCollections.observableArrayList(genreDAO.getAllGenres());
+        return FXCollections.observableArrayList(genreDAO.getAll());
     }
 }

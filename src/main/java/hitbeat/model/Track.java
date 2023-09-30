@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "track")
-public class Track {
+public class Track extends BaseModel{
     @Id
     @GeneratedValue
     private Long id;
@@ -32,6 +32,18 @@ public class Track {
     public Track() {
     }
 
+    public Track(String name, Date creationDate, int duration, String picturePath, String filePath, boolean explicit,
+            boolean single, Genre genre) {
+        this.name = name;
+        this.creationDate = creationDate;
+        this.duration = duration;
+        this.picturePath = picturePath;
+        this.filePath = filePath;
+        this.explicit = explicit;
+        this.single = single;
+        this.genre = genre;
+    }
+
     public Genre getGenre() {
         return this.genre;
     }
@@ -50,6 +62,10 @@ public class Track {
 
     public void toggleFavorite() {
         this.favorite = !this.favorite;
+    }
+
+    public String getName() {
+        return this.name;
     }
 
 }

@@ -35,51 +35,12 @@
     fill: white;
     -fx-text-alignment: left;
 }
-
-/* Estilo para o rótulo minValueLabel */
-.min-value-label {
-    font-size: 14px;
-    -fx-font-size: 14px;
-    -fx-text-fill: #fff;
+.px-1 {
+    -fx-padding: 0 5px;
+    padding: 0 5px;
 }
 
-/* Estilo para o rótulo maxValueLabel */
-.max-value-label {
-    font-size: 14px;
-    -fx-font-size: 14px;
-    -fx-text-fill: #fff;
-}
-
-.progress-slider {
-    -fx-padding: 0;
-    padding: 0;
-    -fx-pref-width: 400px;
-    -fx-min-width: 200px;
-}
-.progress-bar-div{
-    -fx-background-color: #2195f300;
-    background-color: #2195f300;
-    -fx-alignment: center;
+.px-2 {
     -fx-padding: 0 10px;
     padding: 0 10px;
-}
-.footer{
-    -fx-alignment: center;
-    -fx-pref-height: 80px;
-    -fx-pref-width: 100%;
-    -fx-background-color: #302f2f;
-    background-color: #302f2f;
-}
-.actions-tab{
-    -fx-alignment: center;
-}
-.side-box{
-    -fx-alignment: center;
-    -fx-pref-width: 120px;
-    -fx-padding: 0 10px;
-}
-.repeat-btn{
-    -fx-background-color: #2195f300;
-    background-color: #2195f300;
-    -fx-text-fill: red;
 }
