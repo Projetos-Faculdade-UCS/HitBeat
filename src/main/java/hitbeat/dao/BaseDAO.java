@@ -1,29 +1,46 @@
 package hitbeat.dao;
 
+import java.util.List;
+
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.query.Query;
 
-public abstract class BaseDAO {
-    
-    private static SessionFactory sessionFactory;
+import hitbeat.model.BaseModel;
+import hitbeat.util.HibernateUtil;
 
-    protected static void init(Class<?> modelClass){
-        final StandardServiceRegistry registry =
-                new StandardServiceRegistryBuilder()
-                        .build();     
-        sessionFactory =
-                new MetadataSources(registry)             
-                        .addAnnotatedClass(modelClass)   
-                        .buildMetadata()                  
-                        .buildSessionFactory();
+public abstract class BaseDAO<T extends BaseModel> {
+    private Class<T> modelClass;
+
+    public BaseDAO(Class<T> modelClass){
+        this.modelClass = modelClass;
     }
-
-    public static void close() {
-        if (sessionFactory != null) {
-            sessionFactory.close();
+    
+    public List<T> getAll() {
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        try (Session session = sessionFactory.openSession()) {
+            String hql = "FROM Genre";
+            Query<T> query = session.createQuery(hql, modelClass);
+            return query.list();
         }
     }
-    
+
+    public T get(Long id){
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        try (Session session = sessionFactory.openSession()) {
+            String hql = String.format("FROM %s g WHERE g.id = :id", modelClass.getSimpleName());
+            Query<T> query = session.createQuery(hql, modelClass);
+            query.setParameter("name", id);
+            return query.uniqueResult();
+        }
+    }
+
+    public void save(T objectT) {
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.merge(objectT);
+            session.getTransaction().commit();
+        }
+    }
 }
