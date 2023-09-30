@@ -24,13 +24,13 @@ public class PlayPauseBtn extends MFXButton{
             this.setPaused(!paused);
         });
 
-        this.setPaused(false);
+        this.setPaused(true);
         this.setId("playPauseBtn");
     }
 
     private void setPaused(boolean paused) {
         this.paused = paused;
-         if (paused) {
+         if (!paused) {
             this.setGraphic(svgPause.build());
             mediaPlayer.play();
         } else {
