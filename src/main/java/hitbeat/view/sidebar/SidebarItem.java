@@ -1,11 +1,10 @@
 package hitbeat.view.sidebar;
 
 import hitbeat.styles.Styles;
-import hitbeat.view.base.widgets.Widget;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.scene.Node;
 
-public class SidebarItem extends Widget {
+public class SidebarItem extends MFXButton {
 
     private static final double BUTTON_MIN_WIDTH = 200;
 
@@ -17,18 +16,14 @@ public class SidebarItem extends Widget {
         this.text = text;
         this.icon = icon;
         this.onClick = onClick;
+        setupButton();
     }
 
-    @Override
-    public Node build() {
-        return setupButton();
-    }
-
-    private MFXButton setupButton() {
-        MFXButton button = new MFXButton(text, icon);
-        button.setMinWidth(BUTTON_MIN_WIDTH);
-        button.setStyle(Styles.SIDEBAR_BUTTONS);
-        button.setOnAction(e -> onClick.run());
-        return button;
+    private void setupButton() {
+        this.setGraphic(icon);
+        this.setText(text);
+        this.setMinWidth(BUTTON_MIN_WIDTH);
+        this.setStyle(Styles.SIDEBAR_BUTTONS);
+        this.setOnAction(e -> onClick.run());
     }
 }

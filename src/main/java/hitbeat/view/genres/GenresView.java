@@ -2,7 +2,6 @@ package hitbeat.view.genres;
 
 import hitbeat.controller.genres.GenresController;
 import hitbeat.model.Genre;
-import hitbeat.view.base.widgets.Widget;
 import hitbeat.view.base.widgets.listview.ListView;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -11,17 +10,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-public class GenresView extends Widget {
+public class GenresView extends ListView<Genre> {
     private ObservableList<Genre> genres;
     private final GenresController controller = new GenresController();
 
-    @Override
-    public Node build() {
-
+    public GenresView() {
+        super(null);
         genres = controller.fetchAll();
-        ListView<Genre> lv = new ListView<Genre>(genres);
+        this.setItems(genres);
 
-        lv.setCellFactory(genre -> {
+        this.setCellFactory(genre -> {
             return new ListCell<Genre>() {
                 @Override
                 protected void updateItem(Genre genre, boolean empty) {
@@ -32,15 +30,15 @@ public class GenresView extends Widget {
                         // hide the cell
                         setId("hidden-list-cell");
                         return;
-                    } else {        
+                    } else {
                         VBox vbox = new VBox();
                         Node genreCell = new GenreCell(genre);
                         VBox.setVgrow(genreCell, Priority.ALWAYS);
                         HBox.setHgrow(genreCell, Priority.ALWAYS);
                         vbox.getChildren().add(genreCell);
-        
+
                         HBox.setHgrow(vbox, Priority.ALWAYS);
-                        
+
                         setGraphic(vbox);
                         setOnMouseClicked(event -> {
                             System.out.println("Clicked on " + genre.getName());
@@ -50,7 +48,5 @@ public class GenresView extends Widget {
                 }
             };
         });
-
-        return lv;
     }
 }

@@ -1,6 +1,5 @@
 package hitbeat.view.footer;
 
-
 import hitbeat.view.base.widgets.SVGWidget;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.geometry.Pos;
@@ -10,16 +9,15 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-
-public class RepeatBtn extends MFXButton{
+public class RepeatBtn extends MFXButton {
     private boolean repeat = false;
 
-    public RepeatBtn(MediaPlayer mediaPlayer){
+    public RepeatBtn(MediaPlayer mediaPlayer) {
         super("");
 
         SVGWidget svgRepeat = new SVGWidget("/hitbeat/svg/repeat.svg", 16, Color.WHITE);
-        Node repeatNode = svgRepeat.build();
-        
+        Node repeatNode = svgRepeat;
+
         Circle repeatIndicator = new Circle(2);
         repeatIndicator.setFill(Color.WHITE);
         repeatIndicator.setVisible(false);
@@ -39,7 +37,7 @@ public class RepeatBtn extends MFXButton{
                 repeatIndicator.setFill(Color.BLUEVIOLET);
 
                 svgRepeat.setColor(Color.BLUEVIOLET);
-                setNewRepeat(stack, svgRepeat.build());
+                setNewRepeat(stack, svgRepeat);
 
                 mediaPlayer.setOnEndOfMedia(() -> {
                     mediaPlayer.seek(mediaPlayer.getStartTime());
@@ -51,9 +49,10 @@ public class RepeatBtn extends MFXButton{
                 repeatIndicator.setFill(Color.WHITE);
 
                 svgRepeat.setColor(Color.WHITE);
-                setNewRepeat(stack, svgRepeat.build());
+                setNewRepeat(stack, svgRepeat);
 
-                mediaPlayer.setOnEndOfMedia(() -> {});
+                mediaPlayer.setOnEndOfMedia(() -> {
+                });
             }
         });
     }

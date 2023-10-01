@@ -21,11 +21,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-
 public class IndexView extends Application {
     private static final double BACK_BUTTON_SIZE = 30;
-    
-    
+
     private BorderPane root;
     private Scene scene;
     private Sidebar sidebar;
@@ -35,12 +33,12 @@ public class IndexView extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         root = new BorderPane();
-        content = new StartPage().build();
+        content = new StartPage();
         sidebar = setupSidebar();
         Footer footer = new Footer();
 
         root.setCenter(content);
-        root.setLeft(sidebar.build());
+        root.setLeft(sidebar);
         root.setBottom(footer);
 
         root.applyCss();
@@ -83,7 +81,6 @@ public class IndexView extends Application {
         this.content = newContent;
         root.setCenter(wrapContentWithBackButton());
     }
-    
 
     public ContentMemento saveToMemento() {
         return new ContentMemento(unwrapContent(root.getCenter()));
@@ -106,7 +103,7 @@ public class IndexView extends Application {
         // Check if there are any saved mementos before adding the back button
         if (controller.hasMemento()) {
             // set the content with a top padding of the size of the back button
-            content.setStyle("-fx-padding: " + 2* BACK_BUTTON_SIZE + " 0 0 0;");
+            content.setStyle("-fx-padding: " + 2 * BACK_BUTTON_SIZE + " 0 0 0;");
             MFXButton backButton = createBackButton();
             contentWrapper.getChildren().add(backButton);
         }
@@ -118,7 +115,7 @@ public class IndexView extends Application {
         SVGWidget backButtonIcon = new SVGWidget("/hitbeat/svg/back-button.svg", BACK_BUTTON_SIZE, Color.WHITE);
 
         MFXButton backButton = new MFXButton("");
-        backButton.setGraphic(backButtonIcon.build());
+        backButton.setGraphic(backButtonIcon);
         backButton.setStyle("-fx-background-color: transparent;");
         StackPane.setAlignment(backButton, Pos.TOP_LEFT);
         StackPane.setMargin(backButton, new Insets(10));

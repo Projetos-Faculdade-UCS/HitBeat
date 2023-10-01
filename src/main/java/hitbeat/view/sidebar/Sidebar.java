@@ -3,7 +3,6 @@ package hitbeat.view.sidebar;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import hitbeat.view.base.widgets.Widget;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
@@ -13,7 +12,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
-public class Sidebar extends Widget {
+public class Sidebar extends VBox {
 
     private final String title;
     private final ArrayList<SidebarTopic> topics = new ArrayList<>();
@@ -23,24 +22,18 @@ public class Sidebar extends Widget {
     private final InvalidationListener heightInvalidationListener = obs -> delay.playFromStart();
 
     public Sidebar(String title, SidebarTopic... topics) {
+        super(10);
         this.title = title;
         Collections.addAll(this.topics, topics);
         initializeDelay();
-    }
+        this.setStyle("-fx-background-color: #1e1e1e;");
 
-    @Override
-    public Node build() {
-        VBox sidebar = new VBox(10);
-        sidebar.setStyle("-fx-background-color: #1e1e1e;");
-        
         topicsSidebar = new VBox();
-        sidebar.getChildren().add(new SidebarTitle(title).build());
+        this.getChildren().add(new SidebarTitle(this.title));
         addTopicsWithSpacersToSidebar(topicsSidebar);
-        sidebar.getChildren().add(topicsSidebar);
+        this.getChildren().add(topicsSidebar);
 
-        deferSpacerAdjustment(sidebar);
-
-        return sidebar;
+        deferSpacerAdjustment(this);
     }
 
     private void initializeDelay() {
@@ -49,17 +42,17 @@ public class Sidebar extends Widget {
 
     private void addTopicsWithSpacersToSidebar(VBox sidebar) {
         for (SidebarTopic topic : topics) {
-            Node node = topic.build();
+            Node node = topic;
             node.applyCss();
             if (node instanceof Parent) {
                 ((Parent) node).layout();
             }
             sidebar.getChildren().add(node);
-            totalTopicsHeight += node.getBoundsInParent().getHeight();  // update the total height
+            totalTopicsHeight += node.getBoundsInParent().getHeight(); // update the total height
             sidebar.getChildren().add(createSpacer());
         }
         if (!topics.isEmpty()) {
-            sidebar.getChildren().remove(sidebar.getChildren().size() - 1);  // Remove the last spacer
+            sidebar.getChildren().remove(sidebar.getChildren().size() - 1); // Remove the last spacer
         }
     }
 
@@ -80,7 +73,6 @@ public class Sidebar extends Widget {
             topicsSidebar.heightProperty().addListener(heightInvalidationListener);
         });
     }
-    
 
     private void setAllSpacersSize(double spacerSize) {
         for (Node node : topicsSidebar.getChildren()) {

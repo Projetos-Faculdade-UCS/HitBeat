@@ -3,31 +3,23 @@ package hitbeat.view.sidebar;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import hitbeat.view.base.widgets.Widget;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class SidebarTopic extends Widget {
+public class SidebarTopic extends VBox {
     private String title;
     private ArrayList<SidebarItem> items = new ArrayList<>();
 
     public SidebarTopic(String title, SidebarItem... items) {
+        super(0);
         this.title = title;
         Collections.addAll(this.items, items);
-    }
+        this.setFillWidth(true);
 
-    @Override
-    public Node build() {
-        VBox sidebarTopic = new VBox(0);
-        sidebarTopic.setFillWidth(true);
-        
-        sidebarTopic.getChildren().add(createTitlePane());
-        items.forEach(item -> sidebarTopic.getChildren().add(item.build()));
-
-        return sidebarTopic;
+        this.getChildren().add(createTitlePane());
+        this.items.forEach(item -> this.getChildren().add(item));
     }
 
     private BorderPane createTitlePane() {

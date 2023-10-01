@@ -9,12 +9,11 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 
-public class SVGWidget extends Widget {
+public class SVGWidget extends StackPane {
 
     private String resourcePath;
     private double width;
@@ -26,6 +25,7 @@ public class SVGWidget extends Widget {
         this.width = 0;
         this.height = 0;
         this.color = Color.WHITE;
+        this.build();
     }
 
     public SVGWidget(String resourcePath, Color color) {
@@ -33,6 +33,7 @@ public class SVGWidget extends Widget {
         this.width = 30;
         this.height = 30;
         this.color = color;
+        this.build();
     }
 
     public SVGWidget(String resourcePath, double size) {
@@ -40,6 +41,7 @@ public class SVGWidget extends Widget {
         this.width = size;
         this.height = size;
         this.color = Color.WHITE;
+        this.build();
     }
 
     public SVGWidget(String resourcePath, double size, Color color) {
@@ -47,6 +49,7 @@ public class SVGWidget extends Widget {
         this.width = size;
         this.height = size;
         this.color = color;
+        this.build();
     }
 
     public SVGWidget(String resourcePath, double width, double height) {
@@ -54,6 +57,7 @@ public class SVGWidget extends Widget {
         this.width = width;
         this.height = height;
         this.color = Color.WHITE;
+        this.build();
     }
 
     public SVGWidget(String resourcePath, double width, double height, Color color) {
@@ -61,16 +65,15 @@ public class SVGWidget extends Widget {
         this.width = width;
         this.height = height;
         this.color = color;
+        this.build();
     }
 
-    @Override
-    public Node build() {
+    public void build() {
         ArrayList<String> paths = getSvgPaths();
 
-        StackPane stackPane = new StackPane();
-        stackPane.setPrefSize(width, height);
-        stackPane.setMaxSize(width, height);
-        stackPane.setMinSize(width, height);
+        this.setPrefSize(width, height);
+        this.setMaxSize(width, height);
+        this.setMinSize(width, height);
 
         for (String path : paths) {
             SVGPath svgPath = new SVGPath();
@@ -83,10 +86,8 @@ public class SVGWidget extends Widget {
             svgPath.setScaleY(scaleY);
 
             svgPath.setFill(color);
-            stackPane.getChildren().add(svgPath);
+            this.getChildren().add(svgPath);
         }
-
-        return stackPane;
 
     }
 
