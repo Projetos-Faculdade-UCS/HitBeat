@@ -51,7 +51,7 @@ public abstract class BaseDAO<T extends BaseModel> {
         });
     }
 
-    private <R> R executeMethod(Function<Session,R> function) {
+    protected <R> R executeMethod(Function<Session,R> function) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = null;
         try {
