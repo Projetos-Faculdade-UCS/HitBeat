@@ -1,6 +1,7 @@
 package hitbeat.dao;
 
 import java.util.List;
+import java.util.function.Function;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -19,63 +20,61 @@ public abstract class BaseDAO<T extends BaseModel> {
     }
     
     public List<T> getAll() {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-        Session session = null;
-        try  {
-            session = sessionFactory.openSession();
+        return executeMethod(session -> {
             String hql = String.format("FROM %s", this.className);
             Query<T> query = session.createQuery(hql, modelClass);
             return query.list();
-        }  catch (Exception e) {
-            if (session != null && session.getTransaction() != null) {
-                session.getTransaction().rollback();
-            }
-            throw e;
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
+        });
     }
 
     public T get(Long id){
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            String hql = String.format("FROM %s g WHERE g.id = :id", this.className);
+        return executeMethod(session -> {
+            return session.get(modelClass, id);
+        });
+    }
+
+    public T first(){
+        return executeMethod(session -> {
+            String hql = String.format("FROM %s", this.className);
             Query<T> query = session.createQuery(hql, modelClass);
-            query.setParameter("id", id);
+            query.setMaxResults(1);
             return query.uniqueResult();
-        }  catch (Exception e) {
-            if (session != null && session.getTransaction() != null) {
-                session.getTransaction().rollback();
-            }
-            throw e;
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
+        });
     }
 
     public void save(T objectT) {
+        executeMethod(session -> {
+            session.beginTransaction();
+            session.merge(objectT);
+            session.getTransaction().commit();
+            return null;
+        });
+    }
+
+    private <R> R executeMethod(Function<Session,R> function) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = null;
         try {
             session = sessionFactory.openSession();
-            session.beginTransaction();
-            session.merge(objectT);
-            session.getTransaction().commit();
+            R objectT = function.apply(session);
+            return objectT;
         } catch (Exception e) {
-            if (session != null && session.getTransaction() != null) {
-                session.getTransaction().rollback();
-            }
+            rollbackTransaction(session);
             throw e;
         } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
+            closeSession(session);
+        }
+    }
+
+    private void closeSession(Session session) {
+        if (session != null && session.isOpen()) {
+            session.close();
+        }
+    }
+
+    private void rollbackTransaction(Session session) {
+        if (session != null && session.getTransaction() != null) {
+            session.getTransaction().rollback();
         }
     }
 }

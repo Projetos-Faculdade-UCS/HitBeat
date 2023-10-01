@@ -1,12 +1,13 @@
 package hitbeat.model;
 
 import java.util.Date;
+import java.util.UUID;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -14,7 +15,7 @@ import jakarta.persistence.Table;
 public class Track extends BaseModel{
     @Id
     @GeneratedValue
-    private Long id;
+    private UUID id;
 
     private String name;
     private Date creationDate;
@@ -25,7 +26,7 @@ public class Track extends BaseModel{
     private boolean single;
     private boolean favorite;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "genre_id")
     private Genre genre;
 

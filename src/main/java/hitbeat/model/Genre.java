@@ -1,5 +1,7 @@
 package hitbeat.model;
 
+import java.util.UUID;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -10,7 +12,7 @@ import jakarta.persistence.Table;
 public class Genre extends BaseModel{
     @Id
     @GeneratedValue
-    private Long id;
+    private UUID id;
 
     private String name;
 
