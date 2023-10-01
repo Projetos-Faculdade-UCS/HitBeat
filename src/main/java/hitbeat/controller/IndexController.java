@@ -3,7 +3,6 @@ package hitbeat.controller;
 import hitbeat.view.IndexView;
 import hitbeat.view.StartPage;
 import hitbeat.view.base.mementos.ContentCaretaker;
-import hitbeat.view.base.widgets.Widget;
 import hitbeat.view.genres.GenresView;
 import hitbeat.view.tracks.TracksView;
 import javafx.scene.Node;
@@ -41,8 +40,8 @@ public class IndexController {
         return caretaker.hasMemento();
     }
 
-    private void setContent(Widget contentWidget) {
+    private void setContent(Node contentWidget) {
         caretaker.addMemento(view.saveToMemento());
-        view.updateContent(contentWidget.build());
+        view.updateContent(contentWidget);
     }
 }

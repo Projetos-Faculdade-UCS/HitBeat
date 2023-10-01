@@ -16,7 +16,7 @@ public class GenreCell extends Pane {
         this.genre = genre;
 
         // Create Leading
-        Node leading = new GenreCellCenter("lead").build();
+        Node leading = new GenreCellCenter("lead");
 
         // Create Title
         Label titleLabel = new Label(this.genre.getName());
@@ -31,7 +31,7 @@ public class GenreCell extends Pane {
         trailingLabel.setStyle("-fx-font-size: 14; -fx-text-fill: white;");
 
         ListTile listTile = new ListTile(leading, titleLabel, subtitleLabel, trailingLabel);
-        
+
         this.getChildren().add(listTile);
         VBox.setVgrow(this, Priority.ALWAYS);
         HBox.setHgrow(this, Priority.ALWAYS);

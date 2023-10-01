@@ -7,11 +7,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 
-public class VolumeBox extends HBox{
+public class VolumeBox extends HBox {
 
     boolean muted = false;
     double volume = 0.5;
-    
+
     public VolumeBox(MediaPlayer mediaPlayer) {
         super(15);
 
@@ -22,8 +22,8 @@ public class VolumeBox extends HBox{
 
         SVGWidget svgMute = new SVGWidget("/hitbeat/svg/volume-mute.svg", 15, Color.WHITE);
         SVGWidget svgVolume = new SVGWidget("/hitbeat/svg/volume-max.svg", 15, Color.WHITE);
-        
-        MFXButton muteBtn = new MFXButton("", svgVolume.build());
+
+        MFXButton muteBtn = new MFXButton("", svgVolume);
 
         muteBtn.setOnAction(e -> {
             if (muted) {
@@ -38,9 +38,9 @@ public class VolumeBox extends HBox{
 
         volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.doubleValue() == 0) {
-                muteBtn.setGraphic(svgMute.build());
+                muteBtn.setGraphic(svgMute);
             } else {
-                muteBtn.setGraphic(svgVolume.build());
+                muteBtn.setGraphic(svgVolume);
             }
         });
 
