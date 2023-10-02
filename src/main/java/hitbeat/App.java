@@ -14,7 +14,7 @@ public class App {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             HibernateUtil.shutdown();
         }));
-        
+
         GenreDAO.mockData();
         TrackDAO.mockData();
         IndexView.main(args);

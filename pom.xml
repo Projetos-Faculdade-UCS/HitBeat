@@ -95,11 +95,29 @@
     </dependency>
 
     <dependency>
-        <groupId>net.sf.javamusictag</groupId>
-        <artifactId>jid3lib</artifactId>
-        <version>0.5.4</version>
+      <groupId>com.mpatric</groupId>
+      <artifactId>mp3agic</artifactId>
+      <version>0.9.1</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.30</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derby</artifactId>
+      <version>10.16.1.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derbytools</artifactId>
+      <version>10.16.1.1</version>
+    </dependency>
 
   </dependencies>
 

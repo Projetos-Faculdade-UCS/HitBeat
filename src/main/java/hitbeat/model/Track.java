@@ -1,7 +1,6 @@
 package hitbeat.model;
 
 import java.util.Date;
-import java.util.UUID;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,13 +8,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@Data
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "track")
-public class Track extends BaseModel{
+public class Track extends BaseModel {
     @Id
     @GeneratedValue
-    private UUID id;
+    private Long id;
 
     private String name;
     private Date creationDate;
@@ -43,30 +46,6 @@ public class Track extends BaseModel{
         this.explicit = explicit;
         this.single = single;
         this.genre = genre;
-    }
-
-    public Genre getGenre() {
-        return this.genre;
-    }
-
-    public void setGenre(Genre genre) {
-        this.genre = genre;
-    }
-
-    public boolean getFavorite() {
-        return this.favorite;
-    }
-
-    public void setFavorite(boolean favorite) {
-        this.favorite = favorite;
-    }
-
-    public void toggleFavorite() {
-        this.favorite = !this.favorite;
-    }
-
-    public String getName() {
-        return this.name;
     }
 
 }
