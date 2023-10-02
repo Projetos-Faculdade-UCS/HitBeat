@@ -56,7 +56,7 @@ public class IndexView extends Application {
                         new SidebarItem("Músicas", null, controller::loadTracksView),
                         new SidebarItem("Gêneros", null, controller::loadGenresView)),
                 new SidebarTopic(
-                        "Menu 2",
+                        "Gerenciar",
                         new SidebarItem("Minha Biblioteca", null, controller::loadLibraryView)));
     }
 
