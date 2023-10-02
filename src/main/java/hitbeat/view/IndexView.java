@@ -57,7 +57,7 @@ public class IndexView extends Application {
                         new SidebarItem("Gêneros", null, controller::loadGenresView)),
                 new SidebarTopic(
                         "Menu 2",
-                        new SidebarItem("Index", null, controller::loadStartPage)));
+                        new SidebarItem("Minha Biblioteca", null, controller::loadLibraryView)));
     }
 
     private void setupScene(Stage primaryStage) {

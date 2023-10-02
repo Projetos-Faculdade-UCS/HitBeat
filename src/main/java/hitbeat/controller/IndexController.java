@@ -4,6 +4,7 @@ import hitbeat.view.IndexView;
 import hitbeat.view.StartPage;
 import hitbeat.view.base.mementos.ContentCaretaker;
 import hitbeat.view.genres.GenresView;
+import hitbeat.view.library.LibraryPage;
 import hitbeat.view.tracks.TracksView;
 import javafx.scene.Node;
 
@@ -29,6 +30,11 @@ public class IndexController {
     public void loadGenresView() {
         GenresView centerOne = new GenresView();
         setContent(centerOne);
+    }
+
+    public void loadLibraryView() {
+        LibraryPage libraryPage = new LibraryPage();
+        setContent(libraryPage);
     }
 
     public void restoreLastState() {
