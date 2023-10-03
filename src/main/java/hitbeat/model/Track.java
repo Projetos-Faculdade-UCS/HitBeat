@@ -2,6 +2,9 @@ package hitbeat.model;
 
 import java.util.Date;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -14,10 +17,12 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Entity
-@Table(name = "track")
+@Table(name = "track", uniqueConstraints = {
+    @jakarta.persistence.UniqueConstraint(columnNames = "filePath", name = "track_filePath_unique")
+})
 public class Track extends BaseModel {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -29,8 +34,9 @@ public class Track extends BaseModel {
     private boolean single;
     private boolean favorite;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "genre_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Genre genre;
 
     public Track() {

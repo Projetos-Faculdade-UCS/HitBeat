@@ -11,11 +11,11 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "genre", uniqueConstraints = {
-        @jakarta.persistence.UniqueConstraint(columnNames = "name")
+        @jakarta.persistence.UniqueConstraint(columnNames = "name", name = "genre_name_unique")
 })
 public class Genre extends BaseModel {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
 
     private String name;
