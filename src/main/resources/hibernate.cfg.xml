@@ -31,6 +31,9 @@
         <!-- Drop and re-create the database schema on startup -->
         <property name="hibernate.hbm2ddl.auto">update</property> <!-- can also be "create", "validate", or "create-drop" -->
 
+        <!-- enable batch -->
+        <property name="hibernate.jdbc.batch_size">100</property>
+
         
         <!-- Mention annotated class -->
         <mapping class="hitbeat.model.Track"/>
