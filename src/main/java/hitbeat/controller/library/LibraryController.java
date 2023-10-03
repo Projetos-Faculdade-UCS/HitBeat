@@ -1,10 +1,15 @@
 package hitbeat.controller.library;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Collections;
+import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import hitbeat.dao.GenreDAO;
 import hitbeat.dao.TrackDAO;
@@ -33,11 +38,17 @@ public class LibraryController {
      * @param callback - Callback para processar os arquivos MP3 selecionados
      */
     public void addFolderToLibrary() {
+        Date date = new Date(System.currentTimeMillis());
         File selectedFolder = selectFolder();
+        Date date2 = new Date(System.currentTimeMillis());
+        System.out.println("Time to select folder: " + (date2.getTime() - date.getTime()) + "ms");
+        date = new Date(System.currentTimeMillis());
 
         if (selectedFolder != null) {
             files = getMP3FilesFromFolder(selectedFolder);
 
+            date2 = new Date(System.currentTimeMillis());
+            System.out.println("Time to get mp3 files: " + (date2.getTime() - date.getTime()) + "ms");
             System.out.println("Selected folder: " + selectedFolder.getAbsolutePath());
         } else {
             System.out.println("No folder selected");
@@ -63,21 +74,34 @@ public class LibraryController {
      * @return Lista de arquivos MP3 envolvidos em objetos CustomMP3File
      */
     private List<CustomMP3File> getMP3FilesFromFolder(File folder) {
+        Date date = new Date(System.currentTimeMillis());
         if (folder == null || !folder.isDirectory()) {
             throw new IllegalArgumentException("The provided File object is not a directory or is null.");
         }
 
-        File[] filesInDirectory = folder.listFiles();
+        Path dirPath = folder.toPath();
+        List<CustomMP3File> mp3Files = new ArrayList<>();
 
-        if (filesInDirectory == null) {
-            return Collections.emptyList();
+        try {
+            Files.walkFileTree(dirPath, new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    if (file.toString().toLowerCase().endsWith(".mp3")) {
+                        CustomMP3File customMP3File = createCustomMP3File(file.toFile());
+                        if (customMP3File != null) {
+                            mp3Files.add(customMP3File);
+                        }
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } catch (IOException e) {
+            mp3Files.clear();
         }
 
-        return Arrays.stream(filesInDirectory)
-                .filter(file -> file.getName().toLowerCase().endsWith(".mp3"))
-                .map(this::createCustomMP3File)
-                .filter(file -> file != null)
-                .collect(Collectors.toList());
+        Date date2 = new Date(System.currentTimeMillis());
+        System.out.println("Time to get mp3 files: " + (date2.getTime() - date.getTime()) + "ms");
+        return mp3Files;
     }
 
     /**
