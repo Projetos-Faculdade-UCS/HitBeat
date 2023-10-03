@@ -44,7 +44,7 @@ public class LibraryDatabaseManager {
                     return genre;
                 })
                 .collect(Collectors.toList());
-        genreDAO.saveAllEntities(newGenres, "name");
+        genreDAO.bulkCreateOrUpdate(newGenres, "name");
 
         // Merge both lists of genres for track association
         List<Genre> allGenres = Stream.concat(existingGenres.stream(), newGenres.stream()).collect(Collectors.toList());
@@ -63,7 +63,7 @@ public class LibraryDatabaseManager {
                     return track;
                 })
                 .collect(Collectors.toList());
-        trackDAO.saveAllEntities(tracks, "filePath");
+        trackDAO.bulkCreateOrUpdate(tracks, "filePath");
     }
 
     public void saveCustomMP3FileToDatabase(CustomMP3File customMP3File) {

@@ -1,0 +1,64 @@
+.song-edit-row {
+    -fx-border-color: #b4b4b4;
+    border-color: #b4b4b4;
+    -fx-border-width: 1px;
+    border-width: 1px;
+    -fx-border-radius: 10px;
+    border-radius: 10px;
+
+    -fx-padding: 10px;
+    padding: 10px;
+}
+
+.song-edit-row .mfx-text-field {
+    -fx-background-color: transparent;
+    background-color: transparent;
+    -mfx-background-color: transparent;
+    -fx-text-fill: white !important;
+}
+
+.text-field-title {
+    -fx-font-size: 12px;
+    font-size: 12px;
+    -fx-fill: white;
+    fill: white;
+    -fx-text-alignment: left;
+}
+
+.library-page {
+    -fx-padding: 10px;
+    padding: 10px;
+}
+
+.library-page .scroll-pane {
+    -fx-padding: 10px;
+    padding: 10px;
+    -fx-background-color: transparent;
+    background-color: transparent;
+}
+
+.library-page .files-box {
+    -fx-background-color: transparent;
+    background-color: transparent;
+}
+
+.library-page .files-box .hbox .mfx-text-field {
+    -fx-background-color: transparent;
+    background-color: transparent;
+    -jfx-unfocus-color: transparent;
+    -jfx-focus-color: transparent;
+}
+
+.library-page .save-button {
+    -fx-alignment: BOTTOM_RIGHT;
+    /* Other styles for positioning, padding, etc. */
+}
+
+.library-page .button-raised {
+    /* Your button styles here */
+    -fx-background-color: -main-color;
+    background-color: -main-color;
+    -fx-text-fill: white;
+}
+
+

@@ -6,7 +6,6 @@ import hitbeat.controller.library.LibraryController;
 import hitbeat.util.CustomMP3File;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -16,20 +15,43 @@ public class LibraryPage extends VBox {
 
     public LibraryPage() {
         super();
+        this.getStyleClass().add("library-page");
+
         MFXButton button = new MFXButton("Add Folder to Library");
         button.getStyleClass().add("button-raised");
         button.setOnAction(e -> {
-            controller.addFolderToLibrary((files) -> setFilesFromFolder(files));
+            controller.addFolderToLibrary();
+            setFilesFromFolder(controller.getFiles());
         });
-
         this.getChildren().add(button);
 
-        // show files from folder
         MFXScrollPane scrollPane = new MFXScrollPane();
         filesBox = new VBox();
+        filesBox.setSpacing(10);
         scrollPane.setContent(filesBox);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+        VBox.setVgrow(scrollPane, javafx.scene.layout.Priority.ALWAYS);
 
-        this.getChildren().add(filesBox);
+        scrollPane.getStyleClass().add("scroll-pane");
+        this.getChildren().add(scrollPane);
+
+        scrollPane.getStyleClass().add("scroll-pane");
+        filesBox.getStyleClass().add("files-box");
+
+        // save button (floats on the bottom right)
+        MFXButton saveButton = new MFXButton("Save");
+        saveButton.getStyleClass().add("button-raised");
+        saveButton.setOnAction(e -> {
+            controller.saveToDatabase();
+            setFilesFromFolder(controller.getFiles());
+        });
+        saveButton.getStyleClass().add("save-button");
+        saveButton.getStyleClass().add("button-raised");
+
+        this.getChildren().add(saveButton);
+
+        this.getStylesheets().add(getClass().getResource("/hitbeat/css/library/library.css").toExternalForm());
     }
 
     private void setFilesFromFolder(List<CustomMP3File> files) {
@@ -42,13 +64,10 @@ public class LibraryPage extends VBox {
         }
 
         for (CustomMP3File file : files) {
-            HBox fileBox = new HBox();
-            Text text = new Text(file.getTitle() + " -> " + file.getAlbum() + " -> " + file.getArtist() + " -> "
-                    + file.getGenre());
-            text.setId("text");
-            text.setStyle("-fx-font-size: 20px; -fx-text-fill: white !important;");
-            fileBox.getChildren().add(text);
-            filesBox.getChildren().add(fileBox);
+            SongEditRow songEditRow = new SongEditRow(file);
+            filesBox.getChildren().add(songEditRow);
         }
+
     }
+
 }

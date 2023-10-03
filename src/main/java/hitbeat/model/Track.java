@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.With;
@@ -22,7 +23,7 @@ import lombok.With;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "track", uniqueConstraints = {
-        @jakarta.persistence.UniqueConstraint(columnNames = "filePath", name = "track_filePath_unique")
+        @UniqueConstraint(columnNames = "filePath", name = "track_filePath_unique")
 })
 public class Track extends BaseModel {
     @Id

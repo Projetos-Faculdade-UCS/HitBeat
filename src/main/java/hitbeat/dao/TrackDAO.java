@@ -24,7 +24,7 @@ public class TrackDAO extends BaseDAO<Track> {
     }
 
     @Override
-    public void updateEntityProperties(Track existingTrack, Track newTrack) {
+    public void updateProperties(Track existingTrack, Track newTrack) {
         existingTrack
                 .withName(newTrack.getName())
                 .withCreationDate(newTrack.getCreationDate())

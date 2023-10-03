@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 public class ListTile extends HBox {
@@ -15,7 +16,7 @@ public class ListTile extends HBox {
 
         // Create and add spacer for positioning
         Pane spacer = new Pane();
-        HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+        HBox.setHgrow(spacer, Priority.ALWAYS);
 
         // Build the HBox
         if (leading != null) this.getChildren().add(leading);
@@ -32,8 +33,8 @@ public class ListTile extends HBox {
     private void styleHBox() {
         this.setSpacing(10);
         this.setPadding(new Insets(10));
-        VBox.setVgrow(this, javafx.scene.layout.Priority.ALWAYS);
-        HBox.setHgrow(this, javafx.scene.layout.Priority.ALWAYS);
+        VBox.setVgrow(this, Priority.ALWAYS);
+        HBox.setHgrow(this, Priority.ALWAYS);
     }
 
     private void addParentPropertyListener() {

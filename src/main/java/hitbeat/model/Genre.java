@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.With;
@@ -14,7 +15,7 @@ import lombok.With;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "genre", uniqueConstraints = {
-        @jakarta.persistence.UniqueConstraint(columnNames = "name", name = "genre_name_unique")
+        @UniqueConstraint(columnNames = "name", name = "genre_name_unique")
 })
 public class Genre extends BaseModel {
     @Id

@@ -13,6 +13,9 @@ import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.NotSupportedException;
 import com.mpatric.mp3agic.UnsupportedTagException;
 
+import lombok.Setter;
+
+@Setter
 public class CustomMP3File {
 
     private final Mp3File mp3file;

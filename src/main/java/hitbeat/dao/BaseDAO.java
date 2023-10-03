@@ -149,7 +149,7 @@ public abstract class BaseDAO<T extends BaseModel> {
         }
     }
 
-    public void saveAllEntities(List<T> entities, String uniqueField) {
+    public void bulkCreateOrUpdate(List<T> entities, String uniqueField) {
         executeMethod(session -> {
             Map<String, T> existingEntitiesMap = getExistingEntitiesMap(entities, session, uniqueField);
 
@@ -159,7 +159,7 @@ public abstract class BaseDAO<T extends BaseModel> {
                 T existingEntity = existingEntitiesMap.get(uniqueValue);
 
                 if (existingEntity != null) {
-                    updateEntityProperties(existingEntity, entity);
+                    updateProperties(existingEntity, entity);
                     session.merge(existingEntity);
                 } else {
                     session.persist(entity);
@@ -198,5 +198,5 @@ public abstract class BaseDAO<T extends BaseModel> {
         }
     }
 
-    protected abstract void updateEntityProperties(T existingEntity, T newEntity);
+    protected abstract void updateProperties(T existingEntity, T newEntity);
 }

@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import hitbeat.dao.GenreDAO;
@@ -17,6 +16,7 @@ public class LibraryController {
     private GenreDAO genreDAO;
     private TrackDAO trackDAO;
     private LibraryDatabaseManager libraryDatabaseManager;
+    private List<CustomMP3File> files;
 
     public LibraryController() {
         this.genreDAO = new GenreDAO();
@@ -32,15 +32,11 @@ public class LibraryController {
      *
      * @param callback - Callback para processar os arquivos MP3 selecionados
      */
-    public void addFolderToLibrary(Consumer<List<CustomMP3File>> callback) {
+    public void addFolderToLibrary() {
         File selectedFolder = selectFolder();
 
         if (selectedFolder != null) {
-            List<CustomMP3File> files = getMP3FilesFromFolder(selectedFolder);
-
-            // Save each CustomMP3File to the database
-            libraryDatabaseManager.saveMultipleCustomMP3FilesToDatabase(files);
-            callback.accept(files);
+            files = getMP3FilesFromFolder(selectedFolder);
 
             System.out.println("Selected folder: " + selectedFolder.getAbsolutePath());
         } else {
@@ -81,7 +77,7 @@ public class LibraryController {
                 .filter(file -> file.getName().toLowerCase().endsWith(".mp3"))
                 .map(this::createCustomMP3File)
                 .filter(file -> file != null)
-                .collect(Collectors.toList()); 
+                .collect(Collectors.toList());
     }
 
     /**
@@ -97,5 +93,18 @@ public class LibraryController {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public void saveToDatabase() {
+        if (files == null || files.isEmpty()) {
+            System.out.println("No files to save");
+            return;
+        }
+        libraryDatabaseManager.saveMultipleCustomMP3FilesToDatabase(files);
+        files.clear();
+    }
+
+    public List<CustomMP3File> getFiles() {
+        return files;
     }
 }

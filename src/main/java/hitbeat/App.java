@@ -13,8 +13,7 @@ public class App {
             HibernateUtil.shutdown();
         }));
 
-        // GenreDAO.mockData();
-        // TrackDAO.mockData();
+        HibernateUtil.init();
         IndexView.main(args);
 
         HibernateUtil.shutdown();

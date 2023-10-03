@@ -56,7 +56,7 @@ public class GenreDAO extends BaseDAO<Genre> {
     }
 
     @Override
-    protected void updateEntityProperties(Genre existingEntity, Genre newEntity) {
-        existingEntity.withName(newEntity.getName());
+    protected void updateProperties(Genre existingEntity, Genre newEntity) {
+        existingEntity.setName(newEntity.getName());
     }
 }
