@@ -1,33 +1,32 @@
 package hitbeat.view.footer;
 
+import hitbeat.controller.player.PlayerController;
 import hitbeat.view.base.widgets.SVGWidget;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class RepeatBtn extends MFXButton {
     private boolean repeat = false;
 
-    public RepeatBtn(MediaPlayer mediaPlayer) {
+    public RepeatBtn(PlayerController player) {
         super("");
 
-        SVGWidget svgRepeat = new SVGWidget("/hitbeat/svg/repeat.svg", 16, Color.WHITE);
-        Node repeatNode = svgRepeat;
+        SVGWidget svgRepeat = new SVGWidget(
+            "/hitbeat/svg/repeat.svg", 16, Color.WHITE);
 
         Circle repeatIndicator = new Circle(2);
         repeatIndicator.setFill(Color.WHITE);
         repeatIndicator.setVisible(false);
 
-        StackPane.setAlignment(repeatNode, Pos.CENTER);
+        StackPane.setAlignment(svgRepeat, Pos.CENTER);
         StackPane.setAlignment(repeatIndicator, Pos.BOTTOM_CENTER);
         repeatIndicator.setStyle("-fx-translate-y: 8px;");
 
         StackPane stack = new StackPane();
-        stack.getChildren().addAll(repeatNode, repeatIndicator);
+        stack.getChildren().addAll(svgRepeat, repeatIndicator);
 
         this.setGraphic(stack);
         this.setOnAction(event -> {
@@ -37,28 +36,17 @@ public class RepeatBtn extends MFXButton {
                 repeatIndicator.setFill(Color.BLUEVIOLET);
 
                 svgRepeat.setColor(Color.BLUEVIOLET);
-                setNewRepeat(stack, svgRepeat);
-
-                mediaPlayer.setOnEndOfMedia(() -> {
-                    mediaPlayer.seek(mediaPlayer.getStartTime());
-                    mediaPlayer.play();
-                });
+                player.toggleRepeat();
+                
             } else {
                 repeat = false;
                 repeatIndicator.setVisible(false);
                 repeatIndicator.setFill(Color.WHITE);
 
                 svgRepeat.setColor(Color.WHITE);
-                setNewRepeat(stack, svgRepeat);
-
-                mediaPlayer.setOnEndOfMedia(() -> {
-                });
+                player.toggleRepeat();
             }
         });
-    }
-
-    private void setNewRepeat(StackPane stack, Node repeatNode) {
-        stack.getChildren().set(0, repeatNode);
     }
 
 }

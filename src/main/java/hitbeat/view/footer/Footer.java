@@ -16,7 +16,7 @@ public class Footer extends HBox{
 
         //---------------layout---------------------
         MusicBox musicBox = new MusicBox();
-        MediaPlayerBox mediaPlayerBox = new MediaPlayerBox(mediaPlayer);
+        MediaPlayerBox mediaPlayerBox = new MediaPlayerBox();
         VolumeBox volumeBox = new VolumeBox(mediaPlayer);
 
         HBox.setHgrow(musicBox, Priority.NEVER);

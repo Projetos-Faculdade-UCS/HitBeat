@@ -1,17 +1,17 @@
 package hitbeat.view.footer;
 
+import hitbeat.controller.player.PlayerController;
 import hitbeat.view.base.wrappers.Slider;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
 
 public class ProgressBar extends HBox{
     
-    public ProgressBar(MediaPlayer mediaPlayer) {
+    public ProgressBar(PlayerController player) {
         super(1);
 
         // ------infos de duracao---------
@@ -19,13 +19,14 @@ public class ProgressBar extends HBox{
         progressSlider.setMin(0);
         progressSlider.setValue(0);
         
-        Label minValueLabel = new Label(this.formatTime(progressSlider.getMin()));
-        Label maxValueLabel = new Label();
+        Label minValueLabel;
+        Label maxValueLabel;
 
-        mediaPlayer.setOnReady(() -> {
-            double duracao = mediaPlayer.getTotalDuration().toSeconds();
-            maxValueLabel.setText(this.formatTime(duracao));
+        player.setOnReady(() -> {
+            double duracao = player.getTotalDuration();
             progressSlider.setMax(duracao);
+            maxValueLabel.setText(this.formatTime(duracao));
+            minValueLabel.setText(this.formatTime(0));
         });
 
         // ------estilos---------
@@ -37,7 +38,7 @@ public class ProgressBar extends HBox{
         // ------atualizador do tempo---------
         Timeline sliderUpdater = new Timeline(
             new KeyFrame(Duration.seconds(.01), event -> {
-                progressSlider.setValue(mediaPlayer.getCurrentTime().toSeconds());
+                progressSlider.setValue(player.getCurrentTime());
                 minValueLabel.setText(this.formatTime(progressSlider.getValue()));
             })
         );
@@ -45,7 +46,7 @@ public class ProgressBar extends HBox{
             sliderUpdater.pause();
         });
         progressSlider.setOnMouseReleased(event ->{
-            mediaPlayer.seek(Duration.seconds(progressSlider.getValue()));
+            player.seek(Duration.seconds(progressSlider.getValue()));
             sliderUpdater.play();
         });
         sliderUpdater.setCycleCount(Timeline.INDEFINITE);
