@@ -53,3 +53,8 @@
 .root {
     -main-color: #8A2BE2;
 }
+
+.transparent {
+    -fx-background-color: transparent;
+    background-color: transparent;
+}

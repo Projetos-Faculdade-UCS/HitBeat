@@ -1,28 +1,29 @@
-package hitbeat.view.genres;
+package hitbeat.view.tracks;
 
-import hitbeat.model.Genre;
+import hitbeat.model.Track;
 import hitbeat.view.base.widgets.ListTile;
 import hitbeat.view.base.widgets.listview.BaseCell;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.text.Text;
 
-public class GenreCell extends BaseCell<Genre> {
-    private Genre genre;
+public class TrackCell extends BaseCell<Track> {
+    private Track track;
     private Label titleLabel;
     private Label subtitleLabel;
     private Label trailingLabel;
 
-    public GenreCell(Genre genre) {
+    public TrackCell(Track track) {
         // Initialize UI components
         initUI();
 
-        // Set genre data
-        updateItem(genre);
+        // Set track data
+        updateItem(track);
     }
 
     private void initUI() {
         // Create Leading
-        Node leading = new GenreCellCenter("lead");
+        Text leading = new Text("lead");
+        leading.setStyle("-fx-font-size: 16; -fx-text-fill: white;");
 
         // Create Title
         titleLabel = new Label();
@@ -41,13 +42,13 @@ public class GenreCell extends BaseCell<Genre> {
     }
 
     @Override
-    public void updateItem(Genre genre) {
-        this.genre = genre;
+    public void updateItem(Track track) {
+        this.track = track;
 
-        if (genre != null) {
-            titleLabel.setText(this.genre.getName());
-            subtitleLabel.setText("Subtitle text here"); // Update if Genre has more data
-            trailingLabel.setText("Trail"); // Update if Genre has more data
+        if (track != null) {
+            titleLabel.setText(this.track.getName());
+            subtitleLabel.setText("Subtitle text here"); // Update if Track has more data
+            trailingLabel.setText("Trail"); // Update if Track has more data
         } else {
             titleLabel.setText("");
             subtitleLabel.setText("");

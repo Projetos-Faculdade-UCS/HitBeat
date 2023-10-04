@@ -29,7 +29,7 @@ public class LibraryPage extends VBox {
         initializeStyling();
         configureChildren();
 
-        getStylesheets().add(getClass().getResource("/hitbeat/css/library/library.css").toExternalForm());
+        getStylesheets().add("hitbeat/css/library/library.css");
     }
 
     private void initializeStyling() {
@@ -55,7 +55,7 @@ public class LibraryPage extends VBox {
     private void createConfiguredScrollPane() {
         scrollPane = new MFXScrollPane();
 
-        filesBox = new ListView<>(null);
+        filesBox = new ListView<>();
         filesBox.setCellFactory(param -> new SongEditRowCell());
         filesBox.getStyleClass().add("files-box");
 

@@ -17,6 +17,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -34,6 +35,7 @@ public class IndexView extends Application {
     public void start(Stage primaryStage) throws Exception {
         root = new BorderPane();
         content = new StartPage();
+        this.setContentLayout((Pane) content);
         sidebar = setupSidebar();
         Footer footer = new Footer();
 
@@ -108,11 +110,15 @@ public class IndexView extends Application {
             contentWrapper.getChildren().add(backButton);
         }
 
+        setContentLayout(contentWrapper);
+
+        return contentWrapper;
+    }
+
+    private void setContentLayout(Pane contentWrapper) {
         Layout.getInstance().setContentWidth(contentWrapper.widthProperty());
 
         Layout.getInstance().setContentHeight(contentWrapper.heightProperty());
-
-        return contentWrapper;
     }
 
     private MFXButton createBackButton() {
