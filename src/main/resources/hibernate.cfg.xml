@@ -38,6 +38,7 @@
         <!-- Mention annotated class -->
         <mapping class="hitbeat.model.Track"/>
         <mapping class="hitbeat.model.Genre"/>
+        <mapping class="hitbeat.model.Queue"/>
 
     </session-factory>
 </hibernate-configuration>

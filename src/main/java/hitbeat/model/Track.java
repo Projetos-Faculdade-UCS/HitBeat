@@ -1,9 +1,11 @@
 package hitbeat.model;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -61,6 +63,21 @@ public class Track extends BaseModel {
         this.explicit = explicit;
         this.single = single;
         this.genre = genre;
+    }
+
+    // Track(Long, String, Date, int, String, String, boolean, boolean, boolean, Genre, Set<Queue>)
+    public Track(Long id, String name, Date creationDate, int duration, String picturePath, String filePath,
+            boolean explicit, boolean single, boolean favorite, Genre genre, Set<Queue> queues) {
+        this.id = id;
+        this.name = name;
+        this.creationDate = creationDate;
+        this.duration = duration;
+        this.picturePath = picturePath;
+        this.filePath = filePath;
+        this.explicit = explicit;
+        this.single = single;
+        this.genre = genre;
+        this.queues = queues;
     }
 
     public Track(String name, Date creationDate, int duration, String picturePath, String filePath,
