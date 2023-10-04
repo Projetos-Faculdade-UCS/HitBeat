@@ -5,19 +5,20 @@
 <hibernate-configuration>
     <session-factory>
         <!-- JDBC Database connection settings -->
-        <property name="hibernate.connection.driver_class">org.sqlite.JDBC</property>
-        <property name="hibernate.connection.url">jdbc:sqlite:db.sqlite</property>
-        <property name="hibernate.connection.username">sa</property>
-        <property name="hibernate.connection.password">sa</property>
-        <property name="hibernate.connection.autocommit">true</property>
-
+        <property name="hibernate.connection.driver_class">org.apache.derby.jdbc.EmbeddedDriver</property>
+        <property name="hibernate.connection.url">jdbc:derby:myDB;create=true</property>
+        <property name="hibernate.connection.username">app</property> <!-- default user for Derby -->
+        <property name="hibernate.connection.password">app</property> <!-- default password for Derby -->
 
         <!-- JDBC connection pool settings -->
         <property name="hibernate.c3p0.min_size">5</property>
         <property name="hibernate.c3p0.max_size">20</property>
+        <property name="hibernate.c3p0.timeout">300</property>
+        <property name="hibernate.c3p0.max_statements">50</property>
+        <property name="hibernate.c3p0.idle_test_period">3000</property>
 
         <!-- Specify dialect -->
-        <property name="hibernate.dialect">org.hibernate.community.dialect.SQLiteDialect</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.DerbyDialect</property>
 
         <!-- Enable Hibernate's automatic session context management -->
         <property name="hibernate.current_session_context_class">thread</property>
@@ -28,12 +29,12 @@
         <property name="hibernate.highlight_sql">true</property>
 
         <!-- Drop and re-create the database schema on startup -->
-        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.hbm2ddl.auto">update</property> <!-- can also be "create", "validate", or "create-drop" -->
 
+        
         <!-- Mention annotated class -->
         <mapping class="hitbeat.model.Track"/>
         <mapping class="hitbeat.model.Genre"/>
-        <mapping class="hitbeat.model.Queue"/>
 
     </session-factory>
 </hibernate-configuration>

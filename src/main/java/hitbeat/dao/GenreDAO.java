@@ -31,6 +31,12 @@ public class GenreDAO extends BaseDAO<Genre> {
         });
     }
 
-
-    // ... Other CRUD operations ...
+    public Genre findByName(String genreName) {
+        return executeMethod(session -> {
+            String hql = "FROM Genre g WHERE g.name = :name";
+            Query<Genre> query = session.createQuery(hql, Genre.class);
+            query.setParameter("name", genreName);
+            return query.uniqueResult();
+        });
+    }
 }
