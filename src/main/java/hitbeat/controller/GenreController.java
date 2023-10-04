@@ -15,7 +15,7 @@ public class GenreController {
     private GenreDAO genreDAO = new GenreDAO();
 
     public void handleFetchGenresButtonAction(ActionEvent event) {
-        List<Genre> genres = genreDAO.getGenresByName("example");
+        List<Genre> genres = genreDAO.findGenresByName("example");
         List<String> genreNames = genres.stream().map(Genre::getName).collect(Collectors.toList());
         genreListView.getItems().setAll(genreNames);
     }

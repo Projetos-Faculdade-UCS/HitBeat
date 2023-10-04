@@ -48,3 +48,8 @@
 #text {
     -fx-text-fill: white;
 }
+
+/* define main color */
+.root {
+    -main-color: #8A2BE2;
+}

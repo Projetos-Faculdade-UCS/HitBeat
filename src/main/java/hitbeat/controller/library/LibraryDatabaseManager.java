@@ -3,6 +3,7 @@ package hitbeat.controller.library;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import hitbeat.dao.GenreDAO;
 import hitbeat.dao.TrackDAO;
@@ -21,23 +22,39 @@ public class LibraryDatabaseManager {
     }
 
     public void saveMultipleCustomMP3FilesToDatabase(List<CustomMP3File> customMP3Files) {
-        List<Genre> genres = customMP3Files.stream()
+        // Extract distinct genres from the MP3 files
+        List<String> genreNames = customMP3Files.stream()
                 .map(CustomMP3File::getGenre)
                 .distinct()
-                .map(genreName -> {
+                .collect(Collectors.toList());
+
+        // Fetch existing genres from the database
+        List<Genre> existingGenres = genreDAO.getGenresByNames(genreNames);
+
+        // Determine which genre names are not yet in the database
+        List<String> newGenreNames = genreNames.stream()
+                .filter(name -> existingGenres.stream().noneMatch(genre -> genre.getName().equals(name)))
+                .collect(Collectors.toList());
+
+        // Create new Genre objects for those names and save them
+        List<Genre> newGenres = newGenreNames.stream()
+                .map(name -> {
                     Genre genre = new Genre();
-                    genre.setName(genreName);
+                    genre.setName(name);
                     return genre;
                 })
                 .collect(Collectors.toList());
+        genreDAO.bulkCreateOrUpdate(newGenres, "name");
 
-        genreDAO.saveAll(genres);
+        // Merge both lists of genres for track association
+        List<Genre> allGenres = Stream.concat(existingGenres.stream(), newGenres.stream()).collect(Collectors.toList());
 
+        // Create and save tracks with associated genres
         List<Track> tracks = customMP3Files.stream()
                 .map(customMP3File -> {
                     Track track = new Track();
                     track.setName(customMP3File.getTitle());
-                    track.setGenre(genres.stream()
+                    track.setGenre(allGenres.stream()
                             .filter(genre -> genre.getName().equals(customMP3File.getGenre()))
                             .findFirst()
                             .orElse(null));
@@ -46,8 +63,7 @@ public class LibraryDatabaseManager {
                     return track;
                 })
                 .collect(Collectors.toList());
-
-        trackDAO.saveAll(tracks);
+        trackDAO.bulkCreateOrUpdate(tracks, "filePath");
     }
 
     public void saveCustomMP3FileToDatabase(CustomMP3File customMP3File) {

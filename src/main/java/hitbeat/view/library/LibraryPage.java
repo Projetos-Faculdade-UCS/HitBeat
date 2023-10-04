@@ -1,54 +1,130 @@
 package hitbeat.view.library;
 
-import java.util.List;
-
 import hitbeat.controller.library.LibraryController;
 import hitbeat.util.CustomMP3File;
+import hitbeat.view.Layout;
+import hitbeat.view.base.widgets.Margin;
+import hitbeat.view.base.widgets.listview.ListView;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
-import javafx.scene.layout.HBox;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ListCell;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 public class LibraryPage extends VBox {
-    LibraryController controller = new LibraryController();
-    VBox filesBox;
+
+    private LibraryController controller;
+    private ListView<CustomMP3File> filesBox;
+
+    private MFXScrollPane scrollPane;
+
+    private int deferredLayoutPasses = 0;
 
     public LibraryPage() {
         super();
-        MFXButton button = new MFXButton("Add Folder to Library");
-        button.getStyleClass().add("button-raised");
-        button.setOnAction(e -> {
-            controller.addFolderToLibrary((files) -> setFilesFromFolder(files));
-        });
 
-        this.getChildren().add(button);
+        controller = new LibraryController(this);
 
-        // show files from folder
-        MFXScrollPane scrollPane = new MFXScrollPane();
-        filesBox = new VBox();
-        scrollPane.setContent(filesBox);
+        initializeStyling();
+        configureChildren();
 
-        this.getChildren().add(filesBox);
+        getStylesheets().add(getClass().getResource("/hitbeat/css/library/library.css").toExternalForm());
     }
 
-    private void setFilesFromFolder(List<CustomMP3File> files) {
-        filesBox.getChildren().clear();
+    private void initializeStyling() {
+        getStyleClass().add("library-page");
+    }
 
-        if (files == null || files.isEmpty()) {
-            Text text = new Text("No .mp3 files found.");
-            filesBox.getChildren().add(text);
-            return;
+    private void configureChildren() {
+        addDragAndDrop();
+        addFilesBoxToScrollPane();
+        addSaveButton();
+    }
+
+    private void addDragAndDrop() {
+        DragAndDrop dragAndDrop = new DragAndDrop(controller);
+        getChildren().add(dragAndDrop);
+    }
+
+    private void addFilesBoxToScrollPane() {
+        createConfiguredScrollPane();
+        getChildren().add(scrollPane);
+    }
+
+    private void createConfiguredScrollPane() {
+        scrollPane = new MFXScrollPane();
+
+        filesBox = new ListView<>(null);
+        filesBox.setCellFactory(param -> new SongEditRowCell());
+        filesBox.getStyleClass().add("files-box");
+
+        scrollPane.setContent(filesBox);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+        scrollPane.getStyleClass().add("scroll-pane");
+
+        VBox.setVgrow(scrollPane, javafx.scene.layout.Priority.ALWAYS);
+    }
+
+    private void addSaveButton() {
+        MFXButton saveButton = createSaveButton();
+        getChildren().add(saveButton);
+    }
+
+    private MFXButton createSaveButton() {
+        MFXButton saveButton = new MFXButton("Save");
+        saveButton.getStyleClass().addAll("save-button", "button-raised");
+        saveButton.setOnAction(e -> {
+            controller.saveToDatabase();
+            setFilesFromFolder(controller.getFiles());
+        });
+        return saveButton;
+    }
+
+    public void setFilesFromFolder(ObservableList<CustomMP3File> files) {
+        filesBox.setItems(files);
+    }
+
+    class SongEditRowCell extends ListCell<CustomMP3File> {
+        private final SongEditRow songEditRow;
+
+        public SongEditRowCell() {
+            songEditRow = new SongEditRow(null);
         }
 
-        for (CustomMP3File file : files) {
-            HBox fileBox = new HBox();
-            Text text = new Text(file.getTitle() + " -> " + file.getAlbum() + " -> " + file.getArtist() + " -> "
-                    + file.getGenre());
-            text.setId("text");
-            text.setStyle("-fx-font-size: 20px; -fx-text-fill: white !important;");
-            fileBox.getChildren().add(text);
-            filesBox.getChildren().add(fileBox);
+        @Override
+        protected void updateItem(CustomMP3File file, boolean empty) {
+            super.updateItem(file, empty);
+
+            if (file == null || empty) {
+                resetCell();
+            } else {
+                updateCellWithFile(file);
+            }
+
+            if (deferredLayoutPasses == 0) {
+                System.out.println("request layout");
+                Platform.runLater(() -> {
+                    requestLayout();
+                    deferredLayoutPasses++;
+                });
+            }
+        }
+
+        private void resetCell() {
+            songEditRow.prefWidthProperty().unbind();
+            setText(null);
+            setGraphic(null);
+            setId("hidden-list-cell");
+        }
+
+        private void updateCellWithFile(CustomMP3File file) {
+            Margin margin = new Margin(songEditRow, 0, 0, 30, 0);
+            songEditRow.updateFile(file);
+            songEditRow.prefWidthProperty().bind(Layout.getInstance().getContentWidth().subtract(60));
+            setGraphic(margin);
+            songEditRow.setId("list-cell");
         }
     }
 }

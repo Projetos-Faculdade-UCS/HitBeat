@@ -1,15 +1,23 @@
 package hitbeat.controller.library;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Collections;
+import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import hitbeat.dao.GenreDAO;
 import hitbeat.dao.TrackDAO;
 import hitbeat.util.CustomMP3File;
+import hitbeat.view.library.LibraryPage;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.input.DragEvent;
 import javafx.stage.DirectoryChooser;
 
 public class LibraryController {
@@ -17,8 +25,11 @@ public class LibraryController {
     private GenreDAO genreDAO;
     private TrackDAO trackDAO;
     private LibraryDatabaseManager libraryDatabaseManager;
+    private ObservableList<CustomMP3File> files;
+    private LibraryPage libraryPage;
 
-    public LibraryController() {
+    public LibraryController(LibraryPage libraryPage) {
+        this.libraryPage = libraryPage;
         this.genreDAO = new GenreDAO();
         this.trackDAO = new TrackDAO();
         this.libraryDatabaseManager = new LibraryDatabaseManager(genreDAO, trackDAO);
@@ -32,17 +43,32 @@ public class LibraryController {
      *
      * @param callback - Callback para processar os arquivos MP3 selecionados
      */
-    public void addFolderToLibrary(Consumer<List<CustomMP3File>> callback) {
+    public void addFolderToLibrary() {
+        Date date = new Date(System.currentTimeMillis());
         File selectedFolder = selectFolder();
+        Date date2 = new Date(System.currentTimeMillis());
+        System.out.println("Time to select folder: " + (date2.getTime() - date.getTime()) + "ms");
+        date = new Date(System.currentTimeMillis());
 
-        if (selectedFolder != null) {
-            List<CustomMP3File> files = getMP3FilesFromFolder(selectedFolder);
+        addFolderToLibrary(selectedFolder);
+    }
 
-            // Save each CustomMP3File to the database
-            libraryDatabaseManager.saveMultipleCustomMP3FilesToDatabase(files);
-            callback.accept(files);
+    private void addFolderToLibrary(File folder) {
+        if (folder != null) {
+            Date date = new Date(System.currentTimeMillis());
+            List<CustomMP3File> files = getMP3FilesFromFolder(folder);
+            
+            this.files = FXCollections.observableArrayList(files);
 
-            System.out.println("Selected folder: " + selectedFolder.getAbsolutePath());
+            Date date2 = new Date(System.currentTimeMillis());
+            System.out.println("Time to get mp3 files: " + (date2.getTime() - date.getTime()) + "ms");
+
+            date = new Date(System.currentTimeMillis());
+            libraryPage.setFilesFromFolder(this.files);
+            date2 = new Date(System.currentTimeMillis());
+            System.out.println("Time to set files: " + (date2.getTime() - date.getTime()) + "ms");
+
+            System.out.println("Selected folder: " + folder.getAbsolutePath());
         } else {
             System.out.println("No folder selected");
         }
@@ -71,17 +97,27 @@ public class LibraryController {
             throw new IllegalArgumentException("The provided File object is not a directory or is null.");
         }
 
-        File[] filesInDirectory = folder.listFiles();
+        Path dirPath = folder.toPath();
+        List<CustomMP3File> mp3Files = new ArrayList<>();
 
-        if (filesInDirectory == null) {
-            return Collections.emptyList();
+        try {
+            Files.walkFileTree(dirPath, new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    if (file.toString().toLowerCase().endsWith(".mp3")) {
+                        CustomMP3File customMP3File = createCustomMP3File(file.toFile());
+                        if (customMP3File != null) {
+                            mp3Files.add(customMP3File);
+                        }
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } catch (IOException e) {
+            mp3Files.clear();
         }
 
-        return Arrays.stream(filesInDirectory)
-                .filter(file -> file.getName().toLowerCase().endsWith(".mp3"))
-                .map(this::createCustomMP3File)
-                .filter(file -> file != null)
-                .collect(Collectors.toList()); 
+        return mp3Files;
     }
 
     /**
@@ -97,5 +133,30 @@ public class LibraryController {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public void saveToDatabase() {
+        if (files == null || files.isEmpty()) {
+            System.out.println("No files to save");
+            return;
+        }
+        libraryDatabaseManager.saveMultipleCustomMP3FilesToDatabase(files);
+        files.clear();
+    }
+
+    public ObservableList<CustomMP3File> getFiles() {
+        return files;
+    }
+
+    public void dragEvent(DragEvent event) {
+        boolean success = false;
+        if (event.getDragboard().hasFiles()) {
+            success = true;
+            event.getDragboard().getFiles().forEach(file -> {
+                addFolderToLibrary(file);
+            });
+        }
+        event.setDropCompleted(success);
+        event.consume();
     }
 }

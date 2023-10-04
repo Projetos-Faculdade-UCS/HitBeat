@@ -13,6 +13,9 @@ import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.NotSupportedException;
 import com.mpatric.mp3agic.UnsupportedTagException;
 
+import lombok.Setter;
+
+@Setter
 public class CustomMP3File {
 
     private final Mp3File mp3file;
@@ -75,7 +78,7 @@ public class CustomMP3File {
         for (Charset charset : charsetsToBeTested) {
             try {
                 String decodedString = new String(input.getBytes("ISO-8859-1"), charset);
-                System.out.println("Decoding with " + charset); 
+
                 return decodedString;
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();

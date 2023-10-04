@@ -1,22 +1,29 @@
 package hitbeat.dao;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import hitbeat.model.BaseModel;
 import hitbeat.util.HibernateUtil;
 
 /**
- * Classe abstrata de Data Access Object para fornecer operações básicas de banco de dados 
+ * Classe abstrata de Data Access Object para fornecer operações básicas de
+ * banco de dados
  * para qualquer modelo que estende BaseModel.
  *
- * @param <T> - O tipo do modelo que este DAO manipula, que deve estender BaseModel.
+ * @param <T> - O tipo do modelo que este DAO manipula, que deve estender
+ *            BaseModel.
  */
 public abstract class BaseDAO<T extends BaseModel> {
+    private static final int BATCH_SIZE = 100;
     private Class<T> modelClass;
     private String className;
 
@@ -25,11 +32,11 @@ public abstract class BaseDAO<T extends BaseModel> {
      *
      * @param modelClass - O tipo de classe do modelo que este DAO manipulará.
      */
-    public BaseDAO(Class<T> modelClass){
+    public BaseDAO(Class<T> modelClass) {
         this.modelClass = modelClass;
         this.className = modelClass.getSimpleName();
     }
-    
+
     /**
      * Recupera todos os registros do modelo no banco de dados.
      *
@@ -49,7 +56,7 @@ public abstract class BaseDAO<T extends BaseModel> {
      * @param id - O ID do registro a ser recuperado.
      * @return O registro com o ID especificado ou null se não for encontrado.
      */
-    public T get(Long id){
+    public T get(Long id) {
         return executeMethod(session -> {
             return session.get(modelClass, id);
         });
@@ -60,7 +67,7 @@ public abstract class BaseDAO<T extends BaseModel> {
      *
      * @return O primeiro registro encontrado ou null se a tabela estiver vazia.
      */
-    public T first(){
+    public T first() {
         return executeMethod(session -> {
             String hql = String.format("FROM %s", this.className);
             Query<T> query = session.createQuery(hql, modelClass);
@@ -95,19 +102,22 @@ public abstract class BaseDAO<T extends BaseModel> {
     }
 
     /**
-     * Método utilitário para manipular operações de sessão do Hibernate e garantir 
+     * Método utilitário para manipular operações de sessão do Hibernate e garantir
      * a limpeza da sessão.
      *
-     * @param <R> - O tipo do objeto de retorno.
+     * @param <R>      - O tipo do objeto de retorno.
      * @param function - Uma função lambda com a operação de sessão.
      * @return O resultado da função (tipicamente um registro de banco de dados).
      */
-    protected <R> R executeMethod(Function<Session,R> function) {
+    protected <R> R executeMethod(Function<Session, R> function) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = null;
+        Transaction transaction = null;
         try {
             session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
             R objectT = function.apply(session);
+            transaction.commit();
             return objectT;
         } catch (Exception e) {
             rollbackTransaction(session);
@@ -138,4 +148,55 @@ public abstract class BaseDAO<T extends BaseModel> {
             session.getTransaction().rollback();
         }
     }
+
+    public void bulkCreateOrUpdate(List<T> entities, String uniqueField) {
+        executeMethod(session -> {
+            Map<String, T> existingEntitiesMap = getExistingEntitiesMap(entities, session, uniqueField);
+
+            for (int i = 0; i < entities.size(); i++) {
+                T entity = entities.get(i);
+                String uniqueValue = getEntityFieldValue(entity, uniqueField);
+                T existingEntity = existingEntitiesMap.get(uniqueValue);
+
+                if (existingEntity != null) {
+                    updateProperties(existingEntity, entity);
+                    session.merge(existingEntity);
+                } else {
+                    session.persist(entity);
+                }
+
+                if ((i + 1) % BATCH_SIZE == 0) {
+                    session.flush();
+                    session.clear();
+                }
+            }
+
+            session.flush();
+            session.clear();
+
+            return null;
+        });
+    }
+
+    private Map<String, T> getExistingEntitiesMap(List<T> entities, Session session, String uniqueField) {
+        List<String> uniqueValues = entities.stream()
+                .map(entity -> getEntityFieldValue(entity, uniqueField))
+                .collect(Collectors.toList());
+        String hql = "FROM " + modelClass.getName() + " e WHERE e." + uniqueField + " IN (:values)";
+        Query<T> query = session.createQuery(hql, modelClass);
+        query.setParameterList("values", uniqueValues);
+        List<T> existingEntities = query.list();
+        return existingEntities.stream()
+                .collect(Collectors.toMap(entity -> getEntityFieldValue(entity, uniqueField), entity -> entity));
+    }
+
+    protected String getEntityFieldValue(T entity, String field) {
+        try {
+            return (String) PropertyUtils.getProperty(entity, field);
+        } catch (Exception e) {
+            throw new RuntimeException("Error reading field: " + field, e);
+        }
+    }
+
+    protected abstract void updateProperties(T existingEntity, T newEntity);
 }
