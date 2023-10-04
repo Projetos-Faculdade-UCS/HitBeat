@@ -3,9 +3,11 @@ package hitbeat.view.library;
 import hitbeat.controller.library.LibraryController;
 import hitbeat.util.CustomMP3File;
 import hitbeat.view.Layout;
+import hitbeat.view.base.widgets.Margin;
 import hitbeat.view.base.widgets.listview.ListView;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.VBox;
@@ -14,6 +16,10 @@ public class LibraryPage extends VBox {
 
     private LibraryController controller;
     private ListView<CustomMP3File> filesBox;
+
+    private MFXScrollPane scrollPane;
+
+    private int deferredLayoutPasses = 0;
 
     public LibraryPage() {
         super();
@@ -42,12 +48,12 @@ public class LibraryPage extends VBox {
     }
 
     private void addFilesBoxToScrollPane() {
-        MFXScrollPane scrollPane = createConfiguredScrollPane();
+        createConfiguredScrollPane();
         getChildren().add(scrollPane);
     }
 
-    private MFXScrollPane createConfiguredScrollPane() {
-        MFXScrollPane scrollPane = new MFXScrollPane();
+    private void createConfiguredScrollPane() {
+        scrollPane = new MFXScrollPane();
 
         filesBox = new ListView<>(null);
         filesBox.setCellFactory(param -> new SongEditRowCell());
@@ -59,7 +65,6 @@ public class LibraryPage extends VBox {
         scrollPane.getStyleClass().add("scroll-pane");
 
         VBox.setVgrow(scrollPane, javafx.scene.layout.Priority.ALWAYS);
-        return scrollPane;
     }
 
     private void addSaveButton() {
@@ -97,6 +102,14 @@ public class LibraryPage extends VBox {
             } else {
                 updateCellWithFile(file);
             }
+
+            if (deferredLayoutPasses == 0) {
+                System.out.println("request layout");
+                Platform.runLater(() -> {
+                    requestLayout();
+                    deferredLayoutPasses++;
+                });
+            }
         }
 
         private void resetCell() {
@@ -107,10 +120,11 @@ public class LibraryPage extends VBox {
         }
 
         private void updateCellWithFile(CustomMP3File file) {
+            Margin margin = new Margin(songEditRow, 0, 0, 30, 0);
             songEditRow.updateFile(file);
             songEditRow.prefWidthProperty().bind(Layout.getInstance().getContentWidth().subtract(60));
-            setGraphic(songEditRow);
-            setId("list-cell");
+            setGraphic(margin);
+            songEditRow.setId("list-cell");
         }
     }
 }

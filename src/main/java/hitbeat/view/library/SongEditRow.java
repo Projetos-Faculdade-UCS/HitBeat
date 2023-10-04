@@ -5,7 +5,6 @@ import hitbeat.util.CustomMP3File;
 import hitbeat.view.Layout;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.beans.value.ChangeListener;
-import javafx.geometry.Insets;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -68,7 +67,6 @@ public class SongEditRow extends VBox {
 
         private void setupTextField(ChangeListener<String> listener) {
             field.setPrefHeight(30);
-            field.setPadding(Insets.EMPTY);
             field.setMinHeight(30);
             field.setMaxHeight(30);
             field.prefWidthProperty().bind(SongEditRow.this.widthProperty().subtract(10));
