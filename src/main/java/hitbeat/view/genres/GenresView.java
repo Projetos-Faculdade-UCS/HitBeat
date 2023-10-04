@@ -11,14 +11,17 @@ public class GenresView extends MFXScrollPane {
     private final GenresController controller = new GenresController();
 
     public GenresView() {
-        super(null);
+        super();
         genres = controller.fetchAll();
 
 
         ListView<Genre> listView = new ListView<>(genres, genre -> {
             return new GenreCell(genre);
         });
-        this.getStyleClass().add("scroll-pane");
+        
+        this.getStyleClass().add("transparent");
+
+        
 
         
         this.setContent(listView);

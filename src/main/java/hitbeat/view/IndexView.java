@@ -105,7 +105,7 @@ public class IndexView extends Application {
         // Check if there are any saved mementos before adding the back button
         if (controller.hasMemento()) {
             // set the content with a top padding of the size of the back button
-            content.setStyle("-fx-padding: " + 2 * BACK_BUTTON_SIZE + " 0 0 0;");
+            content.setStyle("-fx-padding: " + 2 * BACK_BUTTON_SIZE + " 0 0 0; -fx-background-color: transparent;");
             MFXButton backButton = createBackButton();
             contentWrapper.getChildren().add(backButton);
         }
