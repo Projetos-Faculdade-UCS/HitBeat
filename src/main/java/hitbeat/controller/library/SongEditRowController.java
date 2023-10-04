@@ -14,8 +14,16 @@ public class SongEditRowController {
         return file;
     }
 
-    public void textListener(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+    public void titleTextListener(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         file.setTitle(newValue);
+    }
+    
+    public void genreTextListener(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+        file.setGenre(newValue);
+    }
+    
+    public void setFile(CustomMP3File file2) {
+        this.file = file2;
     }
    
 }

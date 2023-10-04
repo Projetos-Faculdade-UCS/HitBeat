@@ -2,75 +2,87 @@ package hitbeat.view.library;
 
 import hitbeat.controller.library.SongEditRowController;
 import hitbeat.util.CustomMP3File;
+import hitbeat.view.Layout;
 import io.github.palexdev.materialfx.controls.MFXTextField;
+import javafx.beans.value.ChangeListener;
 import javafx.geometry.Insets;
-import javafx.geometry.VPos;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class SongEditRow extends GridPane {
+public class SongEditRow extends VBox {
 
     private SongEditRowController controller;
+    private Field titleField;
+    private Field genreField;
+    private Field filePathField;
 
     public SongEditRow(CustomMP3File file) {
         super();
         this.controller = new SongEditRowController(file);
 
-        this.setHgap(10);
-        this.setVgap(10);
-
-        Field titleField = new Field(file.getTitle(), "Título");
-
-        Field genreField = new Field(file.getGenre(), "Gênero");
-
-        Field filePathField = new Field(file.getFilePath(), "Caminho do arquivo");
-        filePathField.setEnabled(false);
-
-        titleField.prefWidthProperty().bind(this.widthProperty().subtract(10));
-        genreField.prefWidthProperty().bind(this.widthProperty().subtract(10));
-        filePathField.prefWidthProperty().bind(this.widthProperty().subtract(10));
-
-        this.add(titleField, 0, 0);
-        this.add(genreField, 0, 1);
-        this.add(filePathField, 0, 2);
+        initializeFields(file);
+        addFieldsToLayout();
 
         this.getStyleClass().add("song-edit-row");
+
+        Layout.getInstance().getContentWidth();
     }
 
-    public SongEditRowController getController() {
-        return controller;
+    private void initializeFields(CustomMP3File file) {
+        titleField = createField(file != null ? file.getTitle() : "", "Título", controller::titleTextListener);
+        genreField = createField(file != null ? file.getGenre() : "", "Gênero", controller::genreTextListener);
+        filePathField = createField(file != null ? file.getFilePath() : "", "Caminho do arquivo", null);
+        filePathField.setEnabled(false);
+    }
+
+    private Field createField(String text, String title, ChangeListener<String> listener) {
+        return new Field(text, createTextWithTitleStyle(title), listener);
+    }
+
+    private Text createTextWithTitleStyle(String title) {
+        Text text = new Text(title);
+        text.getStyleClass().add("text-field-title");
+        return text;
+    }
+
+    private void addFieldsToLayout() {
+        this.getChildren().addAll(titleField, genreField, filePathField);
+        this.setSpacing(10);
+    }
+
+    public void updateFile(CustomMP3File file) {
+        controller.setFile(file);
+        titleField.setText(file.getTitle());
+        genreField.setText(file.getGenre());
+        filePathField.setText(file.getFilePath());
     }
 
     class Field extends VBox {
         private final MFXTextField field;
 
-        public Field(String text, String title) {
-            super();
+        public Field(String text, Text fieldTitle, ChangeListener<String> listener) {
+            field = new MFXTextField(text);
+            setupTextField(listener);
+            this.getChildren().addAll(fieldTitle, field);
+        }
 
-            Text fieldTitle = new Text(title);
-            fieldTitle.getStyleClass().add("text-field-title");
-            this.getChildren().add(fieldTitle);
-
-            field = new MFXTextField();
-            field.setText(text);
-            field.prefWidthProperty().bind(this.widthProperty());
-            
-            field.textProperty().addListener(controller::textListener);
-            
+        private void setupTextField(ChangeListener<String> listener) {
             field.setPrefHeight(30);
             field.setPadding(Insets.EMPTY);
             field.setMinHeight(30);
             field.setMaxHeight(30);
+            field.prefWidthProperty().bind(SongEditRow.this.widthProperty().subtract(10));
+            if (listener != null) {
+                field.textProperty().addListener(listener);
+            }
+        }
 
-            GridPane.setValignment(field, VPos.CENTER);
-
-            this.getChildren().add(field);
+        public void setText(String text) {
+            field.setText(text);
         }
 
         public void setEnabled(boolean enabled) {
             field.setDisable(!enabled);
         }
-
     }
 }

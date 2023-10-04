@@ -1,73 +1,116 @@
 package hitbeat.view.library;
 
-import java.util.List;
-
 import hitbeat.controller.library.LibraryController;
 import hitbeat.util.CustomMP3File;
+import hitbeat.view.Layout;
+import hitbeat.view.base.widgets.listview.ListView;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ListCell;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 public class LibraryPage extends VBox {
-    LibraryController controller = new LibraryController();
-    VBox filesBox;
+
+    private LibraryController controller;
+    private ListView<CustomMP3File> filesBox;
 
     public LibraryPage() {
         super();
-        this.getStyleClass().add("library-page");
 
-        MFXButton button = new MFXButton("Add Folder to Library");
-        button.getStyleClass().add("button-raised");
-        button.setOnAction(e -> {
-            controller.addFolderToLibrary();
-            setFilesFromFolder(controller.getFiles());
-        });
-        this.getChildren().add(button);
+        controller = new LibraryController(this);
 
+        initializeStyling();
+        configureChildren();
+
+        getStylesheets().add(getClass().getResource("/hitbeat/css/library/library.css").toExternalForm());
+    }
+
+    private void initializeStyling() {
+        getStyleClass().add("library-page");
+    }
+
+    private void configureChildren() {
+        addDragAndDrop();
+        addFilesBoxToScrollPane();
+        addSaveButton();
+    }
+
+    private void addDragAndDrop() {
+        DragAndDrop dragAndDrop = new DragAndDrop(controller);
+        getChildren().add(dragAndDrop);
+    }
+
+    private void addFilesBoxToScrollPane() {
+        MFXScrollPane scrollPane = createConfiguredScrollPane();
+        getChildren().add(scrollPane);
+    }
+
+    private MFXScrollPane createConfiguredScrollPane() {
         MFXScrollPane scrollPane = new MFXScrollPane();
-        filesBox = new VBox();
-        filesBox.setSpacing(10);
+
+        filesBox = new ListView<>(null);
+        filesBox.setCellFactory(param -> new SongEditRowCell());
+        filesBox.getStyleClass().add("files-box");
+
         scrollPane.setContent(filesBox);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
+        scrollPane.getStyleClass().add("scroll-pane");
+
         VBox.setVgrow(scrollPane, javafx.scene.layout.Priority.ALWAYS);
+        return scrollPane;
+    }
 
-        scrollPane.getStyleClass().add("scroll-pane");
-        this.getChildren().add(scrollPane);
+    private void addSaveButton() {
+        MFXButton saveButton = createSaveButton();
+        getChildren().add(saveButton);
+    }
 
-        scrollPane.getStyleClass().add("scroll-pane");
-        filesBox.getStyleClass().add("files-box");
-
-        // save button (floats on the bottom right)
+    private MFXButton createSaveButton() {
         MFXButton saveButton = new MFXButton("Save");
-        saveButton.getStyleClass().add("button-raised");
+        saveButton.getStyleClass().addAll("save-button", "button-raised");
         saveButton.setOnAction(e -> {
             controller.saveToDatabase();
             setFilesFromFolder(controller.getFiles());
         });
-        saveButton.getStyleClass().add("save-button");
-        saveButton.getStyleClass().add("button-raised");
-
-        this.getChildren().add(saveButton);
-
-        this.getStylesheets().add(getClass().getResource("/hitbeat/css/library/library.css").toExternalForm());
+        return saveButton;
     }
 
-    private void setFilesFromFolder(List<CustomMP3File> files) {
-        filesBox.getChildren().clear();
-
-        if (files == null || files.isEmpty()) {
-            Text text = new Text("No .mp3 files found.");
-            filesBox.getChildren().add(text);
-            return;
-        }
-
-        for (CustomMP3File file : files) {
-            SongEditRow songEditRow = new SongEditRow(file);
-            filesBox.getChildren().add(songEditRow);
-        }
-
+    public void setFilesFromFolder(ObservableList<CustomMP3File> files) {
+        filesBox.setItems(files);
     }
 
+    class SongEditRowCell extends ListCell<CustomMP3File> {
+        private final SongEditRow songEditRow;
+
+        public SongEditRowCell() {
+            songEditRow = new SongEditRow(null);
+        }
+
+        @Override
+        protected void updateItem(CustomMP3File file, boolean empty) {
+            super.updateItem(file, empty);
+
+            if (file == null || empty) {
+                resetCell();
+            } else {
+                updateCellWithFile(file);
+            }
+        }
+
+        private void resetCell() {
+            songEditRow.prefWidthProperty().unbind();
+            setText(null);
+            setGraphic(null);
+            setId("hidden-list-cell");
+        }
+
+        private void updateCellWithFile(CustomMP3File file) {
+            songEditRow.updateFile(file);
+            songEditRow.prefWidthProperty().bind(Layout.getInstance().getContentWidth().subtract(60));
+            setGraphic(songEditRow);
+            setId("list-cell");
+        }
+    }
 }

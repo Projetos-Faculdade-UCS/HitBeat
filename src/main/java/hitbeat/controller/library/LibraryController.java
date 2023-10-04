@@ -14,6 +14,10 @@ import java.util.List;
 import hitbeat.dao.GenreDAO;
 import hitbeat.dao.TrackDAO;
 import hitbeat.util.CustomMP3File;
+import hitbeat.view.library.LibraryPage;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.input.DragEvent;
 import javafx.stage.DirectoryChooser;
 
 public class LibraryController {
@@ -21,9 +25,11 @@ public class LibraryController {
     private GenreDAO genreDAO;
     private TrackDAO trackDAO;
     private LibraryDatabaseManager libraryDatabaseManager;
-    private List<CustomMP3File> files;
+    private ObservableList<CustomMP3File> files;
+    private LibraryPage libraryPage;
 
-    public LibraryController() {
+    public LibraryController(LibraryPage libraryPage) {
+        this.libraryPage = libraryPage;
         this.genreDAO = new GenreDAO();
         this.trackDAO = new TrackDAO();
         this.libraryDatabaseManager = new LibraryDatabaseManager(genreDAO, trackDAO);
@@ -44,12 +50,25 @@ public class LibraryController {
         System.out.println("Time to select folder: " + (date2.getTime() - date.getTime()) + "ms");
         date = new Date(System.currentTimeMillis());
 
-        if (selectedFolder != null) {
-            files = getMP3FilesFromFolder(selectedFolder);
+        addFolderToLibrary(selectedFolder);
+    }
 
-            date2 = new Date(System.currentTimeMillis());
+    private void addFolderToLibrary(File folder) {
+        if (folder != null) {
+            Date date = new Date(System.currentTimeMillis());
+            List<CustomMP3File> files = getMP3FilesFromFolder(folder);
+            
+            this.files = FXCollections.observableArrayList(files);
+
+            Date date2 = new Date(System.currentTimeMillis());
             System.out.println("Time to get mp3 files: " + (date2.getTime() - date.getTime()) + "ms");
-            System.out.println("Selected folder: " + selectedFolder.getAbsolutePath());
+
+            date = new Date(System.currentTimeMillis());
+            libraryPage.setFilesFromFolder(this.files);
+            date2 = new Date(System.currentTimeMillis());
+            System.out.println("Time to set files: " + (date2.getTime() - date.getTime()) + "ms");
+
+            System.out.println("Selected folder: " + folder.getAbsolutePath());
         } else {
             System.out.println("No folder selected");
         }
@@ -74,7 +93,6 @@ public class LibraryController {
      * @return Lista de arquivos MP3 envolvidos em objetos CustomMP3File
      */
     private List<CustomMP3File> getMP3FilesFromFolder(File folder) {
-        Date date = new Date(System.currentTimeMillis());
         if (folder == null || !folder.isDirectory()) {
             throw new IllegalArgumentException("The provided File object is not a directory or is null.");
         }
@@ -99,8 +117,6 @@ public class LibraryController {
             mp3Files.clear();
         }
 
-        Date date2 = new Date(System.currentTimeMillis());
-        System.out.println("Time to get mp3 files: " + (date2.getTime() - date.getTime()) + "ms");
         return mp3Files;
     }
 
@@ -128,7 +144,19 @@ public class LibraryController {
         files.clear();
     }
 
-    public List<CustomMP3File> getFiles() {
+    public ObservableList<CustomMP3File> getFiles() {
         return files;
+    }
+
+    public void dragEvent(DragEvent event) {
+        boolean success = false;
+        if (event.getDragboard().hasFiles()) {
+            success = true;
+            event.getDragboard().getFiles().forEach(file -> {
+                addFolderToLibrary(file);
+            });
+        }
+        event.setDropCompleted(success);
+        event.consume();
     }
 }

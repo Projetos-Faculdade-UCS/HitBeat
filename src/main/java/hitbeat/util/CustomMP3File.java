@@ -78,7 +78,7 @@ public class CustomMP3File {
         for (Charset charset : charsetsToBeTested) {
             try {
                 String decodedString = new String(input.getBytes("ISO-8859-1"), charset);
-                System.out.println("Decoding with " + charset); 
+
                 return decodedString;
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();

@@ -108,6 +108,10 @@ public class IndexView extends Application {
             contentWrapper.getChildren().add(backButton);
         }
 
+        Layout.getInstance().setContentWidth(contentWrapper.widthProperty());
+
+        Layout.getInstance().setContentHeight(contentWrapper.heightProperty());
+
         return contentWrapper;
     }
 
