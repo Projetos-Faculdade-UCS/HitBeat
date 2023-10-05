@@ -1,5 +1,6 @@
 package hitbeat.view;
 
+import hitbeat.controller.Icons;
 import hitbeat.controller.IndexController;
 import hitbeat.view.Player.Footer;
 // ... Other imports ...
@@ -30,6 +31,7 @@ public class IndexView extends Application {
     private Sidebar sidebar;
     private Node content;
     private final IndexController controller = new IndexController(this);
+    private final Icons icons = new Icons();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -53,13 +55,13 @@ public class IndexView extends Application {
         return new Sidebar(
                 "HitBeat",
                 new SidebarTopic(
-                        "Menu 1",
-                        new SidebarItem("Index", null, controller::loadStartPage),
-                        new SidebarItem("Músicas", null, controller::loadTracksView),
-                        new SidebarItem("Gêneros", null, controller::loadGenresView)),
+                    "Minhas Músicas",
+                    new SidebarItem("Index", icons.getHome(), controller::loadStartPage),
+                    new SidebarItem("Músicas", icons.getTracks(), controller::loadTracksView),
+                    new SidebarItem("Gêneros", icons.getGenres(), controller::loadGenresView)),
                 new SidebarTopic(
-                        "Gerenciar",
-                        new SidebarItem("Minha Biblioteca", null, controller::loadLibraryView)));
+                    "Gerenciar",
+                    new SidebarItem("Minha Biblioteca", null, controller::loadLibraryView)));
     }
 
     private void setupScene(Stage primaryStage) {

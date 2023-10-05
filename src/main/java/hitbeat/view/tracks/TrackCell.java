@@ -1,10 +1,17 @@
 package hitbeat.view.tracks;
 
+import hitbeat.controller.player.PlayerController;
 import hitbeat.model.Track;
 import hitbeat.view.base.widgets.ListTile;
+import hitbeat.view.base.widgets.MinButton;
+import hitbeat.view.base.widgets.SVGWidget;
 import hitbeat.view.base.widgets.listview.BaseCell;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.text.Text;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 public class TrackCell extends BaseCell<Track> {
     private Track track;
@@ -22,8 +29,19 @@ public class TrackCell extends BaseCell<Track> {
 
     private void initUI() {
         // Create Leading
-        Text leading = new Text("lead");
-        leading.setStyle("-fx-font-size: 16; -fx-text-fill: white;");
+        MinButton playBtn = new MinButton("");
+        SVGWidget svgPlay = new SVGWidget("/hitbeat/svg/play.svg", 25, Color.WHITE);
+        playBtn.setGraphic(svgPlay);
+        
+        StackPane playbox = new StackPane(playBtn);
+        VBox.setVgrow(playbox, Priority.ALWAYS);
+
+        playbox.setAlignment(Pos.CENTER);
+        playbox.setPickOnBounds(false);
+
+        playBtn.setOnMouseClicked( event -> {
+            PlayerController.getInstance().play(this.track);
+        });
 
         // Create Title
         titleLabel = new Label();
@@ -37,7 +55,7 @@ public class TrackCell extends BaseCell<Track> {
         trailingLabel = new Label();
         trailingLabel.setStyle("-fx-font-size: 14; -fx-text-fill: white;");
 
-        ListTile listTile = new ListTile(leading, titleLabel, subtitleLabel, trailingLabel);
+        ListTile listTile = new ListTile(playbox, titleLabel, subtitleLabel, trailingLabel);
         this.getChildren().add(listTile);
     }
 
