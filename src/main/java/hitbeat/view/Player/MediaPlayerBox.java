@@ -1,4 +1,4 @@
-package hitbeat.view.footer;
+package hitbeat.view.Player;
 
 import hitbeat.controller.player.PlayerController;
 import hitbeat.view.base.widgets.SVGWidget;
@@ -18,14 +18,14 @@ public class MediaPlayerBox extends VBox {
         SVGWidget svgNext = new SVGWidget("/hitbeat/svg/next.svg", 15, Color.WHITE);
         SVGWidget svgPrevious = new SVGWidget("/hitbeat/svg/previous.svg", 15, Color.WHITE);
 
-        PlayPauseBtn playPauseBtn = new PlayPauseBtn(player);
-        RepeatBtn repeatBtn = new RepeatBtn(player);
+        PlayPauseBtn playPauseBtn = new PlayPauseBtn();
+        RepeatBtn repeatBtn = new RepeatBtn();
         MFXButton resetBtn = getResetBtn();
         MFXButton nextBtn = new MFXButton("", svgNext);
         MFXButton previousBtn = new MFXButton("", svgPrevious);
 
         HBox actionsTab = new HBox(15);
-        ProgressBar progressBar = new ProgressBar(player);
+        ProgressBar progressBar = new ProgressBar();
 
         actionsTab.getChildren().addAll(
                 resetBtn, previousBtn, playPauseBtn, nextBtn, repeatBtn);

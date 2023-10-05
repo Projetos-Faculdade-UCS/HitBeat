@@ -1,4 +1,4 @@
-package hitbeat.view.footer;
+package hitbeat.view.Player;
 
 import hitbeat.controller.player.PlayerController;
 import hitbeat.view.base.widgets.SVGWidget;
@@ -11,14 +11,17 @@ public class PlayPauseBtn extends MFXButton {
     SVGWidget svgPlay;
     SVGWidget svgPause;
 
-    public PlayPauseBtn(PlayerController player) {
+    public PlayPauseBtn() {
         super("");
-        this.player = player;
+
+        this.player = PlayerController.getInstance();
 
         svgPlay = new SVGWidget("/hitbeat/svg/play.svg", 30, Color.WHITE);
         svgPause = new SVGWidget("/hitbeat/svg/pause.svg", 30, Color.WHITE);
 
         this.setOnAction( event -> this.playPause() );
+        this.playPause();
+
         this.setId("playPauseBtn");
     }
 

@@ -1,10 +1,10 @@
-package hitbeat.view.footer;
+package hitbeat.view.Player;
 
+import hitbeat.controller.player.PlayerController;
 import hitbeat.view.base.widgets.SVGWidget;
 import hitbeat.view.base.wrappers.Slider;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.scene.layout.HBox;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 
 public class VolumeBox extends HBox {
@@ -12,13 +12,15 @@ public class VolumeBox extends HBox {
     boolean muted = false;
     double volume = 0.5;
 
-    public VolumeBox(MediaPlayer mediaPlayer) {
+    public VolumeBox() {
         super(15);
 
+        PlayerController player = PlayerController.getInstance();
+    
         Slider volumeSlider = new Slider(0, 1, volume);
         volumeSlider.setDecimalPrecision(2);
         volumeSlider.getStyleClass().add("volume-slider");
-        mediaPlayer.volumeProperty().bind(volumeSlider.valueProperty());
+        player.bindVolume(volumeSlider.valueProperty());
 
         SVGWidget svgMute = new SVGWidget("/hitbeat/svg/volume-mute.svg", 15, Color.WHITE);
         SVGWidget svgVolume = new SVGWidget("/hitbeat/svg/volume-max.svg", 15, Color.WHITE);

@@ -1,6 +1,7 @@
 package hitbeat.view.genres;
 
 import hitbeat.controller.genres.GenresController;
+import hitbeat.controller.player.PlayerController;
 import hitbeat.model.Genre;
 import hitbeat.view.Layout;
 import hitbeat.view.base.widgets.Margin;
@@ -49,6 +50,7 @@ public class GenresView extends ListView<Genre> {
                 setGraphic(margin);
                 setOnMouseClicked(event -> {
                     System.out.println("Clicked on " + genre.getName());
+                    PlayerController.getInstance().playTeste();
                 });
                 genreCell.setId("list-cell");
             }

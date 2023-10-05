@@ -1,4 +1,4 @@
-package hitbeat.view.footer;
+package hitbeat.view.Player;
 
 import javafx.scene.layout.HBox;
 

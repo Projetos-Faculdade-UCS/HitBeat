@@ -1,22 +1,29 @@
 package hitbeat.controller.player;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import hitbeat.dao.TrackDAO;
 import hitbeat.model.Queue;
 import hitbeat.model.Track;
-import javafx.scene.Node;
+import hitbeat.view.Player.ProgressBar;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.beans.property.DoubleProperty;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
+import javafx.util.Duration;
 
 public class PlayerController {
-    private static PlayerController instance = null;
+    private static PlayerController instance;
     private MediaPlayer song;
-    private Node playerView;
+    private Track track;
 
     private Runnable onReady;
 
     
     private PlayerController() {
-        this.song = new MediaPlayer(null); //testar se isso funciona
     }
 
     public static PlayerController getInstance() {
@@ -27,10 +34,17 @@ public class PlayerController {
     }
 
     public boolean isPlaying() {
+        if (!this.hasSong()) return false;
         return this.song.getStatus() == Status.PLAYING;
     }
 
+    public boolean hasSong() {
+        return this.song != null;
+    }
+
     public void playPause() {
+        if (!this.hasSong()) return;
+
         if (this.isPlaying()){
             this.song.pause();
         } else {
@@ -38,12 +52,27 @@ public class PlayerController {
         }
     }
 
+    public void playTeste() {
+        TrackDAO trackDAO = new TrackDAO();
+        Track track = trackDAO.first();
+        this.play(track);
+    }
+
     public void play(Track track) {
-        this.song.stop();
         this.dispose();
-        this.song = new MediaPlayer( new Media(track.getFilePath()) );
+
+        this.track = track;
+
+        String path;
+        try{
+            URI uri = new URI(track.getFilePath());
+            path = uri.getPath();
+        }catch(URISyntaxException e){
+            path = track.getFilePath();
+        }
+
+        this.song = new MediaPlayer( new Media(path) );
         this.attach();
-        this.song.play();
     }
 
     public void play(Queue queue){
@@ -54,13 +83,17 @@ public class PlayerController {
     * Faz musica voltar ao inicio
     */
     public void resetSong(){
+        if (!this.hasSong()) return;
+
         this.song.seek(this.song.getStartTime());
     }
 
     /*
-    * Faz musica voltar ao inicio e tocar
+    * Faz musica voltar ao inicio e tocar, toda vez que ela terminar
     */
     public void toggleRepeat() {
+        if (!this.hasSong()) return;
+
         if (this.song.getCycleCount() == MediaPlayer.INDEFINITE) {
             // Desativa a repetição
             this.song.setCycleCount(1);
@@ -70,29 +103,46 @@ public class PlayerController {
         }
     }
 
-    public void setOnReady(Runnable action) {
-        this.song.setOnReady(action);
-    } 
+    // public void setOnReady(Runnable action) {
+    //     this.song.setOnReady(action);
+    // } 
 
-    public double getTotalDuration() {
-        return this.song.getTotalDuration().toSeconds();
-    }
+    private void dispose() {
+        if (!this.hasSong()) return;
 
-    public double getCurrentTime() {
-        return this.song.getCurrentTime().toSeconds();
-    }
-
-    public void dispose() {
+        this.song.stop();
         this.onReady = this.song.getOnReady();
         this.song.dispose();
     }
 
-    public void attach() {
+    private void attach() {
         this.song.setOnReady(this.onReady);
+        this.song.play();
     }
 
     public void seek(double sTime) {
-        this.song.seek( sTime);
+        if (!this.hasSong()) return;
+        this.song.seek(Duration.seconds(sTime));
     }
-    // private void set
+
+    public Timeline getProgressManager(ProgressBar ProgressBar) {
+        Timeline progressManager = new Timeline(
+            new KeyFrame(Duration.seconds(.01), event -> {
+                if (!this.hasSong()) return;
+                ProgressBar.setProgressIndicators(
+                    this.song.getTotalDuration().toSeconds(),
+                    this.song.getCurrentTime().toSeconds()
+                );
+            })
+        );
+
+        return progressManager;
+    }
+
+    public void bindVolume(DoubleProperty sliderValue) {
+        this.onReady = () -> {
+            if (onReady != null) onReady.run();
+            this.song.setVolume(sliderValue.getValue());
+        };
+    }
 }

@@ -1,23 +1,21 @@
-package hitbeat.view.footer;
+package hitbeat.view.Player;
 
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 
 public class Footer extends HBox{
     
     public Footer() {
         super(10);
         // ----------player de musica----------------
-        String path2Song = getClass().getResource("/hitbeat/media/HitBeat.mp3").toString();
-        MediaPlayer mediaPlayer = new MediaPlayer(new Media(path2Song));
+        // String path2Song = getClass().getResource("/hitbeat/media/HitBeat.mp3").toString();
+        // MediaPlayer mediaPlayer = new MediaPlayer(new Media(path2Song));
 
         //---------------layout---------------------
         MusicBox musicBox = new MusicBox();
         MediaPlayerBox mediaPlayerBox = new MediaPlayerBox();
-        VolumeBox volumeBox = new VolumeBox(mediaPlayer);
+        VolumeBox volumeBox = new VolumeBox();
 
         HBox.setHgrow(musicBox, Priority.NEVER);
         HBox.setHgrow(mediaPlayerBox, Priority.ALWAYS);

@@ -1,4 +1,4 @@
-package hitbeat.view.footer;
+package hitbeat.view.Player;
 
 import hitbeat.controller.player.PlayerController;
 import hitbeat.view.base.widgets.SVGWidget;
@@ -11,8 +11,10 @@ import javafx.scene.shape.Circle;
 public class RepeatBtn extends MFXButton {
     private boolean repeat = false;
 
-    public RepeatBtn(PlayerController player) {
+    public RepeatBtn() {
         super("");
+
+        PlayerController player = PlayerController.getInstance();
 
         SVGWidget svgRepeat = new SVGWidget(
             "/hitbeat/svg/repeat.svg", 16, Color.WHITE);
