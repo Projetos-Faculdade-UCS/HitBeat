@@ -2,17 +2,11 @@ package hitbeat.view.tracks;
 
 import hitbeat.controller.tracks.TracksController;
 import hitbeat.model.Track;
-import hitbeat.view.base.widgets.ListTile;
 import hitbeat.view.base.widgets.listview.ListView;
+import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import javafx.collections.ObservableList;
-import javafx.scene.Node;
-import javafx.scene.control.ListCell;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
-public class TracksView extends ListView<Track> {
+public class TracksView extends MFXScrollPane {
     private ObservableList<Track> tracks;
     private final TracksController controller = new TracksController();
 
@@ -20,39 +14,16 @@ public class TracksView extends ListView<Track> {
         super(null);
         tracks = controller.fetchAll();
 
-        this.setItems(tracks);
-
-        this.setCellFactory(track -> {
-            return new ListCell<Track>() {
-                @Override
-                protected void updateItem(Track track, boolean empty) {
-                    super.updateItem(track, empty);
-                    if (track == null || empty) {
-                        setText(null);
-                        setGraphic(null);
-                        // hide the cell
-                        setId("hidden-list-cell");
-                        return;
-                    } else {
-                        VBox vbox = new VBox();
-                        Text trackName = new Text(track.getName());
-                        Text leading = new Text("Leading: " + track.getName());
-
-                        Node trackCell = new ListTile(leading, trackName, leading, leading);
-                        VBox.setVgrow(trackCell, Priority.ALWAYS);
-                        HBox.setHgrow(trackCell, Priority.ALWAYS);
-                        vbox.getChildren().add(trackCell);
-
-                        HBox.setHgrow(vbox, Priority.ALWAYS);
-
-                        setGraphic(vbox);
-                        setOnMouseClicked(event -> {
-                            System.out.println("Clicked on " + track.getName());
-                        });
-                        setId("list-cell");
-                    }
-                }
-            };
+        ListView<Track> listView = new ListView<>(tracks, track -> {
+            return new TrackCell(track);
         });
+
+        listView.setItems(tracks);
+
+        this.setContent(listView);
+
+        // grow this pane to fill the parent
+        this.setFitToWidth(true);
+        this.setFitToHeight(true);
     }
 }

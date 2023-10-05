@@ -1,4 +1,4 @@
-#custList {
+.list-view {
 	-fx-background-color: transparent;
 	background-color: transparent;
 	-fx-background-radius: 10;
@@ -6,7 +6,7 @@
 	border-radius: 10;
 }
 
-#custList #list-cell {
+.list-view .list-cell {
 	-fx-background-color: transparent;
 	background-color: transparent;
 	-fx-background-radius: 10;
@@ -17,7 +17,8 @@
 	-fx-border-width: 1;
 	border-width: 1;
 }
-#custList #hidden-list-cell {
+
+.list-view .hidden-list-cell {
 	-fx-background-color: transparent;
 	background-color: transparent;
 	-fx-background-radius: 10;

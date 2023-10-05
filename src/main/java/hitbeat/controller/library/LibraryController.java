@@ -29,6 +29,7 @@ public class LibraryController {
     private LibraryPage libraryPage;
 
     public LibraryController(LibraryPage libraryPage) {
+        this.files = FXCollections.observableArrayList(new ArrayList<>());
         this.libraryPage = libraryPage;
         this.genreDAO = new GenreDAO();
         this.trackDAO = new TrackDAO();
@@ -58,7 +59,7 @@ public class LibraryController {
             Date date = new Date(System.currentTimeMillis());
             List<CustomMP3File> files = getMP3FilesFromFolder(folder);
             
-            this.files = FXCollections.observableArrayList(files);
+            this.files.addAll(FXCollections.observableArrayList(files));
 
             Date date2 = new Date(System.currentTimeMillis());
             System.out.println("Time to get mp3 files: " + (date2.getTime() - date.getTime()) + "ms");
