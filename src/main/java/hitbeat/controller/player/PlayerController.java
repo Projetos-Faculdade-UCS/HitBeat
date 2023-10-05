@@ -59,12 +59,7 @@ public class PlayerController {
         this.dispose();
 
         this.track = track;
-
-        String path;
-
-        path = track.getFilePath();
-
-        this.song = new MediaPlayer( new Media(path) );
+        this.song = new MediaPlayer( new Media(track.getFilePath()) );
         this.attach();
     }
 
