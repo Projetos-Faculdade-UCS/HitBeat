@@ -25,6 +25,11 @@ public class GenresView extends MFXScrollPane {
 
         
         this.setContent(listView);
+
+        // grow this pane to fill the parent
+        this.setFitToWidth(true);
+        this.setFitToHeight(true);
+
     }
 
     // class ListGenreCell extends ListCell<Genre> {

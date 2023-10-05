@@ -1,10 +1,7 @@
 package hitbeat.view.base.widgets.listview;
 
 import hitbeat.view.Layout;
-import hitbeat.view.base.widgets.Margin;
 import javafx.collections.ObservableList;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
 public class ListView<T> extends javafx.scene.control.ListView<T> {
     @FunctionalInterface
@@ -43,8 +40,8 @@ public class ListView<T> extends javafx.scene.control.ListView<T> {
             return new ListCell();
         });
 
-        HBox.setHgrow(this, javafx.scene.layout.Priority.ALWAYS);
-        VBox.setVgrow(this, javafx.scene.layout.Priority.ALWAYS);
+
+        this.setPadding(new javafx.geometry.Insets(0, 8, 0, 8));
 
     }
 
@@ -52,9 +49,9 @@ public class ListView<T> extends javafx.scene.control.ListView<T> {
         private final BaseCell<T> cell;
 
         public ListCell() {
-            cell = cellBuilder.build(null); // Pass null initially, the updateItem will set the correct item.
-            cell.prefWidthProperty().bind(Layout.getInstance().getContentWidth().subtract(20));
+            cell = cellBuilder.build(null);
             this.getStyleClass().add("list-cell");
+            this.setPadding(new javafx.geometry.Insets(0, 8, 16, 8));
         }
 
         @Override
@@ -77,11 +74,11 @@ public class ListView<T> extends javafx.scene.control.ListView<T> {
 
         private void updateCellWithItem(T item) {
             cell.updateItem(item);
-            cell.prefWidthProperty().bind(Layout.getInstance().getContentWidth().subtract(20));
+            cell.prefWidthProperty().bind(Layout.getInstance().getContentWidth().subtract(58));
 
-            Margin margin = new Margin(cell, 0, 0, 8, 0);
+            // Margin margin = new Margin(cell, 0, 0, 8, 0);
 
-            setGraphic(margin);
+            setGraphic(cell);
             setOnMouseClicked(event -> {
                 // System.out.println("Clicked on " + genre.getName());
             });

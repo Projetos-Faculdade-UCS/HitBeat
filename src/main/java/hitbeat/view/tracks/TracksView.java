@@ -20,11 +20,11 @@ public class TracksView extends MFXScrollPane {
 
         listView.setItems(tracks);
 
-        // listView.setCellFactory(track -> {
-        //     return new ListTrackCell();
-        // });
-
         this.setContent(listView);
+
+        // grow this pane to fill the parent
+        this.setFitToWidth(true);
+        this.setFitToHeight(true);
     }
 
     // class ListTrackCell extends ListCell<Track> {

@@ -1,11 +1,4 @@
 .song-edit-row {
-    -fx-border-color: #b4b4b4;
-    border-color: #b4b4b4;
-    -fx-border-width: 1px;
-    border-width: 1px;
-    -fx-border-radius: 10px;
-    border-radius: 10px;
-
     -fx-padding: 10px;
     padding: 10px;
 }
@@ -25,14 +18,14 @@
     -fx-text-alignment: left;
 }
 
-.library-page {
+/* .library-page {
     -fx-padding: 10px;
     padding: 10px;
-}
+} */
 
 .library-page .scroll-pane {
-    -fx-padding: 10px;
-    padding: 10px;
+    /* -fx-padding: 10px;
+    padding: 10px; */
     -fx-background-color: transparent;
     background-color: transparent;
 }
