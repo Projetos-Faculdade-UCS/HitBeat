@@ -1,6 +1,7 @@
 package hitbeat.view.genres;
 
 import hitbeat.controller.genres.GenresController;
+import hitbeat.controller.player.PlayerController;
 import hitbeat.model.Genre;
 import hitbeat.view.base.widgets.listview.ListView;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
@@ -29,6 +30,7 @@ public class GenresView extends MFXScrollPane {
         // grow this pane to fill the parent
         this.setFitToWidth(true);
         this.setFitToHeight(true);
+
 
     }
 }

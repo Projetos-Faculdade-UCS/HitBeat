@@ -1,10 +1,10 @@
 package hitbeat.view;
 
 import hitbeat.controller.IndexController;
+import hitbeat.view.Player.Footer;
 // ... Other imports ...
 import hitbeat.view.base.mementos.ContentMemento;
 import hitbeat.view.base.widgets.SVGWidget;
-import hitbeat.view.footer.Footer;
 import hitbeat.view.sidebar.Sidebar;
 import hitbeat.view.sidebar.SidebarItem;
 import hitbeat.view.sidebar.SidebarTopic;
