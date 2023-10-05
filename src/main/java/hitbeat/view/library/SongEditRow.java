@@ -2,35 +2,43 @@ package hitbeat.view.library;
 
 import hitbeat.controller.library.SongEditRowController;
 import hitbeat.util.CustomMP3File;
-import hitbeat.view.Layout;
+import hitbeat.view.base.widgets.listview.BaseCell;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class SongEditRow extends VBox {
+public class SongEditRow extends BaseCell<CustomMP3File> {
 
+    private VBox root;
     private SongEditRowController controller;
     private Field titleField;
     private Field genreField;
     private Field filePathField;
 
     public SongEditRow(CustomMP3File file) {
-        super();
-        this.controller = new SongEditRowController(file);
+        // Initialize UI components
+        initUI();
 
-        initializeFields(file);
-        addFieldsToLayout();
-
-        this.getStyleClass().add("song-edit-row");
-
-        Layout.getInstance().getContentWidth();
+        // Set file data
+        updateItem(file);
     }
 
-    private void initializeFields(CustomMP3File file) {
-        titleField = createField(file != null ? file.getTitle() : "", "Título", controller::titleTextListener);
-        genreField = createField(file != null ? file.getGenre() : "", "Gênero", controller::genreTextListener);
-        filePathField = createField(file != null ? file.getFilePath() : "", "Caminho do arquivo", null);
+    private void initUI() {
+        root = new VBox();
+        root.getStyleClass().add("song-edit-row");
+        this.getChildren().add(root);
+
+        this.controller = new SongEditRowController(null); // We will set the file later
+
+        initializeFields();
+        addFieldsToLayout();
+    }
+
+    private void initializeFields() {
+        titleField = createField("", "Título", controller::titleTextListener);
+        genreField = createField("", "Gênero", controller::genreTextListener);
+        filePathField = createField("", "Caminho do arquivo", null);
         filePathField.setEnabled(false);
     }
 
@@ -45,15 +53,22 @@ public class SongEditRow extends VBox {
     }
 
     private void addFieldsToLayout() {
-        this.getChildren().addAll(titleField, genreField, filePathField);
-        this.setSpacing(10);
+        root.getChildren().addAll(titleField, genreField, filePathField);
+        root.setSpacing(10);
     }
 
-    public void updateFile(CustomMP3File file) {
-        controller.setFile(file);
-        titleField.setText(file.getTitle());
-        genreField.setText(file.getGenre());
-        filePathField.setText(file.getFilePath());
+    @Override
+    public void updateItem(CustomMP3File file) {
+        if (file != null) {
+            controller.setFile(file);
+            titleField.setText(file.getTitle());
+            genreField.setText(file.getGenre());
+            filePathField.setText(file.getFilePath());
+        } else {
+            titleField.setText("");
+            genreField.setText("");
+            filePathField.setText("");
+        }
     }
 
     class Field extends VBox {
@@ -69,7 +84,7 @@ public class SongEditRow extends VBox {
             field.setPrefHeight(30);
             field.setMinHeight(30);
             field.setMaxHeight(30);
-            field.prefWidthProperty().bind(SongEditRow.this.widthProperty().subtract(10));
+            field.prefWidthProperty().bind(SongEditRow.this.widthProperty().subtract(28));
             if (listener != null) {
                 field.textProperty().addListener(listener);
             }
