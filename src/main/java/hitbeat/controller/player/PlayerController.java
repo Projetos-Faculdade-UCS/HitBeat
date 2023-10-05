@@ -1,8 +1,5 @@
 package hitbeat.controller.player;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import hitbeat.dao.TrackDAO;
 import hitbeat.model.Queue;
 import hitbeat.model.Track;
@@ -64,12 +61,8 @@ public class PlayerController {
         this.track = track;
 
         String path;
-        try{
-            URI uri = new URI(track.getFilePath());
-            path = uri.getPath();
-        }catch(URISyntaxException e){
-            path = track.getFilePath();
-        }
+
+        path = track.getFilePath();
 
         this.song = new MediaPlayer( new Media(path) );
         this.attach();

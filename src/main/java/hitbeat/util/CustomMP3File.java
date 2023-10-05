@@ -45,7 +45,8 @@ public class CustomMP3File {
     }
 
     public String getFilePath() {
-        return mp3file.getFilename();
+        File file = new File( mp3file.getFilename() );
+        return file.toURI().toString();
     }
 
     private String extractData(Function<ID3v2, String> v2Function, Function<ID3v1, String> v1Function) {
