@@ -31,37 +31,4 @@ public class GenresView extends MFXScrollPane {
         this.setFitToHeight(true);
 
     }
-
-    // class ListGenreCell extends ListCell<Genre> {
-    //     private GenreCell genreCell;
-
-    //     public ListGenreCell() {
-    //         super();
-    //         this.genreCell = new GenreCell(null);
-    //     }
-
-    //     @Override
-    //     protected void updateItem(Genre genre, boolean empty) {
-    //         super.updateItem(genre, empty);
-    //         if (genre == null || empty) {
-    //             genreCell.prefWidthProperty().unbind();
-    //             setText(null);
-    //             setGraphic(null);
-    //             // hide the cell
-    //             setId("hidden-list-cell");
-    //             return;
-    //         } else {
-    //             genreCell.setGenre(genre);
-    //             genreCell.prefWidthProperty().bind(Layout.getInstance().getContentWidth().subtract(20));
-
-    //             Margin margin = new Margin(genreCell, 0, 0, 8, 0);
-
-    //             setGraphic(margin);
-    //             setOnMouseClicked(event -> {
-    //                 System.out.println("Clicked on " + genre.getName());
-    //             });
-    //             genreCell.setId("list-cell");
-    //         }
-    //     }
-    // }
 }

@@ -75,46 +75,4 @@ public class LibraryPage extends VBox {
     public void setFilesFromFolder(ObservableList<CustomMP3File> files) {
         mp3FileList.setFiles(files);
     }
-
-    // class SongEditRowCell extends ListCell<CustomMP3File> {
-    //     private final SongEditRow songEditRow;
-
-    //     public SongEditRowCell() {
-    //         songEditRow = new SongEditRow(null);
-    //     }
-
-    //     @Override
-    //     protected void updateItem(CustomMP3File file, boolean empty) {
-    //         super.updateItem(file, empty);
-
-    //         if (file == null || empty) {
-    //             resetCell();
-    //         } else {
-    //             updateCellWithFile(file);
-    //         }
-
-    //         if (deferredLayoutPasses == 0) {
-    //             System.out.println("request layout");
-    //             Platform.runLater(() -> {
-    //                 requestLayout();
-    //                 deferredLayoutPasses++;
-    //             });
-    //         }
-    //     }
-
-    //     private void resetCell() {
-    //         songEditRow.prefWidthProperty().unbind();
-    //         setText(null);
-    //         setGraphic(null);
-    //         setId("hidden-list-cell");
-    //     }
-
-    //     private void updateCellWithFile(CustomMP3File file) {
-    //         Margin margin = new Margin(songEditRow, 0, 0, 30, 0);
-    //         songEditRow.updateFile(file);
-    //         songEditRow.prefWidthProperty().bind(Layout.getInstance().getContentWidth().subtract(60));
-    //         setGraphic(margin);
-    //         songEditRow.setId("list-cell");
-    //     }
-    // }
 }
