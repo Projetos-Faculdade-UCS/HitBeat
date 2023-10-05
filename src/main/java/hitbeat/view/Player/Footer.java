@@ -8,10 +8,6 @@ public class Footer extends HBox{
     
     public Footer() {
         super(10);
-        // ----------player de musica----------------
-        // String path2Song = getClass().getResource("/hitbeat/media/HitBeat.mp3").toString();
-        // MediaPlayer mediaPlayer = new MediaPlayer(new Media(path2Song));
-
         //---------------layout---------------------
         MusicBox musicBox = new MusicBox();
         MediaPlayerBox mediaPlayerBox = new MediaPlayerBox();
@@ -29,7 +25,8 @@ public class Footer extends HBox{
 
         //---------------estilos---------------------
         this.setId("footer");
-        this.getStylesheets().add(getClass().getResource("/hitbeat/css/footer/footer.css").toExternalForm());
+        this.getStylesheets().add(
+            getClass().getResource("/hitbeat/css/footer/footer.css").toExternalForm());
     }
 
     
