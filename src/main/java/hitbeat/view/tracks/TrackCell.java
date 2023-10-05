@@ -48,7 +48,7 @@ public class TrackCell extends BaseCell<Track> {
         if (track != null) {
             titleLabel.setText(this.track.getName());
             subtitleLabel.setText("Subtitle text here"); // Update if Track has more data
-            trailingLabel.setText("Trail"); // Update if Track has more data
+            trailingLabel.setText(track.getGenre().getName());
         } else {
             titleLabel.setText("");
             subtitleLabel.setText("");

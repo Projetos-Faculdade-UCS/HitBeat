@@ -11,7 +11,7 @@ public class LibraryPage extends VBox {
 
     private LibraryController controller;
 
-    private TrackList trackList;
+    private MP3FileList mp3FileList;
 
     public LibraryPage() {
         super();
@@ -43,18 +43,18 @@ public class LibraryPage extends VBox {
         createConfiguredScrollPane();
 
         
-        // Set a preferred height to your TrackList
-        trackList.setPrefHeight(400); // You can adjust this value as needed
+        // Set a preferred height to your MP3FileList
+        mp3FileList.setPrefHeight(400); // You can adjust this value as needed
         
-        // Set VBox constraints to make TrackList take available vertical space
-        VBox.setVgrow(trackList, Priority.ALWAYS);
+        // Set VBox constraints to make MP3FileList take available vertical space
+        VBox.setVgrow(mp3FileList, Priority.ALWAYS);
         
 
-        getChildren().add(trackList);
+        getChildren().add(mp3FileList);
     }
 
     private void createConfiguredScrollPane() {
-        trackList = new TrackList(controller);
+        mp3FileList = new MP3FileList(controller);
     }
 
     private void addSaveButton() {
@@ -73,7 +73,7 @@ public class LibraryPage extends VBox {
     }
 
     public void setFilesFromFolder(ObservableList<CustomMP3File> files) {
-        trackList.setFiles(files);
+        mp3FileList.setFiles(files);
     }
 
     // class SongEditRowCell extends ListCell<CustomMP3File> {

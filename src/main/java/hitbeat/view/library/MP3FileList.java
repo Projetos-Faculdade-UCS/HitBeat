@@ -6,11 +6,11 @@ import hitbeat.view.base.widgets.listview.ListView;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import javafx.collections.ObservableList;
 
-public class TrackList extends MFXScrollPane {
+public class MP3FileList extends MFXScrollPane {
     private ObservableList<CustomMP3File> files;
     private LibraryController controller;
 
-    public TrackList(LibraryController controller) {
+    public MP3FileList(LibraryController controller) {
         super();
         this.controller = controller;
         files = this.controller.getFiles();
