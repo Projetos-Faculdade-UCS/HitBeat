@@ -1,6 +1,11 @@
 package hitbeat.controller.player;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import hitbeat.dao.TrackDAO;
+import hitbeat.model.Genre;
 import hitbeat.model.Queue;
 import hitbeat.model.Track;
 import hitbeat.view.Player.ProgressBar;
@@ -16,9 +21,7 @@ public class PlayerController {
     private static PlayerController instance;
     private MediaPlayer song;
     private Track track;
-
-    private Runnable onReady;
-
+    private List<Runnable> onReadyActions = new ArrayList<>();
     
     private PlayerController() {
     }
@@ -39,6 +42,18 @@ public class PlayerController {
         return this.song != null;
     }
 
+    public void setOnPlay(Runnable action) {
+        addOnReady(() -> {
+            this.song.setOnPlaying(() -> action.run() );
+        });
+    }
+
+    public void setOnPause(Runnable action) {
+        addOnReady(() -> {
+            this.song.setOnPaused(() -> action.run() );
+        });
+    }
+
     public void playPause() {
         if (!this.hasSong()) return;
 
@@ -49,10 +64,14 @@ public class PlayerController {
         }
     }
 
-    public void playTeste() {
+    public void play(Genre genre) {
         TrackDAO trackDAO = new TrackDAO();
-        Track track = trackDAO.first();
-        this.play(track);
+        List<Track> tracks = trackDAO.filter(
+            new HashMap<>() {{
+                put("genre", genre);
+            }}
+        );
+        this.play(tracks.get(0));
     }
 
     public void play(Track track) {
@@ -99,13 +118,15 @@ public class PlayerController {
         if (!this.hasSong()) return;
 
         this.song.stop();
-        this.onReady = this.song.getOnReady();
+        // this.onReady = this.song.getOnReady();
         this.song.dispose();
     }
 
     private void attach() {
-        this.song.setOnReady(this.onReady);
-        this.song.play();
+        this.song.setOnReady(() -> {
+            this.executeOnReadyActions();
+        });
+        this.playPause();
     }
 
     public void seek(double sTime) {
@@ -128,9 +149,24 @@ public class PlayerController {
     }
 
     public void bindVolume(DoubleProperty sliderValue) {
-        this.onReady = () -> {
-            if (onReady != null) onReady.run();
-            this.song.setVolume(sliderValue.getValue());
-        };
+        addOnReady(() -> {
+            this.song.volumeProperty().bind(sliderValue);
+        });
+    }
+
+    /*
+     * Adiciona uma ação a ser executada quando a musica estiver pronta.
+     * Concatena a ação passada com a ação que já estava sendo executada.
+     * @param action Ação a ser executada
+     * @return void
+     */
+    public void addOnReady(Runnable action) {
+        onReadyActions.add(action);
+    }
+
+    private void executeOnReadyActions() {
+        for (Runnable action : onReadyActions) {
+            action.run();
+        }
     }
 }

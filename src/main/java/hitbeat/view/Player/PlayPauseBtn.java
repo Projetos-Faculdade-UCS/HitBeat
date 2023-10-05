@@ -19,19 +19,12 @@ public class PlayPauseBtn extends MFXButton {
         svgPlay = new SVGWidget("/hitbeat/svg/play.svg", 30, Color.WHITE);
         svgPause = new SVGWidget("/hitbeat/svg/pause.svg", 30, Color.WHITE);
 
-        this.setOnAction( event -> this.playPause() );
-        this.playPause();
+        this.setOnAction( event -> player.playPause() );
+        player.setOnPlay(() -> this.setGraphic(svgPause));
+        player.setOnPause(() -> this.setGraphic(svgPlay));
 
+        this.setGraphic(svgPlay);
         this.setId("playPauseBtn");
     }
 
-    private void playPause() {
-        player.playPause();
-    
-        if (player.isPlaying()) {
-            this.setGraphic(svgPause);
-        } else {
-            this.setGraphic(svgPlay);
-        }
-    }
 }

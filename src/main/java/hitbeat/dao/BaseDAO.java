@@ -90,6 +90,26 @@ public abstract class BaseDAO<T extends BaseModel> {
         });
     }
 
+
+    /*
+     * Filtra os registros do banco de dados com base em um mapa de parâmetros.
+     * Os parâmetros são mapeados para os campos do modelo.
+     * @param params Um mapa de parâmetros para filtrar os registros.
+     * @return Uma lista de registros filtrados.
+     */
+    public List<T> filter(Map<String, Object> params) {
+        return executeMethod(session -> {
+            String hql = String.format("FROM %s WHERE ", this.className);
+            hql += params.keySet().stream()
+                    .map(key -> String.format("%s = :%s", key, key))
+                    .collect(Collectors.joining(" AND "));
+            Query<T> query = session.createQuery(hql, modelClass);
+            params.forEach((key, value) -> query.setParameter(key, value));
+            return query.list();
+        });
+    }
+
+
     public void saveAll(List<T> objects) {
         executeMethod(session -> {
             session.beginTransaction();

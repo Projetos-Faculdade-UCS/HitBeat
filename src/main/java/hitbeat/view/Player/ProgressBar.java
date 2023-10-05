@@ -12,6 +12,8 @@ public class ProgressBar extends HBox{
     Label maxValueLabel;
     Slider progressSlider;
     
+    private boolean isDragging = false;
+
     public ProgressBar() {
         super(1);
 
@@ -33,10 +35,10 @@ public class ProgressBar extends HBox{
         // ------atualizador do tempo---------
         Timeline progressManager = player.getProgressManager(this);
 
-        progressSlider.setOnMousePressed(event -> progressManager.pause() );
+        progressSlider.setOnMousePressed(event -> isDragging=true );
         progressSlider.setOnMouseReleased(event ->{
             player.seek(progressSlider.getValue());
-            progressManager.play();
+            isDragging=false;
         });
         progressManager.setCycleCount(Timeline.INDEFINITE);
         progressManager.play();
@@ -45,9 +47,12 @@ public class ProgressBar extends HBox{
     }
 
     public void setProgressIndicators(double duracao, double tempoAtual) {
+        if (isDragging){
+            minValueLabel.setText( this.formatTime(progressSlider.getValue()) );
+            return;
+        }
         progressSlider.setMax(duracao);
         maxValueLabel.setText(this.formatTime(duracao));
-        
         progressSlider.setValue(tempoAtual);
         minValueLabel.setText(this.formatTime(tempoAtual));
     }

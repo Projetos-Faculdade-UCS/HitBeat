@@ -50,7 +50,7 @@ public class GenresView extends ListView<Genre> {
                 setGraphic(margin);
                 setOnMouseClicked(event -> {
                     System.out.println("Clicked on " + genre.getName());
-                    PlayerController.getInstance().playTeste();
+                    PlayerController.getInstance().play(genre);
                 });
                 genreCell.setId("list-cell");
             }
