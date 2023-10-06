@@ -25,4 +25,14 @@ public class SidebarItem extends MFXButton {
         this.setOnAction(e -> onClick.run());
         HBox.setHgrow(this, Priority.ALWAYS);
     }
+
+    public void setActive(boolean value) {
+        if (value) {
+            this.getStyleClass().add("active");
+            this.setOnAction(null);
+        } else {
+            this.getStyleClass().remove("active");
+            this.setOnAction(e -> onClick.run());
+        }
+    }
 }

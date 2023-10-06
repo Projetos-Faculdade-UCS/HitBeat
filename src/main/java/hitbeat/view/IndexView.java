@@ -1,5 +1,9 @@
 package hitbeat.view;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import hitbeat.controller.ContentUpdated;
 import hitbeat.controller.Icons;
 import hitbeat.controller.IndexController;
 import hitbeat.view.Player.Footer;
@@ -30,8 +34,9 @@ public class IndexView extends Application {
     private Scene scene;
     private Sidebar sidebar;
     private Node content;
-    private final IndexController controller = new IndexController(this);
+    private final IndexController controller = new IndexController();
     private final Icons icons = new Icons();
+    private Map<String, SidebarItem> sidebarItems = new HashMap<>();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -48,21 +53,36 @@ public class IndexView extends Application {
         root.applyCss();
         root.layout();
 
+        setupEventHandlers();
+
+        controller.setOnRestoreCallback(this::restoreFromMemento); // Setup the callback for restoration
+
         setupScene(primaryStage);
     }
 
+    private void setupEventHandlers() {
+        controller.setContentChangedConsumer(this::updateContent);
+        controller.setSaveStateRequestConsumer(this::saveToMemento);
+    }
+
     private Sidebar setupSidebar() {
+        SidebarItem index = new SidebarItem("Início", icons.getHome(), controller::loadStartPage);
+        index.setActive(true);
+        sidebarItems.put("index", index);
+        sidebarItems.put("genres", new SidebarItem("Gêneros", icons.getGenres(), controller::loadGenresView));
+        sidebarItems.put("tracks", new SidebarItem("Todas", icons.getTracks(), controller::loadTracksView));
+        sidebarItems.put("library", new SidebarItem("Minha Biblioteca", null, controller::loadLibraryView));
+
         return new Sidebar(
                 "HitBeat",
                 new SidebarTopic(
-                    "Minhas Músicas",
-                    new SidebarItem("Index", icons.getHome(), controller::loadStartPage),
-                    new SidebarItem("Gêneros", icons.getGenres(), controller::loadGenresView),
-                    new SidebarItem("Todas", icons.getTracks(), controller::loadTracksView)),
+                        "Minhas Músicas",
+                        sidebarItems.get("index"),
+                        sidebarItems.get("genres"),
+                        sidebarItems.get("tracks")),
                 new SidebarTopic(
-                    "Gerenciar",
-                    new SidebarItem("Minha Biblioteca", null, controller::loadLibraryView)));
-                    
+                        "Gerenciar",
+                        sidebarItems.get("library")));
     }
 
     private void setupScene(Stage primaryStage) {
@@ -82,17 +102,35 @@ public class IndexView extends Application {
         primaryStage.show();
     }
 
-    public void updateContent(Node newContent) {
-        this.content = newContent;
+    public void updateContent(ContentUpdated newContent) {
+        sidebarItems.values().forEach(item -> item.setActive(false));
+
+        if (newContent.getIdentifier() != null) {
+            sidebarItems.get(newContent.getIdentifier()).setActive(true);
+        }
+
+        System.out.println("Updating content to: " + newContent.getContent());
+        this.content = newContent.getContent();
         root.setCenter(wrapContentWithBackButton());
     }
 
     public ContentMemento saveToMemento() {
-        return new ContentMemento(unwrapContent(root.getCenter()));
+        String currentIdentifier = null;
+        for (Map.Entry<String, SidebarItem> entry : sidebarItems.entrySet()) {
+            if (entry.getValue().getStyleClass().contains("active")) {
+                currentIdentifier = entry.getKey();
+                break;
+            }
+        }
+        return new ContentMemento(unwrapContent(root.getCenter()), currentIdentifier);
     }
 
-    public static Node restoreFromMemento(ContentMemento memento) {
-        return memento.getContentState();
+    private void restoreFromMemento(ContentMemento memento) {
+        System.out.println("Restoring from memento");
+
+        System.out.println("Memento content: " + memento.getContentState());
+        System.out.println("Memento identifier: " + memento.getIdentifier());
+        updateContent(new ContentUpdated(memento.getContentState(), memento.getIdentifier()));
     }
 
     private Node unwrapContent(Node content) {

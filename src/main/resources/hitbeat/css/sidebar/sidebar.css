@@ -16,3 +16,7 @@
     /* -fx-content-display: LEFT; */
     -fx-graphic-text-gap: 14;
 }
+
+.sidebar .sidebar-button.active {
+    -fx-text-fill: -main-color;
+}
