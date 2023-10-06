@@ -4,6 +4,7 @@ import hitbeat.controller.library.SongEditRowController;
 import hitbeat.util.CustomMP3File;
 import hitbeat.view.base.widgets.listview.BaseCell;
 import io.github.palexdev.materialfx.controls.MFXTextField;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -14,7 +15,9 @@ public class SongEditRow extends BaseCell<CustomMP3File> {
     private SongEditRowController controller;
     private Field titleField;
     private Field genreField;
+    private Field artistField;
     private Field filePathField;
+    private int deferredLayoutPasses = 0;
 
     public SongEditRow(CustomMP3File file) {
         // Initialize UI components
@@ -33,11 +36,19 @@ public class SongEditRow extends BaseCell<CustomMP3File> {
 
         initializeFields();
         addFieldsToLayout();
+        if (deferredLayoutPasses == 0) {
+            System.out.println("request layout");
+            Platform.runLater(() -> {
+                requestLayout();
+                deferredLayoutPasses++;
+            });
+        }
     }
 
     private void initializeFields() {
         titleField = createField("", "Título", controller::titleTextListener);
         genreField = createField("", "Gênero", controller::genreTextListener);
+        artistField = createField("", "Artista", controller::artistTextListener);
         filePathField = createField("", "Caminho do arquivo", null);
         filePathField.setEnabled(false);
     }
@@ -53,7 +64,7 @@ public class SongEditRow extends BaseCell<CustomMP3File> {
     }
 
     private void addFieldsToLayout() {
-        root.getChildren().addAll(titleField, genreField, filePathField);
+        root.getChildren().addAll(titleField, genreField, artistField, filePathField);
         root.setSpacing(10);
     }
 
@@ -63,10 +74,12 @@ public class SongEditRow extends BaseCell<CustomMP3File> {
             controller.setFile(file);
             titleField.setText(file.getTitle());
             genreField.setText(file.getGenre());
+            artistField.setText(file.getArtist());
             filePathField.setText(file.getFilePath());
         } else {
             titleField.setText("");
             genreField.setText("");
+            artistField.setText("");
             filePathField.setText("");
         }
     }

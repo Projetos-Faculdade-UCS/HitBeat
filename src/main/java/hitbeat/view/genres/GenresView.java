@@ -1,7 +1,6 @@
 package hitbeat.view.genres;
 
 import hitbeat.controller.genres.GenresController;
-import hitbeat.controller.player.PlayerController;
 import hitbeat.model.Genre;
 import hitbeat.view.base.widgets.listview.ListView;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;

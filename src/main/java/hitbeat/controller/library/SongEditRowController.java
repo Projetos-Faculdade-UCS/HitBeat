@@ -25,5 +25,9 @@ public class SongEditRowController {
     public void setFile(CustomMP3File file2) {
         this.file = file2;
     }
+
+    public void artistTextListener(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+        file.setArtist(newValue);
+    }
    
 }
