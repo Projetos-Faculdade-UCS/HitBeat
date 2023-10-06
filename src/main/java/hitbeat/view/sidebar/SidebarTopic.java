@@ -5,6 +5,8 @@ import java.util.Collections;
 
 import javafx.geometry.Insets;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -17,6 +19,7 @@ public class SidebarTopic extends VBox {
         this.title = title;
         Collections.addAll(this.items, items);
         this.setFillWidth(true);
+        HBox.setHgrow(this, Priority.ALWAYS);
 
         this.getChildren().add(createTitlePane());
         this.items.forEach(item -> this.getChildren().add(item));
