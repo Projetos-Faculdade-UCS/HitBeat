@@ -46,6 +46,11 @@ public class Track extends BaseModel {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Genre genre;
 
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "artist_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Artist artist;
+
     @ManyToMany(mappedBy = "tracks")
     private Set<Queue> queues = new HashSet<>();
 
@@ -67,7 +72,7 @@ public class Track extends BaseModel {
 
     // Track(Long, String, Date, int, String, String, boolean, boolean, boolean, Genre, Set<Queue>)
     public Track(Long id, String name, Date creationDate, int duration, String picturePath, String filePath,
-            boolean explicit, boolean single, boolean favorite, Genre genre, Set<Queue> queues) {
+            boolean explicit, boolean single, boolean favorite, Genre genre, Artist artist, Set<Queue> queues) {
         this.id = id;
         this.name = name;
         this.creationDate = creationDate;
@@ -78,6 +83,7 @@ public class Track extends BaseModel {
         this.single = single;
         this.genre = genre;
         this.queues = queues;
+        this.artist = artist;
     }
 
     public Track(String name, Date creationDate, int duration, String picturePath, String filePath,

@@ -1,5 +1,6 @@
 package hitbeat.view.tracks;
 
+import hitbeat.controller.player.PlayerController;
 import hitbeat.model.Track;
 import hitbeat.view.base.widgets.ListTile;
 import hitbeat.view.base.widgets.listview.BaseCell;
@@ -39,6 +40,9 @@ public class TrackCell extends BaseCell<Track> {
 
         ListTile listTile = new ListTile(leading, titleLabel, subtitleLabel, trailingLabel);
         this.getChildren().add(listTile);
+        this.onMouseClickedProperty().set(event -> {
+            PlayerController.getInstance().play(track);
+        });
     }
 
     @Override
@@ -47,7 +51,7 @@ public class TrackCell extends BaseCell<Track> {
 
         if (track != null) {
             titleLabel.setText(this.track.getName());
-            subtitleLabel.setText("Subtitle text here"); // Update if Track has more data
+            subtitleLabel.setText(this.track.getArtist().getName()); // Update if Track has more data
             trailingLabel.setText(track.getGenre().getName());
         } else {
             titleLabel.setText("");

@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import hitbeat.dao.ArtistDAO;
 import hitbeat.dao.GenreDAO;
 import hitbeat.dao.TrackDAO;
+import hitbeat.model.Artist;
 import hitbeat.model.Genre;
 import hitbeat.model.Track;
 import hitbeat.util.CustomMP3File;
@@ -15,13 +17,14 @@ public class LibraryDatabaseManager {
 
     private GenreDAO genreDAO;
     private TrackDAO trackDAO;
+    private ArtistDAO artistDAO;
 
     public LibraryDatabaseManager(GenreDAO genreDAO, TrackDAO trackDAO) {
         this.genreDAO = genreDAO;
         this.trackDAO = trackDAO;
+        this.artistDAO = new ArtistDAO();
     }
-
-    public void saveMultipleCustomMP3FilesToDatabase(List<CustomMP3File> customMP3Files) {
+    private List<Genre> saveGenres(List<CustomMP3File> customMP3Files) {
         // Extract distinct genres from the MP3 files
         List<String> genreNames = customMP3Files.stream()
                 .map(CustomMP3File::getGenre)
@@ -47,7 +50,43 @@ public class LibraryDatabaseManager {
         genreDAO.bulkCreateOrUpdate(newGenres, "name");
 
         // Merge both lists of genres for track association
-        List<Genre> allGenres = Stream.concat(existingGenres.stream(), newGenres.stream()).collect(Collectors.toList());
+        return Stream.concat(existingGenres.stream(), newGenres.stream()).collect(Collectors.toList());
+    }
+
+    private List<Artist> saveArtists(List<CustomMP3File> customMP3Files) {
+        // Extract distinct artists from the MP3 files
+        List<String> artistNames = customMP3Files.stream()
+                .map(CustomMP3File::getArtist)
+                .distinct()
+                .collect(Collectors.toList());
+
+        // Fetch existing artists from the database
+        List<Artist> existingArtists = artistDAO.findByName(artistNames);
+
+        // Determine which artist names are not yet in the database
+        List<String> newArtistNames = artistNames.stream()
+                .filter(name -> existingArtists.stream().noneMatch(artist -> artist.getName().equals(name)))
+                .collect(Collectors.toList());
+
+        // Create new Artist objects for those names and save them
+        List<Artist> newArtists = newArtistNames.stream()
+                .map(name -> {
+                    Artist artist = new Artist();
+                    artist.setName(name);
+                    return artist;
+                })
+                .collect(Collectors.toList());
+        artistDAO.bulkCreateOrUpdate(newArtists, "name");
+
+        // Merge both lists of artists for track association
+        return Stream.concat(existingArtists.stream(), newArtists.stream()).collect(Collectors.toList());
+    }
+
+    public void saveMultipleCustomMP3FilesToDatabase(List<CustomMP3File> customMP3Files) {
+        List<Genre> allGenres = saveGenres(customMP3Files);
+
+        // Create and save artists
+        List<Artist> artists = saveArtists(customMP3Files);
 
         // Create and save tracks with associated genres
         List<Track> tracks = customMP3Files.stream()
@@ -58,8 +97,12 @@ public class LibraryDatabaseManager {
                             .filter(genre -> genre.getName().equals(customMP3File.getGenre()))
                             .findFirst()
                             .orElse(null));
-                    track.setFilePath(customMP3File.getFilePath());
+                    track.setFilePath(customMP3File.getFilenameAsUri());
                     track.setCreationDate(new Date());
+                    track.setArtist(artists.stream()
+                            .filter(artist -> artist.getName().equals(customMP3File.getArtist()))
+                            .findFirst()
+                            .orElse(null));
                     return track;
                 })
                 .collect(Collectors.toList());
