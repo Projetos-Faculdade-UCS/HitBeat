@@ -1,10 +1,12 @@
 package hitbeat.view.Player;
 
 import hitbeat.controller.player.PlayerController;
+import hitbeat.view.base.widgets.Margin;
 import hitbeat.view.base.wrappers.Slider;
 import javafx.animation.Timeline;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 
 
 public class ProgressBar extends HBox{
@@ -27,8 +29,8 @@ public class ProgressBar extends HBox{
         maxValueLabel = new Label("00:00");
         
         // ------estilos---------
-        minValueLabel.getStyleClass().addAll("label", "px-2");
-        maxValueLabel.getStyleClass().addAll("label", "px-1");
+        minValueLabel.getStyleClass().add("label");
+        maxValueLabel.getStyleClass().add("label");
         progressSlider.getStyleClass().add("progress-slider");
         this.setId("progress-bar");
 
@@ -43,7 +45,11 @@ public class ProgressBar extends HBox{
         progressManager.setCycleCount(Timeline.INDEFINITE);
         progressManager.play();
 
-        getChildren().addAll(minValueLabel, progressSlider, maxValueLabel);
+        HBox.setHgrow(progressSlider, Priority.ALWAYS);
+        Margin minLabel = new Margin(maxValueLabel, 0, 10, 0, 0);
+        Margin maxLabel = new Margin(minValueLabel, 0, 0, 0, 6);
+
+        getChildren().addAll(minLabel, progressSlider, maxLabel);
     }
 
     public void setProgressIndicators(double duracao, double tempoAtual) {

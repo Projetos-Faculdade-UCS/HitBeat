@@ -30,25 +30,19 @@ public class RepeatBtn extends MFXButton {
         StackPane stack = new StackPane();
         stack.getChildren().addAll(svgRepeat, repeatIndicator);
 
-        this.setGraphic(stack);
-        this.setOnAction(event -> {
-            if (repeat == false) {
-                repeat = true;
+        player.setOnRepeat( repeat -> {
+            if (repeat == true) {
                 repeatIndicator.setVisible(true);
                 repeatIndicator.setFill(Color.BLUEVIOLET);
-
                 svgRepeat.setColor(Color.BLUEVIOLET);
-                player.toggleRepeat();
-                
             } else {
-                repeat = false;
                 repeatIndicator.setVisible(false);
                 repeatIndicator.setFill(Color.WHITE);
-
                 svgRepeat.setColor(Color.WHITE);
-                player.toggleRepeat();
             }
         });
+        this.setOnMouseClicked( event -> player.toggleRepeat() );
+        this.setGraphic(stack);
     }
 
 }

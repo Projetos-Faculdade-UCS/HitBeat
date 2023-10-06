@@ -1,5 +1,6 @@
 package hitbeat.view.Player;
 
+import hitbeat.view.base.widgets.Margin;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -9,19 +10,19 @@ public class Footer extends HBox{
     public Footer() {
         super(10);
         //---------------layout---------------------
-        MusicBox musicBox = new MusicBox();
         MediaPlayerBox mediaPlayerBox = new MediaPlayerBox();
-        VolumeBox volumeBox = new VolumeBox();
-
-        HBox.setHgrow(musicBox, Priority.NEVER);
+        Margin music = new Margin( new MusicBox(), 0, 0, 0, 20);
+        Margin volume = new Margin( new VolumeBox(), 0, 0, 0, 20);
+        
+        HBox.setHgrow(music, Priority.NEVER);
         HBox.setHgrow(mediaPlayerBox, Priority.ALWAYS);
-        HBox.setHgrow(volumeBox, Priority.NEVER);
+        HBox.setHgrow(volume, Priority.NEVER);
 
-        volumeBox.setAlignment(Pos.CENTER_RIGHT);
+        volume.setAlignment(Pos.CENTER_RIGHT);
         mediaPlayerBox.setAlignment(Pos.CENTER);
-        musicBox.setAlignment(Pos.CENTER_LEFT);
+        music.setAlignment(Pos.CENTER_LEFT);
 
-        getChildren().addAll(musicBox, mediaPlayerBox,  volumeBox);
+        getChildren().addAll(music, mediaPlayerBox, volume);
 
         //---------------estilos---------------------
         this.setId("footer");

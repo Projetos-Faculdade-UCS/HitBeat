@@ -3,6 +3,7 @@ package hitbeat.controller.player;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Consumer;
 
 import hitbeat.dao.TrackDAO;
 import hitbeat.model.Genre;
@@ -22,6 +23,8 @@ public class PlayerController {
     private MediaPlayer song;
     private Track track;
     private List<Runnable> onReadyActions = new ArrayList<>();
+    private boolean repeat = false;
+    private Consumer<Boolean> onRepeat;
     // private List<Track> queue = new ArrayList<>();
     
     private PlayerController() {
@@ -100,33 +103,41 @@ public class PlayerController {
     * Faz musica voltar ao inicio e tocar, toda vez que ela terminar
     */
     public void toggleRepeat() {
-        if (!this.hasSong()) return;
-
-        if (this.song.getCycleCount() == MediaPlayer.INDEFINITE) {
-            // Desativa a repetição
-            this.song.setCycleCount(1);
-        } else {
-            // Ativa a repetição infinita
-            this.song.setCycleCount(MediaPlayer.INDEFINITE);
-        }
+        this.setRepeat(!this.repeat);
+        this.addOnReady( () -> this.setRepeat(repeat) );
     }
 
-    // public void setOnReady(Runnable action) {
-    //     this.song.setOnReady(action);
-    // } 
+    private void setRepeat(boolean repeat) {
+        this.repeat = repeat;
+        this.onRepeat.accept(this.repeat);
+
+        if (!this.hasSong()) return;
+        this.song.setCycleCount( repeat ? MediaPlayer.INDEFINITE : 1 );
+    }
+
+    public void setOnRepeat(Consumer<Boolean> action) {
+        this.onRepeat = action;
+    }
 
     private void dispose() {
         if (!this.hasSong()) return;
 
         this.song.stop();
-        // this.onReady = this.song.getOnReady();
+        this.song.volumeProperty().unbind();
+        
+        this.song.setOnReady(null);
+        this.song.setOnPlaying(null);
+        this.song.setOnPaused(null);
+        this.song.setOnEndOfMedia(null);
+        this.song.setOnStopped(null);
+        this.song.setOnHalted(null);
+        this.song.setOnError(null);
+
         this.song.dispose();
     }
 
     private void attach() {
-        this.song.setOnReady(() -> {
-            this.executeOnReadyActions();
-        });
+        this.song.setOnReady(this::executeOnReadyActions);
         this.playPause();
     }
 

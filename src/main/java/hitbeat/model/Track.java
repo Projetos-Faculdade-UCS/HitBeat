@@ -16,6 +16,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import javafx.scene.image.Image;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.With;
@@ -96,6 +97,13 @@ public class Track extends BaseModel {
         this.explicit = explicit;
         this.single = single;
         this.genre = genre;
+    }
+
+    public Image getCover() {
+        if (this.picturePath == null) {
+            return new Image("/hitbeat/images/track.jpg");
+        }
+        return new Image(this.picturePath);
     }
 
 }

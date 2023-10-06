@@ -4,6 +4,7 @@ import hitbeat.controller.player.PlayerController;
 import hitbeat.view.base.widgets.SVGWidget;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
@@ -26,11 +27,13 @@ public class MediaPlayerBox extends VBox {
 
         HBox actionsTab = new HBox(15);
         ProgressBar progressBar = new ProgressBar();
+        HBox.setHgrow(progressBar, Priority.ALWAYS);
 
         actionsTab.getChildren().addAll(
                 resetBtn, previousBtn, playPauseBtn, nextBtn, repeatBtn);
 
         actionsTab.setId("actionsTab");
+        HBox.setHgrow(actionsTab, Priority.NEVER);
         getChildren().addAll(actionsTab, progressBar);
     }
 
