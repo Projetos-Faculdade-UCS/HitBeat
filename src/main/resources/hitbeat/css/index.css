@@ -58,3 +58,15 @@
     -fx-background-color: transparent;
     background-color: transparent;
 }
+
+.min-button{
+    -fx-background-color: transparent !important;
+    background-color: transparent !important;
+    -fx-padding: 0px;
+    padding: 0px;
+}
+.min-button .mfx-ripple-generator {
+    -mfx-auto-clip: true;
+    -mfx-ripple-color: -main-color;
+    -fx-background-radius: 100;
+}
