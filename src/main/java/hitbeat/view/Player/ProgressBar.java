@@ -46,8 +46,8 @@ public class ProgressBar extends HBox{
         progressManager.play();
 
         HBox.setHgrow(progressSlider, Priority.ALWAYS);
-        Margin minLabel = new Margin(maxValueLabel, 0, 10, 0, 0);
-        Margin maxLabel = new Margin(minValueLabel, 0, 0, 0, 6);
+        Margin minLabel = new Margin(minValueLabel, 0, 10, 0, 0);
+        Margin maxLabel = new Margin(maxValueLabel, 0, 0, 0, 6);
 
         getChildren().addAll(minLabel, progressSlider, maxLabel);
     }

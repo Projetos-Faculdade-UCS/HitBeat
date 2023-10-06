@@ -16,9 +16,14 @@ public class TrackDAO extends BaseDAO<Track> {
         Genre genre = genreDAO.first();
         Date dataAtual = new Date();
 
-        Track track = new Track("Track 1", dataAtual, 100,
-                "C:\\Users\\Public\\Pictures\\Sample Pictures\\Chrysanthemum.jpg",
-                "C:\\Users\\Public\\Music\\Sample Music\\Kalimba.mp3", false, false, false, genre);
+        Track track = new Track();
+        track.setName("Track 1");
+        track.setCreationDate(dataAtual);
+        track.setDuration(100);
+        track.setExplicit(false);
+        track.setFavorite(false);
+        track.setGenre(genre);
+        track.setArtist(null);
         TrackDAO trackDAO = new TrackDAO();
         trackDAO.save(track);
     }
@@ -32,7 +37,7 @@ public class TrackDAO extends BaseDAO<Track> {
                 .withExplicit(newTrack.isExplicit())
                 .withFavorite(newTrack.isFavorite())
                 .withGenre(newTrack.getGenre())
-                .withPicturePath(newTrack.getPicturePath())
+                .withPicture(newTrack.getPicture())
                 .withSingle(newTrack.isSingle());
     }
 }

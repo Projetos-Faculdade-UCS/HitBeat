@@ -24,6 +24,7 @@ public class LibraryDatabaseManager {
         this.trackDAO = trackDAO;
         this.artistDAO = new ArtistDAO();
     }
+
     private List<Genre> saveGenres(List<CustomMP3File> customMP3Files) {
         // Extract distinct genres from the MP3 files
         List<String> genreNames = customMP3Files.stream()
@@ -103,6 +104,7 @@ public class LibraryDatabaseManager {
                             .filter(artist -> artist.getName().equals(customMP3File.getArtist()))
                             .findFirst()
                             .orElse(null));
+                    track.setPicture(customMP3File.getImage());
                     return track;
                 })
                 .collect(Collectors.toList());
@@ -127,6 +129,7 @@ public class LibraryDatabaseManager {
         track.setGenre(genre); // Set the genre reference
         track.setFilePath(customMP3File.getFilePath());
         track.setCreationDate(new Date());
+        track.setPicture(customMP3File.getImage());
 
         trackDAO.save(track); // Save track to database
     }
