@@ -1,0 +1,18 @@
+.sidebar {
+    -fx-background-color: #1e1e1e;
+    background-color: #1e1e1e;
+    -fx-padding: 12px;
+    padding: 12px;
+}
+
+.sidebar .sidebar-button {
+    -fx-background-color: transparent;
+    background-color: transparent;
+    -fx-text-fill: white;
+    -fx-alignment: CENTER_LEFT;
+    /* padding is 10px left */
+    -fx-padding: 8px 8px 8px 24px;
+    padding: 8px 8px 8px 24px;
+    /* -fx-content-display: LEFT; */
+    -fx-graphic-text-gap: 14;
+}

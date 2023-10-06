@@ -24,4 +24,7 @@ public class Layout {
     private ReadOnlyDoubleProperty contentWidth;
     private ReadOnlyDoubleProperty contentHeight;
 
+    private ReadOnlyDoubleProperty rootWidth;
+    private ReadOnlyDoubleProperty rootHeight;
+
 }

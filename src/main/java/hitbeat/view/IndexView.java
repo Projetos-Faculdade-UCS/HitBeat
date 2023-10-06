@@ -57,11 +57,12 @@ public class IndexView extends Application {
                 new SidebarTopic(
                     "Minhas Músicas",
                     new SidebarItem("Index", icons.getHome(), controller::loadStartPage),
-                    new SidebarItem("Músicas", icons.getTracks(), controller::loadTracksView),
-                    new SidebarItem("Gêneros", icons.getGenres(), controller::loadGenresView)),
+                    new SidebarItem("Gêneros", icons.getGenres(), controller::loadGenresView),
+                    new SidebarItem("Todas", icons.getTracks(), controller::loadTracksView)),
                 new SidebarTopic(
                     "Gerenciar",
                     new SidebarItem("Minha Biblioteca", null, controller::loadLibraryView)));
+                    
     }
 
     private void setupScene(Stage primaryStage) {
