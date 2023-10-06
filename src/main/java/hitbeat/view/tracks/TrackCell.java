@@ -32,14 +32,14 @@ public class TrackCell extends BaseCell<Track> {
         MinButton playBtn = new MinButton("");
         SVGWidget svgPlay = new SVGWidget("/hitbeat/svg/play.svg", 25, Color.WHITE);
         playBtn.setGraphic(svgPlay);
-        
+
         StackPane playbox = new StackPane(playBtn);
         VBox.setVgrow(playbox, Priority.ALWAYS);
 
         playbox.setAlignment(Pos.CENTER);
         playbox.setPickOnBounds(false);
 
-        playBtn.setOnMouseClicked( event -> {
+        playBtn.setOnMouseClicked(event -> {
             PlayerController.getInstance().play(this.track);
         });
 
@@ -57,9 +57,6 @@ public class TrackCell extends BaseCell<Track> {
 
         ListTile listTile = new ListTile(playbox, titleLabel, subtitleLabel, trailingLabel);
         this.getChildren().add(listTile);
-        this.onMouseClickedProperty().set(event -> {
-            PlayerController.getInstance().play(track);
-        });
     }
 
     @Override
@@ -68,7 +65,9 @@ public class TrackCell extends BaseCell<Track> {
 
         if (track != null) {
             titleLabel.setText(this.track.getName());
-            subtitleLabel.setText(this.track.getArtist().getName()); // Update if Track has more data
+            if (this.track.getArtist() != null) {
+                subtitleLabel.setText(this.track.getArtist().getName()); // Update if Track has more data
+            }
             trailingLabel.setText(track.getGenre().getName());
         } else {
             titleLabel.setText("");
