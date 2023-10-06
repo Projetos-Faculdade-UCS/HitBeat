@@ -12,11 +12,11 @@ public class Footer extends HBox{
         //---------------layout---------------------
         MediaPlayerBox mediaPlayerBox = new MediaPlayerBox();
         Margin music = new Margin( new MusicBox(), 0, 0, 0, 20);
-        Margin volume = new Margin( new VolumeBox(), 0, 0, 0, 20);
+        Margin volume = new Margin( new VolumeBox(), 0, 20, 0, 0);
         
-        HBox.setHgrow(music, Priority.NEVER);
+        HBox.setHgrow(music, Priority.SOMETIMES);
         HBox.setHgrow(mediaPlayerBox, Priority.ALWAYS);
-        HBox.setHgrow(volume, Priority.NEVER);
+        HBox.setHgrow(volume, Priority.SOMETIMES);
 
         volume.setAlignment(Pos.CENTER_RIGHT);
         mediaPlayerBox.setAlignment(Pos.CENTER);
