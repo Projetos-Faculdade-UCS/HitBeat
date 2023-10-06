@@ -170,4 +170,8 @@ public class PlayerController {
             action.run();
         }
     }
+
+    public Track getTrack() {
+        return this.track;
+    }
 }
