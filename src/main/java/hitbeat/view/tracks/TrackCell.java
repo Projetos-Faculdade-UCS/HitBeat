@@ -3,7 +3,7 @@ package hitbeat.view.tracks;
 import hitbeat.controller.player.PlayerController;
 import hitbeat.model.Track;
 import hitbeat.view.base.widgets.ListTile;
-import hitbeat.view.base.widgets.MinButton;
+import hitbeat.view.base.widgets.RoundedButton;
 import hitbeat.view.base.widgets.SVGWidget;
 import hitbeat.view.base.widgets.listview.BaseCell;
 import javafx.geometry.Pos;
@@ -29,7 +29,7 @@ public class TrackCell extends BaseCell<Track> {
 
     private void initUI() {
         // Create Leading
-        MinButton playBtn = new MinButton("");
+        RoundedButton playBtn = new RoundedButton("");
         SVGWidget svgPlay = new SVGWidget("/hitbeat/svg/play.svg", 25, Color.WHITE);
         playBtn.setGraphic(svgPlay);
 

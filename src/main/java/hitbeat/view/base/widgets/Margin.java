@@ -2,9 +2,9 @@ package hitbeat.view.base.widgets;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.HBox;
 
-public class Margin extends Pane {
+public class Margin extends HBox {
     public Margin(Node child) {
         this.setPadding(new Insets(0));
         this.getChildren().add(child);

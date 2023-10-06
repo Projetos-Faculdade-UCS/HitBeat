@@ -19,6 +19,7 @@ public class SVGWidget extends StackPane {
     private double width;
     private double height;
     private Color color;
+    private SVGPath svgPath;
 
     public SVGWidget(String resourcePath) {
         this.resourcePath = resourcePath;
@@ -76,7 +77,7 @@ public class SVGWidget extends StackPane {
         this.setMinSize(width, height);
 
         for (String path : paths) {
-            SVGPath svgPath = new SVGPath();
+            svgPath = new SVGPath();
             svgPath.setContent(path);
 
             double scaleX = width / svgPath.getBoundsInLocal().getWidth();
@@ -116,6 +117,7 @@ public class SVGWidget extends StackPane {
 
     public void setColor(Color color) {
         this.color = color;
+        svgPath.setFill(color);
     }
 
 }
