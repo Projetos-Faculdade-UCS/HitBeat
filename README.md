@@ -11,10 +11,19 @@ Projeto para a disciplina "Projeto Temático I" da Universidade de Caxias do Sul
 ## Dependências
 
 * Maven
+* libavformat-dev
+* ffmpeg
 * JavaFx
 * [MaterialFX](https://github.com/palexdev/MaterialFX/)
 
 ## Instruções para execução
+
+* instalar dependencias de sistema
+
+```bash
+    sudo apt install ffmpeg
+    sudo apt install libavformat-dev
+```
 
 * conferir que as dependências settadas no `pom.xml` estão funcionando corretamente (testado com vscode + `Java Extension Pack`)
 * O projeto pode ser inicializado através da classe `src.main.java.hitbeat.App`

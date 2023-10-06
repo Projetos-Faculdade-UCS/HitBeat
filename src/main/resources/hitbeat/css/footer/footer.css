@@ -1,0 +1,72 @@
+/* Botões do materialFX */
+#playPauseBtn {
+    -fx-background-radius: 50%;
+    -fx-border-radius: 50%;
+    border-radius: 50%;
+}
+
+#playPauseBtn .mfx-ripple-generator {
+	-mfx-auto-clip: true;
+    -mfx-ripple-color: #8A2BE2;
+}
+
+.mfx-button {
+    -fx-background-color: transparent !important;
+    background-color: transparent !important;
+    -fx-padding: 0px;
+    padding: 0px;
+}
+.mfx-button .mfx-ripple-generator {
+    -mfx-auto-clip: true;
+}
+
+/* Footer */
+#footer{
+    -fx-alignment: center;
+    -fx-pref-height: 80px;
+    -fx-pref-width: 100%;
+    -fx-background-color: #302f2f;
+    background-color: #302f2f;
+}
+.side-box{
+    -fx-alignment: center;
+    -fx-max-width: 600px !important;
+    -fx-min-width: 170px !important;
+    -fx-padding: 0px !important;
+    padding: 0px;
+}
+
+/* MediaPlayer */
+#actionsTab{
+    -fx-alignment: center;
+}
+#progress-bar{
+    -fx-background-color: #2195f300;
+    background-color: #2195f300;
+    -fx-alignment: center;
+    -fx-padding: 0 10px;
+    padding: 0 10px;
+}
+.progress-slider{
+    -fx-max-width: 600px;
+    -fx-min-width: 180px !important;
+    width: 400px;
+    min-width: 200px;    
+}
+.volume-slider{
+    -fx-max-width: 600px;
+    -fx-min-width: 50px !important;
+    width: 100px;
+    -fx-min-width: 50px;
+    min-width: 50px;
+}
+.label {
+    font-size: 12px;
+    -fx-font-size: 12px;
+    -fx-text-fill: #A9A9A9;
+}
+.volume-box{
+    -fx-alignment: center;
+    -fx-padding: 0 5px 0 0 !important;
+    padding: 0 10px 0 0;
+}
