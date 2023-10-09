@@ -98,7 +98,9 @@ public class PlayerController {
     }
 
     public void setOnRepeat(Consumer<Boolean> action) {
-        this.onRepeat = action;
+        this.onRepeat = (repeat) -> {
+            action.accept(repeat);
+       };
     }
 
     public void bindVolume(DoubleProperty sliderValue) {
@@ -146,7 +148,9 @@ public class PlayerController {
 
     private void attachSongListeners() {
         song.setOnEndOfMedia(() -> {
-            song.stop();
+            if (!repeat) {
+                song.stop();
+            }
         });
         song.setOnReady(this::executeOnReadyActions);
     }
