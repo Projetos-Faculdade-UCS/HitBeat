@@ -18,7 +18,10 @@ import javafx.util.Duration;
 
 public class PlayerController {
 
-    private static PlayerController instance;
+    private static class SingletonHelper {
+        private static final PlayerController INSTANCE = new PlayerController();
+    }
+
     private MediaPlayer song;
     private Track track;
     private List<Consumer<MediaPlayer>> onReadyActions = new ArrayList<>();
@@ -29,10 +32,7 @@ public class PlayerController {
     }
 
     public static PlayerController getInstance() {
-        if (instance == null) {
-            instance = new PlayerController();
-        }
-        return instance;
+        return SingletonHelper.INSTANCE;
     }
 
     // Playback Control Methods
