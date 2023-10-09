@@ -3,15 +3,13 @@ package hitbeat.controller.player;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import hitbeat.dao.TrackDAO;
 import hitbeat.model.Genre;
 import hitbeat.model.Queue;
 import hitbeat.model.Track;
-import hitbeat.view.Player.ProgressBar;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -19,14 +17,15 @@ import javafx.scene.media.MediaPlayer.Status;
 import javafx.util.Duration;
 
 public class PlayerController {
+
     private static PlayerController instance;
     private MediaPlayer song;
     private Track track;
-    private List<Runnable> onReadyActions = new ArrayList<>();
+    private List<Consumer<MediaPlayer>> onReadyActions = new ArrayList<>();
     private boolean repeat = false;
     private Consumer<Boolean> onRepeat;
-    // private List<Track> queue = new ArrayList<>();
-    
+    private Consumer<Status> onStatusChange;
+
     private PlayerController() {
     }
 
@@ -37,152 +36,145 @@ public class PlayerController {
         return instance;
     }
 
-    public boolean isPlaying() {
-        if (!this.hasSong()) return false;
-        return this.song.getStatus() == Status.PLAYING;
-    }
-
-    public boolean hasSong() {
-        return this.song != null;
-    }
-
-    public void setOnPlay(Runnable action) {
-        addOnReady(() -> {
-            this.song.setOnPlaying(() -> action.run() );
-        });
-    }
-
-    public void setOnPause(Runnable action) {
-        addOnReady(() -> {
-            this.song.setOnPaused(() -> action.run() );
-        });
-    }
+    // Playback Control Methods
 
     public void playPause() {
-        if (!this.hasSong()) return;
-
-        if (this.isPlaying()){
-            this.song.pause();
-        } else {
-            this.song.play();
+        if (this.hasSong()) {
+            if (this.isPlaying()) {
+                song.pause();
+            } else {
+                song.play();
+            }
         }
     }
 
     public void play(Genre genre) {
         TrackDAO trackDAO = new TrackDAO();
-        List<Track> tracks = trackDAO.filter(
-            new HashMap<>() {{
+        List<Track> tracks = trackDAO.filter(new HashMap<>() {
+            {
                 put("genre", genre);
-            }}
-        );
+            }
+        });
         this.play(tracks.get(0));
     }
 
     public void play(Track track) {
-        this.dispose();
-
+        disposeCurrentSong();
         this.track = track;
-        this.song = new MediaPlayer( new Media(track.getFilePath()) );
-        this.attach();
+        this.song = new MediaPlayer(new Media(track.getFilePath()));
+        attachSongListeners();
+        playPause();
     }
 
-    public void play(Queue queue){
+    public void play(Queue queue) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    /*
-    * Faz musica voltar ao inicio
-    */
-    public void resetSong(){
-        if (!this.hasSong()) return;
-
-        this.song.seek(this.song.getStartTime());
+    public void resetSong() {
+        if (this.hasSong())
+            song.seek(song.getStartTime());
     }
 
-    /*
-    * Faz musica voltar ao inicio e tocar, toda vez que ela terminar
-    */
     public void toggleRepeat() {
-        this.setRepeat(!this.repeat);
-        this.addOnReady( () -> this.setRepeat(repeat) );
+        setRepeat(!repeat);
+        addOnReady((s) -> setRepeat(repeat));
     }
 
-    private void setRepeat(boolean repeat) {
-        this.repeat = repeat;
-        this.onRepeat.accept(this.repeat);
+    public void seek(double sTime) {
+        if (this.hasSong())
+            song.seek(Duration.seconds(sTime));
+    }
 
-        if (!this.hasSong()) return;
-        this.song.setCycleCount( repeat ? MediaPlayer.INDEFINITE : 1 );
+    // Listener Setup
+    public void setOnReady(Consumer<MediaPlayer> action) {
+        addOnReady(action);
+    }
+
+    public void setOnPlay(Runnable action) {
+        addOnReady((s) -> s.setOnPlaying(action));
+    }
+
+    public void setOnPause(Runnable action) {
+        addOnReady((s) -> s.setOnPaused(action));
     }
 
     public void setOnRepeat(Consumer<Boolean> action) {
         this.onRepeat = action;
     }
 
-    private void dispose() {
-        if (!this.hasSong()) return;
-
-        this.song.stop();
-        this.song.volumeProperty().unbind();
-        
-        this.song.setOnReady(null);
-        this.song.setOnPlaying(null);
-        this.song.setOnPaused(null);
-        this.song.setOnEndOfMedia(null);
-        this.song.setOnStopped(null);
-        this.song.setOnHalted(null);
-        this.song.setOnError(null);
-
-        this.song.dispose();
-    }
-
-    private void attach() {
-        this.song.setOnReady(this::executeOnReadyActions);
-        this.playPause();
-    }
-
-    public void seek(double sTime) {
-        if (!this.hasSong()) return;
-        this.song.seek(Duration.seconds(sTime));
-    }
-
-    public Timeline getProgressManager(ProgressBar ProgressBar) {
-        Timeline progressManager = new Timeline(
-            new KeyFrame(Duration.seconds(.01), event -> {
-                if (!this.hasSong()) return;
-                ProgressBar.setProgressIndicators(
-                    this.song.getTotalDuration().toSeconds(),
-                    this.song.getCurrentTime().toSeconds()
-                );
-            })
-        );
-
-        return progressManager;
-    }
-
     public void bindVolume(DoubleProperty sliderValue) {
-        addOnReady(() -> {
-            this.song.volumeProperty().bind(sliderValue);
-        });
+        addOnReady((s) -> s.volumeProperty().bind(sliderValue));
     }
 
-    /*
-     * Adiciona uma ação a ser executada quando a musica estiver pronta.
-     * Concatena a ação passada com a ação que já estava sendo executada.
-     * @param action Ação a ser executada
-     * @return void
-     */
-    public void addOnReady(Runnable action) {
-        onReadyActions.add(action);
+    public void setOnProgress(Consumer<Double> action) {
+        addOnReady((s) -> s.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                action.accept(newValue.toSeconds());
+            }
+        }));
     }
 
-    private void executeOnReadyActions() {
-        for (Runnable action : onReadyActions) {
-            action.run();
-        }
+    public void setOnStatusChange(Consumer<Status> action) {
+        this.onStatusChange = action;
+        addOnReady((s) -> s.statusProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                action.accept(newValue);
+            }
+        }));
+    }
+
+    // Utility Methods
+
+    public boolean isPlaying() {
+        return this.hasSong() && song.getStatus() == Status.PLAYING;
+    }
+
+    public boolean hasSong() {
+        return song != null;
     }
 
     public Track getTrack() {
         return this.track;
+    }
+
+    // Private Helper Methods
+
+    private void setRepeat(boolean repeat) {
+        this.repeat = repeat;
+        Optional.ofNullable(onRepeat).ifPresent(action -> action.accept(this.repeat));
+        if (this.hasSong())
+            song.setCycleCount(repeat ? MediaPlayer.INDEFINITE : 1);
+    }
+
+    private void attachSongListeners() {
+        song.setOnEndOfMedia(() -> {
+            if (onStatusChange != null) {
+                onStatusChange.accept(Status.STOPPED);
+            }
+        });
+        song.setOnReady(this::executeOnReadyActions);
+    }
+
+    private void disposeCurrentSong() {
+        if (this.hasSong()) {
+            song.stop();
+            song.volumeProperty().unbind();
+            song.setOnReady(null);
+            song.setOnPlaying(null);
+            song.setOnPaused(null);
+            song.setOnEndOfMedia(null);
+            song.setOnStopped(null);
+            song.setOnHalted(null);
+            song.setOnError(null);
+            song.dispose();
+        }
+    }
+
+    private void addOnReady(Consumer<MediaPlayer> action) {
+        onReadyActions.add(action);
+    }
+
+    private void executeOnReadyActions() {
+        onReadyActions.forEach(action -> action.accept(song));
     }
 }

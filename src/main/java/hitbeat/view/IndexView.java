@@ -109,7 +109,6 @@ public class IndexView extends Application {
             sidebarItems.get(newContent.getIdentifier()).setActive(true);
         }
 
-        System.out.println("Updating content to: " + newContent.getContent());
         this.content = newContent.getContent();
         root.setCenter(wrapContentWithBackButton());
     }

@@ -35,15 +35,29 @@ public class ProgressBar extends HBox{
         this.setId("progress-bar");
 
         // ------atualizador do tempo---------
-        Timeline progressManager = player.getProgressManager(this);
+        Timeline progressManager = new Timeline();
+
+        player.setOnProgress((progress)-> {
+            if (isDragging) return;
+            progressSlider.setValue(progress);
+            minValueLabel.setText(this.formatTime(progress));
+        });
+
+        player.setOnReady((song) -> {
+            double duration = song.getTotalDuration().toSeconds();
+            progressSlider.setMax(duration);
+            maxValueLabel.setText(this.formatTime(duration));
+        });
+
+        progressManager.setCycleCount(Timeline.INDEFINITE);
+        progressManager.play();
 
         progressSlider.setOnMousePressed(event -> isDragging=true );
         progressSlider.setOnMouseReleased(event ->{
             player.seek(progressSlider.getValue());
             isDragging=false;
         });
-        progressManager.setCycleCount(Timeline.INDEFINITE);
-        progressManager.play();
+        
 
         HBox.setHgrow(progressSlider, Priority.ALWAYS);
         Margin minLabel = new Margin(minValueLabel, 0, 10, 0, 0);

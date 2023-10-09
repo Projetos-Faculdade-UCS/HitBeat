@@ -23,7 +23,7 @@ public class MusicBox extends HBox {
         super(10);
         this.getStyleClass().addAll("side-box", "playing-track");
         PlayerController player = PlayerController.getInstance();
-        player.addOnReady(() -> {
+        player.setOnReady((song) -> {
             String vTrackName = player.getTrack().getName();
             String vArtistName = player.getTrack().getArtist().getName();
             imageView.setImage(player.getTrack().getCover());
