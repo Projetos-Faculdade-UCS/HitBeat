@@ -24,7 +24,6 @@ public class PlayerController {
     private List<Consumer<MediaPlayer>> onReadyActions = new ArrayList<>();
     private boolean repeat = false;
     private Consumer<Boolean> onRepeat;
-    private Consumer<Status> onStatusChange;
 
     private PlayerController() {
     }
@@ -115,7 +114,6 @@ public class PlayerController {
     }
 
     public void setOnStatusChange(Consumer<Status> action) {
-        this.onStatusChange = action;
         addOnReady((s) -> s.statusProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 action.accept(newValue);
@@ -148,9 +146,7 @@ public class PlayerController {
 
     private void attachSongListeners() {
         song.setOnEndOfMedia(() -> {
-            if (onStatusChange != null) {
-                onStatusChange.accept(Status.STOPPED);
-            }
+            song.stop();
         });
         song.setOnReady(this::executeOnReadyActions);
     }
