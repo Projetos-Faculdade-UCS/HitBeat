@@ -1,20 +1,22 @@
 package hitbeat.controller.player;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Consumer;
 
 import hitbeat.dao.TrackDAO;
 import hitbeat.model.Genre;
 import hitbeat.model.Queue;
 import hitbeat.model.Track;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
+import io.reactivex.rxjava3.subjects.PublishSubject;
 import javafx.beans.property.DoubleProperty;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.util.Duration;
+
+// ... [other imports]
 
 public class PlayerController {
 
@@ -24,18 +26,41 @@ public class PlayerController {
 
     private MediaPlayer song;
     private Track track;
-    private List<Consumer<MediaPlayer>> onReadyActions = new ArrayList<>();
+    private BehaviorSubject<MediaPlayer.Status> songStatusSubject = BehaviorSubject.create();
+    private PublishSubject<Track> playTrackSubject = PublishSubject.create();
     private boolean repeat = false;
-    private Consumer<Boolean> onRepeat;
+    private BehaviorSubject<Boolean> repeatStatusSubject = BehaviorSubject.create();
 
     private PlayerController() {
+        initializeSubscriptions();
+    }
+
+    private void initializeSubscriptions() {
+        playTrackSubject
+            .doOnNext(track -> disposeCurrentSong())
+            .map(this::createMediaPlayerForTrack)
+            .subscribe(mediaPlayer -> {
+                song = mediaPlayer;
+                songStatusSubject.onNext(mediaPlayer.getStatus());
+                attachSongListeners();
+                song.play();
+            });
+
+        repeatStatusSubject.subscribe(repeatStatus -> {
+            if (hasSong()) {
+                song.setCycleCount(repeatStatus ? MediaPlayer.INDEFINITE : 1);
+            }
+        });
+    }
+
+    private MediaPlayer createMediaPlayerForTrack(Track track) {
+        this.track = track;
+        return new MediaPlayer(new Media(track.getFilePath()));
     }
 
     public static PlayerController getInstance() {
         return SingletonHelper.INSTANCE;
     }
-
-    // Playback Control Methods
 
     public void playPause() {
         if (this.hasSong()) {
@@ -54,15 +79,11 @@ public class PlayerController {
                 put("genre", genre);
             }
         });
-        this.play(tracks.get(0));
+        playTrackSubject.onNext(tracks.get(0));
     }
 
     public void play(Track track) {
-        disposeCurrentSong();
-        this.track = track;
-        this.song = new MediaPlayer(new Media(track.getFilePath()));
-        attachSongListeners();
-        playPause();
+        playTrackSubject.onNext(track);
     }
 
     public void play(Queue queue) {
@@ -70,63 +91,75 @@ public class PlayerController {
     }
 
     public void resetSong() {
-        if (this.hasSong())
-            song.seek(song.getStartTime());
+        if (this.hasSong()) song.seek(song.getStartTime());
     }
 
     public void toggleRepeat() {
-        setRepeat(!repeat);
-        addOnReady((s) -> setRepeat(repeat));
+        repeat = !repeat;
+        repeatStatusSubject.onNext(repeat);
     }
 
     public void seek(double sTime) {
-        if (this.hasSong())
-            song.seek(Duration.seconds(sTime));
+        if (this.hasSong()) song.seek(Duration.seconds(sTime));
     }
 
-    // Listener Setup
     public void setOnReady(Consumer<MediaPlayer> action) {
-        addOnReady(action);
+        if (hasSong()) song.setOnReady(() -> {
+            try {
+                action.accept(song);
+            } catch (Throwable e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        });
     }
 
     public void setOnPlay(Runnable action) {
-        addOnReady((s) -> s.setOnPlaying(action));
+        if (hasSong()) song.setOnPlaying(action);
     }
 
     public void setOnPause(Runnable action) {
-        addOnReady((s) -> s.setOnPaused(action));
+        if (hasSong()) song.setOnPaused(action);
     }
 
     public void setOnRepeat(Consumer<Boolean> action) {
-        this.onRepeat = (repeat) -> {
-            action.accept(repeat);
-       };
+        repeatStatusSubject.subscribe(action);
     }
 
     public void bindVolume(DoubleProperty sliderValue) {
-        addOnReady((s) -> s.volumeProperty().bind(sliderValue));
+        if (hasSong()) song.volumeProperty().bind(sliderValue);
     }
 
     public void setOnProgress(Consumer<Double> action) {
-        addOnReady((s) -> s.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                action.accept(newValue.toSeconds());
-            }
-        }));
+        if (hasSong()) {
+            song.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null)
+                    try {
+                        action.accept(newValue.toSeconds());
+                    } catch (Throwable e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+            });
+        }
     }
 
     public void setOnStatusChange(Consumer<Status> action) {
-        addOnReady((s) -> s.statusProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                action.accept(newValue);
-            }
-        }));
+        if (hasSong()) {
+            song.statusProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null)
+                    try {
+                        action.accept(newValue);
+                    } catch (Throwable e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+            });
+        }
     }
 
-    // Utility Methods
-
     public boolean isPlaying() {
-        return this.hasSong() && song.getStatus() == Status.PLAYING;
+        return this.hasSong() && songStatusSubject.getValue() == Status.PLAYING;
     }
 
     public boolean hasSong() {
@@ -137,44 +170,18 @@ public class PlayerController {
         return this.track;
     }
 
-    // Private Helper Methods
-
-    private void setRepeat(boolean repeat) {
-        this.repeat = repeat;
-        Optional.ofNullable(onRepeat).ifPresent(action -> action.accept(this.repeat));
-        if (this.hasSong())
-            song.setCycleCount(repeat ? MediaPlayer.INDEFINITE : 1);
+    private void disposeCurrentSong() {
+        if (this.hasSong()) {
+            song.stop();
+            song.dispose();
+            song = null;
+            track = null;
+        }
     }
 
     private void attachSongListeners() {
         song.setOnEndOfMedia(() -> {
-            if (!repeat) {
-                song.stop();
-            }
+            if (!repeat) song.stop();
         });
-        song.setOnReady(this::executeOnReadyActions);
-    }
-
-    private void disposeCurrentSong() {
-        if (this.hasSong()) {
-            song.stop();
-            song.volumeProperty().unbind();
-            song.setOnReady(null);
-            song.setOnPlaying(null);
-            song.setOnPaused(null);
-            song.setOnEndOfMedia(null);
-            song.setOnStopped(null);
-            song.setOnHalted(null);
-            song.setOnError(null);
-            song.dispose();
-        }
-    }
-
-    private void addOnReady(Consumer<MediaPlayer> action) {
-        onReadyActions.add(action);
-    }
-
-    private void executeOnReadyActions() {
-        onReadyActions.forEach(action -> action.accept(song));
     }
 }

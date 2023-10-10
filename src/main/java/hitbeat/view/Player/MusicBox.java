@@ -22,19 +22,9 @@ public class MusicBox extends HBox {
     public MusicBox() {
         super(10);
         this.getStyleClass().addAll("side-box", "playing-track");
+        
         PlayerController player = PlayerController.getInstance();
-        player.setOnReady((song) -> {
-            String vTrackName = player.getTrack().getName();
-            String vArtistName = player.getTrack().getArtist().getName();
-            imageView.setImage(player.getTrack().getCover());
-
-            trackName.setText(vTrackName);
-            trackTooltip.setText(vTrackName);
-
-            artistName.setText(vArtistName);
-            artistTooltip.setText(vArtistName);
-
-        });
+        player.setOnReady((song) -> updateTrackInfo(player));
 
         // Configura Tooltips para os Labels
         Tooltip.install(trackName, trackTooltip);
@@ -47,6 +37,20 @@ public class MusicBox extends HBox {
 
         this.setStyles();
         this.getChildren().addAll(imageView, infoBox);
+    }
+
+    private void updateTrackInfo(PlayerController player) {
+        if (player.getTrack() != null) {
+            String vTrackName = player.getTrack().getName();
+            String vArtistName = player.getTrack().getArtist().getName();
+            imageView.setImage(player.getTrack().getCover());
+
+            trackName.setText(vTrackName);
+            trackTooltip.setText(vTrackName);
+
+            artistName.setText(vArtistName);
+            artistTooltip.setText(vArtistName);
+        }
     }
 
     private void setStyles() {
@@ -67,6 +71,5 @@ public class MusicBox extends HBox {
         Rectangle infoMask = new Rectangle(105, 100);
         infoMask.widthProperty().bind(infoBox.widthProperty());
         infoBox.setClip(infoMask);
-        
     }
 }
