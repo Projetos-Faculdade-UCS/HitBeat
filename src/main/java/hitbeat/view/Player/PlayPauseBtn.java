@@ -20,7 +20,7 @@ public class PlayPauseBtn extends MFXButton {
         svgPlay = new SVGWidget("/hitbeat/svg/play-circle.svg", 30, Color.WHITE);
         svgPause = new SVGWidget("/hitbeat/svg/pause.svg", 30, Color.WHITE);
 
-        this.setOnAction( event -> player.playPause() );
+        this.setOnAction(event -> player.playPause());
         player.setOnStatusChange((status) -> {
             if (status == Status.PLAYING) {
                 this.setGraphic(svgPause);

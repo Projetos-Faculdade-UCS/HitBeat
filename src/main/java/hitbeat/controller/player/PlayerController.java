@@ -24,12 +24,47 @@ public class PlayerController {
         private static final PlayerController INSTANCE = new PlayerController();
     }
 
+    public class Progress {
+        private double currentTime;
+
+        public Progress(double currentTime) {
+            this.currentTime = currentTime;
+        }
+
+        public double getCurrentTime() {
+            return currentTime;
+        }
+    }
+
+    public class SongStart {
+        private Duration duration;
+
+        private Track track;
+
+        public SongStart(Duration duration) {
+            this.duration = duration;
+            this.track = PlayerController.this.getTrack();
+        }
+
+        public Duration getDuration() {
+            return duration;
+        }
+
+        public Track getTrack() {
+            return track;
+        }
+    }
+
     private MediaPlayer song;
     private Track track;
+    private DoubleProperty volume = null;
     private BehaviorSubject<MediaPlayer.Status> songStatusSubject = BehaviorSubject.create();
     private PublishSubject<Track> playTrackSubject = PublishSubject.create();
     private boolean repeat = false;
     private BehaviorSubject<Boolean> repeatStatusSubject = BehaviorSubject.create();
+    private BehaviorSubject<Progress> progressSubject = BehaviorSubject.create();
+    private BehaviorSubject<SongStart> songStartSubject = BehaviorSubject.create();
+    private BehaviorSubject<Double> volumeChangedSubject = BehaviorSubject.create();
 
     private PlayerController() {
         initializeSubscriptions();
@@ -37,14 +72,14 @@ public class PlayerController {
 
     private void initializeSubscriptions() {
         playTrackSubject
-            .doOnNext(track -> disposeCurrentSong())
-            .map(this::createMediaPlayerForTrack)
-            .subscribe(mediaPlayer -> {
-                song = mediaPlayer;
-                songStatusSubject.onNext(mediaPlayer.getStatus());
-                attachSongListeners();
-                song.play();
-            });
+                .doOnNext(track -> disposeCurrentSong())
+                .map(this::createMediaPlayerForTrack)
+                .subscribe(mediaPlayer -> {
+                    song = mediaPlayer;
+                    songStatusSubject.onNext(mediaPlayer.getStatus());
+                    attachSongListeners();
+                    song.play();
+                });
 
         repeatStatusSubject.subscribe(repeatStatus -> {
             if (hasSong()) {
@@ -91,7 +126,8 @@ public class PlayerController {
     }
 
     public void resetSong() {
-        if (this.hasSong()) song.seek(song.getStartTime());
+        if (this.hasSong())
+            song.seek(song.getStartTime());
     }
 
     public void toggleRepeat() {
@@ -100,26 +136,18 @@ public class PlayerController {
     }
 
     public void seek(double sTime) {
-        if (this.hasSong()) song.seek(Duration.seconds(sTime));
-    }
-
-    public void setOnReady(Consumer<MediaPlayer> action) {
-        if (hasSong()) song.setOnReady(() -> {
-            try {
-                action.accept(song);
-            } catch (Throwable e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        });
+        if (this.hasSong())
+            song.seek(Duration.seconds(sTime));
     }
 
     public void setOnPlay(Runnable action) {
-        if (hasSong()) song.setOnPlaying(action);
+        if (hasSong())
+            song.setOnPlaying(action);
     }
 
     public void setOnPause(Runnable action) {
-        if (hasSong()) song.setOnPaused(action);
+        if (hasSong())
+            song.setOnPaused(action);
     }
 
     public void setOnRepeat(Consumer<Boolean> action) {
@@ -127,35 +155,25 @@ public class PlayerController {
     }
 
     public void bindVolume(DoubleProperty sliderValue) {
-        if (hasSong()) song.volumeProperty().bind(sliderValue);
+        volume = sliderValue;
+        if (hasSong())
+            song.volumeProperty().bind(sliderValue);
     }
 
-    public void setOnProgress(Consumer<Double> action) {
-        if (hasSong()) {
-            song.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue != null)
-                    try {
-                        action.accept(newValue.toSeconds());
-                    } catch (Throwable e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-            });
-        }
+    public void setOnProgress(Consumer<Progress> action) {
+        progressSubject.subscribe(action);
+    }
+
+    public void setOnSongStart(Consumer<SongStart> action) {
+        songStartSubject.subscribe(action);
     }
 
     public void setOnStatusChange(Consumer<Status> action) {
-        if (hasSong()) {
-            song.statusProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue != null)
-                    try {
-                        action.accept(newValue);
-                    } catch (Throwable e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-            });
-        }
+        songStatusSubject.subscribe(action);
+    }
+
+    public void setOnVolumeChange(Consumer<Double> action) {
+        volumeChangedSubject.subscribe(action);
     }
 
     public boolean isPlaying() {
@@ -173,6 +191,7 @@ public class PlayerController {
     private void disposeCurrentSong() {
         if (this.hasSong()) {
             song.stop();
+            song.volumeProperty().unbind();
             song.dispose();
             song = null;
             track = null;
@@ -181,7 +200,27 @@ public class PlayerController {
 
     private void attachSongListeners() {
         song.setOnEndOfMedia(() -> {
-            if (!repeat) song.stop();
+            if (!repeat)
+                song.stop();
+        });
+
+        if (volume != null)
+            song.volumeProperty().bind(volume);
+
+        song.setOnReady(() -> {
+            SongStart songStart = new SongStart(song.getTotalDuration());
+            songStartSubject.onNext(songStart);
+        });
+
+        song.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
+            double currentTime = newValue.toSeconds();
+
+            Progress progress = new Progress(currentTime);
+            progressSubject.onNext(progress);
+        });
+
+        song.statusProperty().addListener((observable, oldValue, newValue) -> {
+            songStatusSubject.onNext(newValue);
         });
     }
 }

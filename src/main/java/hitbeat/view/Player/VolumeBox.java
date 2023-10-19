@@ -17,7 +17,7 @@ public class VolumeBox extends HBox {
         super(15);
 
         PlayerController player = PlayerController.getInstance();
-    
+
         Slider volumeSlider = new Slider(0, 1, volume);
         HBox.setHgrow(volumeSlider, Priority.ALWAYS);
         volumeSlider.setDecimalPrecision(2);

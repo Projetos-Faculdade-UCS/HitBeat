@@ -1,6 +1,7 @@
 package hitbeat.view.Player;
 
 import hitbeat.controller.player.PlayerController;
+import hitbeat.controller.player.PlayerController.SongStart;
 import javafx.geometry.Pos;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
@@ -22,9 +23,9 @@ public class MusicBox extends HBox {
     public MusicBox() {
         super(10);
         this.getStyleClass().addAll("side-box", "playing-track");
-        
+
         PlayerController player = PlayerController.getInstance();
-        player.setOnReady((song) -> updateTrackInfo(player));
+        player.setOnSongStart(this::updateTrackInfo);
 
         // Configura Tooltips para os Labels
         Tooltip.install(trackName, trackTooltip);
@@ -39,11 +40,11 @@ public class MusicBox extends HBox {
         this.getChildren().addAll(imageView, infoBox);
     }
 
-    private void updateTrackInfo(PlayerController player) {
-        if (player.getTrack() != null) {
-            String vTrackName = player.getTrack().getName();
-            String vArtistName = player.getTrack().getArtist().getName();
-            imageView.setImage(player.getTrack().getCover());
+    private void updateTrackInfo(SongStart song) {
+        if (song.getTrack() != null) {
+            String vTrackName = song.getTrack().getName();
+            String vArtistName = song.getTrack().getArtist().getName();
+            imageView.setImage(song.getTrack().getCover());
 
             trackName.setText(vTrackName);
             trackTooltip.setText(vTrackName);
@@ -67,7 +68,7 @@ public class MusicBox extends HBox {
         artistName.setStyle("-fx-font-size: 12px; -fx-fill: #A9A9A9;");
 
         infoBox.setStyle("-fx-min-width: 105px; -fx-max-width: 600px;");
-        
+
         Rectangle infoMask = new Rectangle(105, 100);
         infoMask.widthProperty().bind(infoBox.widthProperty());
         infoBox.setClip(infoMask);

@@ -8,26 +8,25 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
-
-public class ProgressBar extends HBox{
+public class ProgressBar extends HBox {
     Label minValueLabel;
     Label maxValueLabel;
     Slider progressSlider;
-    
+
     private boolean isDragging = false;
 
     public ProgressBar() {
         super(1);
 
         PlayerController player = PlayerController.getInstance();
-        
+
         // ------infos de duracao---------
         progressSlider = new Slider();
         progressSlider.setMin(0);
         progressSlider.setValue(0);
         minValueLabel = new Label("00:00");
         maxValueLabel = new Label("00:00");
-        
+
         // ------estilos---------
         minValueLabel.getStyleClass().add("label");
         maxValueLabel.getStyleClass().add("label");
@@ -37,27 +36,33 @@ public class ProgressBar extends HBox{
         // ------atualizador do tempo---------
         Timeline progressManager = new Timeline();
 
-        player.setOnProgress((progress)-> {
-            if (isDragging) return;
-            progressSlider.setValue(progress);
-            minValueLabel.setText(this.formatTime(progress));
-        });
+        player.setOnSongStart((song) -> {
+            progressSlider.setValue(0);
+            minValueLabel.setText("00:00");
 
-        player.setOnReady((song) -> {
-            double duration = song.getTotalDuration().toSeconds();
+            double duration = song.getDuration().toSeconds();
             progressSlider.setMax(duration);
             maxValueLabel.setText(this.formatTime(duration));
+        });
+
+        player.setOnProgress((progress) -> {
+            if (isDragging)
+                return;
+            progressSlider.setValue(progress.getCurrentTime());
+            minValueLabel.setText(this.formatTime(progress.getCurrentTime()));
         });
 
         progressManager.setCycleCount(Timeline.INDEFINITE);
         progressManager.play();
 
-        progressSlider.setOnMousePressed(event -> isDragging=true );
-        progressSlider.setOnMouseReleased(event ->{
-            player.seek(progressSlider.getValue());
-            isDragging=false;
+        progressSlider.setOnMousePressed(event -> {
+            isDragging = true;
         });
-        
+
+        progressSlider.setOnMouseReleased(event -> {
+            player.seek(progressSlider.getValue());
+            isDragging = false;
+        });
 
         HBox.setHgrow(progressSlider, Priority.ALWAYS);
         Margin minLabel = new Margin(minValueLabel, 0, 10, 0, 0);
@@ -67,8 +72,8 @@ public class ProgressBar extends HBox{
     }
 
     public void setProgressIndicators(double duracao, double tempoAtual) {
-        if (isDragging){
-            minValueLabel.setText( this.formatTime(progressSlider.getValue()) );
+        if (isDragging) {
+            minValueLabel.setText(this.formatTime(progressSlider.getValue()));
             return;
         }
         progressSlider.setMax(duracao);
