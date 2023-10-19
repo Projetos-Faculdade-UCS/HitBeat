@@ -15,4 +15,8 @@ public class Icons {
     public SVGWidget getHome() {
         return new SVGWidget("/hitbeat/svg/home.svg", 15, Color.WHITE);
     }
+
+    public SVGWidget getArtists(){
+        return new SVGWidget("/hitbeat/svg/artists.svg", 15, Color.WHITE);
+    }
 }

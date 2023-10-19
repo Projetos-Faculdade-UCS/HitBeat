@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import hitbeat.view.StartPage;
+import hitbeat.view.artists.ArtistsView;
 import hitbeat.view.base.mementos.ContentCaretaker;
 import hitbeat.view.base.mementos.ContentMemento;
 import hitbeat.view.genres.GenresView;
@@ -41,6 +42,11 @@ public class IndexController {
     public void loadLibraryView() {
         LibraryPage libraryPage = new LibraryPage();
         updateContent(new ContentUpdated(libraryPage, "library"));
+    }
+
+    public void loadArtistsView() {
+        ArtistsView artistsView = new ArtistsView();
+        updateContent(new ContentUpdated(artistsView, "artists"));
     }
 
     private void updateContent(ContentUpdated updatedContent) {
