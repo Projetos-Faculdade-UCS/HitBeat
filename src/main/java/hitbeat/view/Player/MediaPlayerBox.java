@@ -21,16 +21,29 @@ public class MediaPlayerBox extends VBox {
 
         PlayPauseBtn playPauseBtn = new PlayPauseBtn();
         RepeatBtn repeatBtn = new RepeatBtn();
-        MFXButton resetBtn = getResetBtn();
+        MFXButton stopBtn = getStopBtn();
         MFXButton nextBtn = new MFXButton("", svgNext);
+
+        nextBtn.setOnMouseClicked(event -> this.player.playNextTrack() );
+
         MFXButton previousBtn = new MFXButton("", svgPrevious);
+
+        // previous: double click to previous track
+        previousBtn.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                this.player.playPreviousTrack();
+            }
+            if (event.getClickCount() == 1) {
+                this.player.resetSong();
+            }
+        });
 
         HBox actionsTab = new HBox(15);
         ProgressBar progressBar = new ProgressBar();
         HBox.setHgrow(progressBar, Priority.ALWAYS);
 
         actionsTab.getChildren().addAll(
-                resetBtn, previousBtn, playPauseBtn, nextBtn, repeatBtn);
+                stopBtn, previousBtn, playPauseBtn, nextBtn, repeatBtn);
 
         actionsTab.setId("actionsTab");
         HBox.setHgrow(actionsTab, Priority.NEVER);
@@ -38,13 +51,13 @@ public class MediaPlayerBox extends VBox {
         this.setStyle("-fx-min-width: 400px;");
     }
 
-    public MFXButton getResetBtn() {
-        SVGWidget svgReset = new SVGWidget("/hitbeat/svg/reset.svg", 15, Color.WHITE);
-        MFXButton resetBtn = new MFXButton("", svgReset);
+    public MFXButton getStopBtn() {
+        SVGWidget svgStop = new SVGWidget("/hitbeat/svg/stop.svg", 15, Color.WHITE);
+        MFXButton stopBtn = new MFXButton("", svgStop);
 
-        resetBtn.setOnAction(event -> this.player.resetSong() );
+        stopBtn.setOnAction(event -> this.player.stop() );
 
-        return resetBtn;
+        return stopBtn;
     }
 
 }
