@@ -109,7 +109,6 @@ public class IndexView extends Application {
             sidebarItems.get(newContent.getIdentifier()).setActive(true);
         }
 
-        System.out.println("Updating content to: " + newContent.getContent());
         this.content = newContent.getContent();
         root.setCenter(wrapContentWithBackButton());
     }
@@ -126,10 +125,6 @@ public class IndexView extends Application {
     }
 
     private void restoreFromMemento(ContentMemento memento) {
-        System.out.println("Restoring from memento");
-
-        System.out.println("Memento content: " + memento.getContentState());
-        System.out.println("Memento identifier: " + memento.getIdentifier());
         updateContent(new ContentUpdated(memento.getContentState(), memento.getIdentifier()));
     }
 

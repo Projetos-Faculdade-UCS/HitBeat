@@ -9,15 +9,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class RepeatBtn extends MFXButton {
-    private boolean repeat = false;
-
     public RepeatBtn() {
         super("");
 
         PlayerController player = PlayerController.getInstance();
 
         SVGWidget svgRepeat = new SVGWidget(
-            "/hitbeat/svg/repeat.svg", 16, Color.WHITE);
+                "/hitbeat/svg/repeat.svg", 16, Color.WHITE);
 
         Circle repeatIndicator = new Circle(2);
         repeatIndicator.setFill(Color.WHITE);
@@ -30,7 +28,7 @@ public class RepeatBtn extends MFXButton {
         StackPane stack = new StackPane();
         stack.getChildren().addAll(svgRepeat, repeatIndicator);
 
-        player.setOnRepeat( repeat -> {
+        player.setOnRepeat(repeat -> {
             if (repeat == true) {
                 repeatIndicator.setVisible(true);
                 repeatIndicator.setFill(Color.BLUEVIOLET);
@@ -41,7 +39,7 @@ public class RepeatBtn extends MFXButton {
                 svgRepeat.setColor(Color.WHITE);
             }
         });
-        this.setOnMouseClicked( event -> player.toggleRepeat() );
+        this.setOnMouseClicked(event -> player.toggleRepeat());
         this.setGraphic(stack);
     }
 
