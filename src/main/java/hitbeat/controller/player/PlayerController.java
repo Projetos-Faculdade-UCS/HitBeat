@@ -13,6 +13,7 @@ import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.PublishSubject;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
@@ -68,6 +69,12 @@ public class PlayerController {
     private final BehaviorSubject<SongStart> songStartSubject = BehaviorSubject.create();
     private final BehaviorSubject<Double> volumeChangedSubject = BehaviorSubject.create();
 
+    // Disposable listeners
+    private Runnable endOfMediaListener;
+    private Runnable onReadyListener;
+    private ChangeListener<? super Duration> currentTimeListener;
+    private ChangeListener<? super MediaPlayer.Status> statusListener;
+
     // Private constructor for Singleton
     private PlayerController() {
         initializeSubscriptions();
@@ -75,11 +82,12 @@ public class PlayerController {
 
     private void initializeSubscriptions() {
         playTrackSubject
-            .doOnNext(this::updateCurrentTrackAndDisposeSong)
-            .map(this::createMediaPlayerForTrack)
-            .subscribe(this::prepareMediaPlayer);
+                .doOnNext(this::updateCurrentTrackAndDisposeSong)
+                .map(this::createMediaPlayerForTrack)
+                .subscribe(this::prepareMediaPlayer);
 
         repeatStatusSubject.subscribe(this::updateSongCycleCount);
+
     }
 
     private MediaPlayer createMediaPlayerForTrack(Track track) {
@@ -108,42 +116,61 @@ public class PlayerController {
 
     private void disposeCurrentSong() {
         if (hasSong()) {
+            // Stop the song
             song.stop();
+
+            // Unbind volume property
             song.volumeProperty().unbind();
+
+            // Remove listeners
+            song.setOnEndOfMedia(null);
+            song.setOnReady(null);
+            song.currentTimeProperty().removeListener(currentTimeListener);
+            song.statusProperty().removeListener(statusListener);
+
+            // Dispose of the media player
             song.dispose();
+
+            // Clear references
             song = null;
             currentTrack = null;
         }
     }
 
     private void attachSongListeners() {
-        song.setOnEndOfMedia(() -> {
+        endOfMediaListener = () -> {
             if (repeat) {
                 song.seek(Duration.ZERO);
                 song.play();
             } else {
                 playNextTrack();
             }
-        });
+        };
+        song.setOnEndOfMedia(endOfMediaListener);
 
         if (volume != null) {
             song.volumeProperty().bind(volume);
         }
 
-        song.setOnReady(() -> {
+        onReadyListener = () -> {
             SongStart songStart = new SongStart(song.getTotalDuration());
             songStartSubject.onNext(songStart);
-        });
+        };
 
-        song.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
+        song.setOnReady(onReadyListener);
+
+        currentTimeListener = (observable, oldValue, newValue) -> {
             double currentTime = newValue.toSeconds();
             Progress progress = new Progress(currentTime);
             progressSubject.onNext(progress);
-        });
+        };
 
-        song.statusProperty().addListener((observable, oldValue, newValue) -> {
+        song.currentTimeProperty().addListener(currentTimeListener);
+
+        statusListener = (observable, oldValue, newValue) -> {
             songStatusSubject.onNext(newValue);
-        });
+        };
+        song.statusProperty().addListener(statusListener);
     }
 
     // Public methods
@@ -169,10 +196,10 @@ public class PlayerController {
             }
         });
 
-        if(!tracks.isEmpty()) {
+        if (!tracks.isEmpty()) {
             clearQueue();
             playedTracks.clear();
-            playTrackSubject.onNext(tracks.get(0)); 
+            playTrackSubject.onNext(tracks.get(0));
             tracks.remove(0);
             addToQueue(tracks);
         }
@@ -307,19 +334,18 @@ public class PlayerController {
 
     public void playPreviousTrack() {
         if (!playedTracks.isEmpty()) {
-            disposeCurrentSong();  // Stop and dispose of the current song
             Track previousTrack = playedTracks.pop();
-            if (currentTrack != null) {
-                playbackQueue.offerFirst(currentTrack);  // Push current track to the front of the queue
+
+            if (currentTrack != null && !currentTrack.equals(previousTrack)) {
+                playbackQueue.offerFirst(currentTrack);
             }
-            play(previousTrack);  // Play the previous track
+
+            disposeCurrentSong();
+            play(previousTrack);
         } else {
-            // If there's no previous track to play (i.e., we're already on the first track),
-            // simply reset the current song to the start.
             resetSong();
         }
     }
-    
 
     public boolean isPlaying() {
         return hasSong() && songStatusSubject.getValue() == MediaPlayer.Status.PLAYING;
