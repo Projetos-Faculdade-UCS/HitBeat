@@ -1,6 +1,7 @@
 package hitbeat.controller.player;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
@@ -63,8 +64,8 @@ public class PlayerController {
     private DoubleProperty volume = null;
     private final BehaviorSubject<MediaPlayer.Status> songStatusSubject = BehaviorSubject.create();
     private final PublishSubject<Track> playTrackSubject = PublishSubject.create();
-    private boolean repeat = false;
-    private final BehaviorSubject<Boolean> repeatStatusSubject = BehaviorSubject.create();
+    private RepeatMode repeat = RepeatMode.NONE;
+    private final BehaviorSubject<RepeatMode> repeatStatusSubject = BehaviorSubject.create();
     private final BehaviorSubject<Progress> progressSubject = BehaviorSubject.create();
     private final BehaviorSubject<SongStart> songStartSubject = BehaviorSubject.create();
     private final BehaviorSubject<Double> volumeChangedSubject = BehaviorSubject.create();
@@ -108,9 +109,9 @@ public class PlayerController {
         song.play();
     }
 
-    private void updateSongCycleCount(boolean repeatStatus) {
+    private void updateSongCycleCount(RepeatMode repeatMode) {
         if (hasSong()) {
-            song.setCycleCount(repeatStatus ? MediaPlayer.INDEFINITE : 1);
+            song.setCycleCount(repeatMode == RepeatMode.REPEAT_ONE ? MediaPlayer.INDEFINITE : 1);
         }
     }
 
@@ -139,7 +140,7 @@ public class PlayerController {
 
     private void attachSongListeners() {
         endOfMediaListener = () -> {
-            if (repeat) {
+            if (repeat == RepeatMode.REPEAT_ONE) {
                 song.seek(Duration.ZERO);
                 song.play();
             } else {
@@ -227,7 +228,10 @@ public class PlayerController {
     }
 
     public void toggleRepeat() {
-        repeat = !repeat;
+        List<RepeatMode> repeatModes = new ArrayList<>(List.of(RepeatMode.values()));
+        int index = repeatModes.indexOf(repeat);
+        index = (index + 1) % repeatModes.size();
+        repeat = repeatModes.get(index);
         repeatStatusSubject.onNext(repeat);
     }
 
@@ -244,7 +248,7 @@ public class PlayerController {
         }
     }
 
-    public void setOnRepeat(Consumer<Boolean> action) {
+    public void setOnRepeat(Consumer<RepeatMode> action) {
         repeatStatusSubject.subscribe(action);
     }
 
@@ -282,15 +286,6 @@ public class PlayerController {
         }
     }
 
-    public boolean getRepeatStatus() {
-        return repeat;
-    }
-
-    public void setRepeatStatus(boolean status) {
-        repeat = status;
-        repeatStatusSubject.onNext(status);
-    }
-
     public DoubleProperty getVolumeProperty() {
         return volume;
     }
@@ -317,11 +312,19 @@ public class PlayerController {
     }
 
     public void playNextTrack() {
+        boolean shouldPushToPlayedTracks = true;
+        if (playbackQueue.isEmpty() && repeat == RepeatMode.REPEAT_ALL) {
+            playbackQueue.addAll(playedTracks.reversed());
+            playedTracks.clear();
+            playbackQueue.offer(currentTrack);
+            shouldPushToPlayedTracks = false;
+        }
+
         if (playbackQueue.isEmpty()) {
             return;
         }
 
-        if (currentTrack != null) {
+        if (currentTrack != null && shouldPushToPlayedTracks) {
             playedTracks.push(currentTrack);
         }
 
