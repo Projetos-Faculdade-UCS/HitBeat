@@ -5,6 +5,7 @@ import hitbeat.view.base.widgets.SVGWidget;
 import hitbeat.view.base.wrappers.Slider;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 
 public class VolumeBox extends HBox {
@@ -16,8 +17,9 @@ public class VolumeBox extends HBox {
         super(15);
 
         PlayerController player = PlayerController.getInstance();
-    
+
         Slider volumeSlider = new Slider(0, 1, volume);
+        HBox.setHgrow(volumeSlider, Priority.ALWAYS);
         volumeSlider.setDecimalPrecision(2);
         volumeSlider.getStyleClass().add("volume-slider");
         player.bindVolume(volumeSlider.valueProperty());
@@ -46,7 +48,7 @@ public class VolumeBox extends HBox {
             }
         });
 
-        this.setId("side-box");
+        this.getStyleClass().addAll("side-box", "volume-box");
         this.getChildren().addAll(muteBtn, volumeSlider);
     }
 }

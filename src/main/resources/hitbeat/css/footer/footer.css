@@ -28,10 +28,9 @@
     -fx-background-color: #302f2f;
     background-color: #302f2f;
 }
-#side-box{
+.side-box{
     -fx-alignment: center;
-    -fx-pref-width: 170px !important;
-    -fx-max-width: 170px !important;
+    -fx-max-width: 600px !important;
     -fx-min-width: 170px !important;
     -fx-padding: 0px !important;
     padding: 0px;
@@ -50,12 +49,12 @@
 }
 .progress-slider{
     -fx-max-width: 600px;
-    -fx-min-width: 200px !important;
+    -fx-min-width: 180px !important;
     width: 400px;
     min-width: 200px;    
 }
 .volume-slider{
-    -fx-max-width: 100px;
+    -fx-max-width: 600px;
     -fx-min-width: 50px !important;
     width: 100px;
     -fx-min-width: 50px;
@@ -65,4 +64,9 @@
     font-size: 12px;
     -fx-font-size: 12px;
     -fx-text-fill: #A9A9A9;
+}
+.volume-box{
+    -fx-alignment: center;
+    -fx-padding: 0 5px 0 0 !important;
+    padding: 0 10px 0 0;
 }

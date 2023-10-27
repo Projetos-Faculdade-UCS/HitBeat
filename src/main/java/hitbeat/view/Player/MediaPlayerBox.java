@@ -35,6 +35,7 @@ public class MediaPlayerBox extends VBox {
         actionsTab.setId("actionsTab");
         HBox.setHgrow(actionsTab, Priority.NEVER);
         getChildren().addAll(actionsTab, progressBar);
+        this.setStyle("-fx-min-width: 400px;");
     }
 
     public MFXButton getResetBtn() {
