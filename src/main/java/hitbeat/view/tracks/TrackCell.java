@@ -1,5 +1,6 @@
 package hitbeat.view.tracks;
 
+import hitbeat.controller.Icons;
 import hitbeat.controller.player.PlayerController;
 import hitbeat.model.Track;
 import hitbeat.view.base.widgets.ListTile;
@@ -7,6 +8,7 @@ import hitbeat.view.base.widgets.RoundedButton;
 import hitbeat.view.base.widgets.SVGWidget;
 import hitbeat.view.base.widgets.listview.BaseCell;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
@@ -18,6 +20,7 @@ public class TrackCell extends BaseCell<Track> {
     private Label titleLabel;
     private Label subtitleLabel;
     private Label trailingLabel;
+    private Icons icons = new Icons();
 
     public TrackCell(Track track) {
         // Initialize UI components
@@ -52,10 +55,10 @@ public class TrackCell extends BaseCell<Track> {
         subtitleLabel.setStyle("-fx-font-size: 14; -fx-text-fill: white;");
 
         // Create Trailing
-        trailingLabel = new Label();
-        trailingLabel.setStyle("-fx-font-size: 14; -fx-text-fill: white;");
+        icons = new Icons();
+        Node trailingIcon = icons.getOptions();
 
-        ListTile listTile = new ListTile(playbox, titleLabel, subtitleLabel, trailingLabel);
+        ListTile listTile = new ListTile(playbox, titleLabel, subtitleLabel, trailingIcon);
         this.getChildren().add(listTile);
     }
 
@@ -68,11 +71,9 @@ public class TrackCell extends BaseCell<Track> {
             if (this.track.getArtist() != null) {
                 subtitleLabel.setText(this.track.getArtist().getName()); // Update if Track has more data
             }
-            trailingLabel.setText(track.getGenre().getName());
         } else {
             titleLabel.setText("");
             subtitleLabel.setText("");
-            trailingLabel.setText("");
         }
     }
 }

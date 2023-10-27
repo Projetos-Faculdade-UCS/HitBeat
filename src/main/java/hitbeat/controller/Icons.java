@@ -23,4 +23,7 @@ public class Icons {
     public SVGWidget getPlaylists(){
         return new SVGWidget("/hitbeat/svg/playlist.svg", 15, Color.WHITE);
     }
+    public SVGWidget getOptions(){
+        return new SVGWidget("/hitbeat/svg/options.svg", 15, Color.WHITE);
+    }
 }
