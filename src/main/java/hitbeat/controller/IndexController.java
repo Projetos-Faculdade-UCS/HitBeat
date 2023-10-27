@@ -9,6 +9,7 @@ import hitbeat.view.base.mementos.ContentCaretaker;
 import hitbeat.view.base.mementos.ContentMemento;
 import hitbeat.view.genres.GenresView;
 import hitbeat.view.library.LibraryPage;
+import hitbeat.view.playlists.PlaylistsView;
 import hitbeat.view.tracks.TracksView;
 
 public class IndexController {
@@ -47,6 +48,11 @@ public class IndexController {
     public void loadArtistsView() {
         ArtistsView artistsView = new ArtistsView();
         updateContent(new ContentUpdated(artistsView, "artists"));
+    }
+
+    public void loadPlaylistsView() {
+        PlaylistsView playlistsView = new PlaylistsView();
+        updateContent(new ContentUpdated(playlistsView, "playlists"));
     }
 
     private void updateContent(ContentUpdated updatedContent) {
