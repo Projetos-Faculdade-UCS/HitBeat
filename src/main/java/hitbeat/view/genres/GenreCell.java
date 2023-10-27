@@ -1,10 +1,17 @@
 package hitbeat.view.genres;
 
+import hitbeat.controller.player.PlayerController;
 import hitbeat.model.Genre;
 import hitbeat.view.base.widgets.ListTile;
+import hitbeat.view.base.widgets.RoundedButton;
+import hitbeat.view.base.widgets.SVGWidget;
 import hitbeat.view.base.widgets.listview.BaseCell;
-import javafx.scene.Node;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 public class GenreCell extends BaseCell<Genre> {
     private Genre genre;
@@ -22,7 +29,20 @@ public class GenreCell extends BaseCell<Genre> {
 
     private void initUI() {
         // Create Leading
-        Node leading = new GenreCellCenter("lead");
+        RoundedButton playBtn = new RoundedButton("");
+        SVGWidget svgPlay = new SVGWidget("/hitbeat/svg/play.svg", 25, Color.WHITE);
+        playBtn.setGraphic(svgPlay);
+
+        StackPane playbox = new StackPane(playBtn);
+        VBox.setVgrow(playbox, Priority.ALWAYS);
+
+        playbox.setAlignment(Pos.CENTER);
+        playbox.setPickOnBounds(false);
+
+        playBtn.setOnMouseClicked(event -> {
+            PlayerController.getInstance().play(this.genre);
+        });
+
 
         // Create Title
         titleLabel = new Label();
@@ -36,7 +56,7 @@ public class GenreCell extends BaseCell<Genre> {
         trailingLabel = new Label();
         trailingLabel.setStyle("-fx-font-size: 14; -fx-text-fill: white;");
 
-        ListTile listTile = new ListTile(leading, titleLabel, subtitleLabel, trailingLabel);
+        ListTile listTile = new ListTile(playbox, titleLabel, subtitleLabel, trailingLabel);
         this.getChildren().add(listTile);
     }
 
