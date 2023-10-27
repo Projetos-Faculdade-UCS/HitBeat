@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import javafx.scene.image.Image;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.With;
@@ -34,5 +35,12 @@ public class Artist extends BaseModel {
         this.name = name;
         this.description = description;
         this.image = image;
+    }
+
+    public Image getCover() {
+        if (this.image == null){
+            return new Image("/hitbeat/images/artists/artist.jpg");
+        }
+        return new Image(this.image);
     }
 }
