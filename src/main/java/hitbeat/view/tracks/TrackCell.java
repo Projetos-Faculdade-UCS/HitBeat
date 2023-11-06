@@ -43,7 +43,7 @@ public class TrackCell extends BaseCell<Track> {
         playbox.setPickOnBounds(false);
 
         playBtn.setOnMouseClicked(event -> {
-            PlayerController.getInstance().play(this.track);
+            PlayerController.getInstance().playSingleTrack(this.track);
         });
 
         // Create Title
