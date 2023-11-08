@@ -1,41 +1,41 @@
 package hitbeat.model;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import javafx.scene.image.Image;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name="Album")
 public class Album extends BaseModel{
     @Id
     @GeneratedValue
     private UUID id;
 
-    private String type;
-
     private String nome;
 
-    @ManyToMany(cascade={ CascadeType.ALL})
-    @JoinTable(
-        name="queue_track",
-        joinColumns = {@JoinColumn(name="album_id")},
-        inverseJoinColumns = {@JoinColumn(name="track_id")}
-    )
+    private Date dt_lancamento;
+
+    private String filePath;
+
+    @OneToMany(mappedBy = "album")
     private Set<Track> tracks = new HashSet<>();
+
+    public Image getCover() {
+        if (this.filePath == null) {
+            return new Image("/hitbeat/images/track.jpg");
+        }
+        return new Image(this.filePath);
+    }
 }

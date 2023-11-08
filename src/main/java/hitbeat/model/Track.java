@@ -3,8 +3,6 @@ package hitbeat.model;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -17,7 +15,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -60,8 +57,10 @@ public class Track extends BaseModel {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Artist artist;
 
-    @ManyToMany(mappedBy = "tracks")
-    private Set<Album> albums = new HashSet<>();
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "album_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Album album;
 
     public Track() {
     }
@@ -81,7 +80,7 @@ public class Track extends BaseModel {
 
     // Track(Long, String, Date, int, String, String, boolean, boolean, boolean, Genre, Set<Queue>)
     public Track(Long id, String name, Date creationDate, int duration, byte[] picture, String filePath,
-            boolean explicit, boolean single, boolean favorite, Genre genre, Artist artist, Set<Album> queues) {
+            boolean explicit, boolean single, boolean favorite, Genre genre, Artist artist, Album album) {
         this.id = id;
         this.name = name;
         this.creationDate = creationDate;
@@ -91,7 +90,7 @@ public class Track extends BaseModel {
         this.explicit = explicit;
         this.single = single;
         this.genre = genre;
-        this.albums = queues;
+        this.album = album;
         this.artist = artist;
     }
 
