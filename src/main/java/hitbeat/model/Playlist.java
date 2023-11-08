@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name="playlist")
-public class Playlist extends Queue{
+public class Playlist extends Album{
     
     private Date creationDate;
     private String title;

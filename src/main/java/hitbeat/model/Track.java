@@ -61,7 +61,7 @@ public class Track extends BaseModel {
     private Artist artist;
 
     @ManyToMany(mappedBy = "tracks")
-    private Set<Queue> queues = new HashSet<>();
+    private Set<Album> albums = new HashSet<>();
 
     public Track() {
     }
@@ -81,7 +81,7 @@ public class Track extends BaseModel {
 
     // Track(Long, String, Date, int, String, String, boolean, boolean, boolean, Genre, Set<Queue>)
     public Track(Long id, String name, Date creationDate, int duration, byte[] picture, String filePath,
-            boolean explicit, boolean single, boolean favorite, Genre genre, Artist artist, Set<Queue> queues) {
+            boolean explicit, boolean single, boolean favorite, Genre genre, Artist artist, Set<Album> queues) {
         this.id = id;
         this.name = name;
         this.creationDate = creationDate;
@@ -91,7 +91,7 @@ public class Track extends BaseModel {
         this.explicit = explicit;
         this.single = single;
         this.genre = genre;
-        this.queues = queues;
+        this.albums = queues;
         this.artist = artist;
     }
 

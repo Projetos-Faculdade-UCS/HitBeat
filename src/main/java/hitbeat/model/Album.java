@@ -21,8 +21,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@Table(name="queue")
-public class Queue extends BaseModel{
+@Table(name="Album")
+public class Album extends BaseModel{
     @Id
     @GeneratedValue
     private UUID id;
@@ -34,7 +34,7 @@ public class Queue extends BaseModel{
     @ManyToMany(cascade={ CascadeType.ALL})
     @JoinTable(
         name="queue_track",
-        joinColumns = {@JoinColumn(name="queue_id")},
+        joinColumns = {@JoinColumn(name="album_id")},
         inverseJoinColumns = {@JoinColumn(name="track_id")}
     )
     private Set<Track> tracks = new HashSet<>();
