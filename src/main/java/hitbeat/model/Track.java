@@ -3,6 +3,8 @@ package hitbeat.model;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -16,6 +18,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import javafx.scene.image.Image;
@@ -62,6 +65,9 @@ public class Track extends BaseModel {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Album album;
 
+    @OneToMany(mappedBy = "track")
+    private Set<PlaylistTrack> playlistTrack= new HashSet<>();
+
     public Track() {
     }
 
@@ -78,9 +84,8 @@ public class Track extends BaseModel {
         this.genre = genre;
     }
 
-    // Track(Long, String, Date, int, String, String, boolean, boolean, boolean, Genre, Set<Queue>)
     public Track(Long id, String name, Date creationDate, int duration, byte[] picture, String filePath,
-            boolean explicit, boolean single, boolean favorite, Genre genre, Artist artist, Album album) {
+            boolean explicit, boolean single, boolean favorite, Genre genre, Artist artist, Album album, Set<PlaylistTrack> playlistTrack) {
         this.id = id;
         this.name = name;
         this.creationDate = creationDate;
@@ -92,6 +97,7 @@ public class Track extends BaseModel {
         this.genre = genre;
         this.album = album;
         this.artist = artist;
+        this.playlistTrack = playlistTrack;
     }
 
     public Track(String name, Date creationDate, int duration, byte[] picture, String filePath,

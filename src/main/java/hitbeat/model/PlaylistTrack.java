@@ -1,11 +1,15 @@
 package hitbeat.model;
 
 
-import java.util.HashSet;
-import java.util.Set;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,14 +17,22 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Entity
-@Table(name="PlaylistTrack")
+@Table(name="Playlist_Track")
 public class PlaylistTrack extends BaseModel{    
 
-    @OneToMany(mappedBy = "playlistTrack")
-    private Set<Track> tracks = new HashSet<>();
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @OneToMany(mappedBy = "playlistTrack")
-    private Set<Playlist> playlists = new HashSet<>();
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "track_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Track track;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "playlist_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Playlist playlist;
 
     private int index;
 

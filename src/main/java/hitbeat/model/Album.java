@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -23,10 +24,12 @@ public class Album extends BaseModel{
     @GeneratedValue
     private UUID id;
 
-    private String nome;
+    private String name;
 
-    private Date dt_lancamento;
+    @Column(name = "launch_date")
+    private Date launchDate;
 
+    @Column(name = "file_path")
     private String filePath;
 
     @OneToMany(mappedBy = "album")

@@ -7,8 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import hitbeat.dao.TrackDAO;
+import hitbeat.model.Album;
 import hitbeat.model.Genre;
-import hitbeat.model.Queue;
+import hitbeat.model.Playlist;
 import hitbeat.model.Track;
 import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
@@ -217,7 +218,11 @@ public class PlayerController {
         play(track);
     }
 
-    public void play(Queue queue) {
+    public void play(Playlist playlist) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void play(Album album) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
