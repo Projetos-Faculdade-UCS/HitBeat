@@ -3,6 +3,7 @@ package hitbeat.controller;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import hitbeat.model.Playlist;
 import hitbeat.view.StartPage;
 import hitbeat.view.artists.ArtistsView;
 import hitbeat.view.base.mementos.ContentCaretaker;
@@ -10,6 +11,7 @@ import hitbeat.view.base.mementos.ContentMemento;
 import hitbeat.view.genres.GenresView;
 import hitbeat.view.library.LibraryPage;
 import hitbeat.view.playlists.CreatePlaylist;
+import hitbeat.view.playlists.DetailPlaylist;
 import hitbeat.view.playlists.PlaylistView;
 import hitbeat.view.tracks.TracksView;
 
@@ -68,6 +70,11 @@ public class IndexController {
     public void loadPlaylistCreateView() {
         CreatePlaylist createPlaylist = new CreatePlaylist();
         updateContent(new ContentUpdated(createPlaylist, "createPlaylist"));
+    }
+
+    public void loadPlayListDetailView(Playlist playlist) {
+        DetailPlaylist detailPlaylist = new DetailPlaylist(playlist);
+        updateContent(new ContentUpdated(detailPlaylist, "detailPlaylist"));
     }
 
     private void updateContent(ContentUpdated updatedContent) {

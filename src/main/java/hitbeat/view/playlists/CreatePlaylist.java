@@ -6,6 +6,7 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 public class CreatePlaylist extends MFXScrollPane{
@@ -16,7 +17,8 @@ public class CreatePlaylist extends MFXScrollPane{
     public CreatePlaylist() {
         super();
         Text title = new Text("Nova Playlist");
-        title.setStyle("-fx-font-size: 20px; -fx-text-fill: #2195f3;");
+        title.setStyle("-fx-font-size: 24px;");
+        title.setFill(Color.WHITE);
         
         MFXTextField nameField = new MFXTextField();
         nameField.setFloatingText("Nome");

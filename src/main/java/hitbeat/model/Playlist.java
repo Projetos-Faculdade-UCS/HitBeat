@@ -1,8 +1,12 @@
 package hitbeat.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import org.hibernate.Hibernate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -68,5 +72,16 @@ public class Playlist extends BaseModel{
         this.name = name;
         this.description = description;
         this.filePath = filePath;
+    }
+
+    public List<Track> getTracks() {
+        Hibernate.initialize(playlistTracks);
+        List<Track> tracks = new ArrayList<>();
+
+        // for (PlaylistTrack playlistTrack : playlistTracks) {
+        //     tracks.add(playlistTrack.getTrack());
+        // }
+
+        return tracks;
     }
 }
