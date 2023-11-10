@@ -9,7 +9,8 @@ public class PlaylistDAO extends BaseDAO<Playlist>{
     
     @Override
     protected void updateProperties(Playlist existingEntity, Playlist newEntity) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateProperties'");
+        existingEntity.setName(newEntity.getName());
+        existingEntity.setDescription(newEntity.getDescription());
+        existingEntity.setFilePath(newEntity.getFilePath());
     }
 }

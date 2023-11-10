@@ -9,7 +9,8 @@ import hitbeat.view.base.mementos.ContentCaretaker;
 import hitbeat.view.base.mementos.ContentMemento;
 import hitbeat.view.genres.GenresView;
 import hitbeat.view.library.LibraryPage;
-import hitbeat.view.playlists.PlaylistsView;
+import hitbeat.view.playlists.CreatePlaylist;
+import hitbeat.view.playlists.PlaylistView;
 import hitbeat.view.tracks.TracksView;
 
 public class IndexController {
@@ -20,6 +21,15 @@ public class IndexController {
 
     // Callback set by the view
     private Consumer<ContentMemento> onRestoreCallback;
+
+    private IndexController() {}
+
+    private static class SingletonHelper {
+        private static final IndexController INSTANCE = new IndexController();
+    }
+    public static IndexController getInstance() {
+        return SingletonHelper.INSTANCE;
+    }
 
     public void setOnRestoreCallback(Consumer<ContentMemento> callback) {
         this.onRestoreCallback = callback;
@@ -51,8 +61,13 @@ public class IndexController {
     }
 
     public void loadPlaylistsView() {
-        PlaylistsView playlistsView = new PlaylistsView();
+        PlaylistView playlistsView = new PlaylistView();
         updateContent(new ContentUpdated(playlistsView, "playlists"));
+    }
+
+    public void loadPlaylistCreateView() {
+        CreatePlaylist createPlaylist = new CreatePlaylist();
+        updateContent(new ContentUpdated(createPlaylist, "createPlaylist"));
     }
 
     private void updateContent(ContentUpdated updatedContent) {

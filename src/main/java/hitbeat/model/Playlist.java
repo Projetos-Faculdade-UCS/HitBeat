@@ -14,7 +14,9 @@ import jakarta.persistence.Table;
 import javafx.scene.image.Image;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.With;
 
+@With
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Entity
@@ -42,5 +44,29 @@ public class Playlist extends BaseModel{
             return new Image("/hitbeat/images/track.jpg");
         }
         return new Image(this.filePath);
+    }
+    
+    public Playlist() {
+    }
+
+    public Playlist(String name) {
+        this.name = name;
+    }
+
+    public Playlist(String name, String description, String filePath, Date pubDate, Set<PlaylistTrack> playlistTracks) {
+        this.name = name;
+        this.description = description;
+        this.filePath = filePath;
+        this.pubDate = pubDate;
+        this.playlistTracks = playlistTracks;
+    }
+
+    public Playlist(Long id, Set<PlaylistTrack> playlistTracks, Date pubDate, String name, String description, String filePath){
+        this.id = id;
+        this.playlistTracks = playlistTracks;
+        this.pubDate = pubDate;
+        this.name = name;
+        this.description = description;
+        this.filePath = filePath;
     }
 }

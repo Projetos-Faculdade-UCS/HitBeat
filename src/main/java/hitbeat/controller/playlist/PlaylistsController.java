@@ -1,4 +1,4 @@
-package hitbeat.controller.playlists;
+package hitbeat.controller.playlist;
 
 import hitbeat.controller.ModelController;
 import hitbeat.dao.PlaylistDAO;

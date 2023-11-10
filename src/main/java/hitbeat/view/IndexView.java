@@ -34,7 +34,7 @@ public class IndexView extends Application {
     private Scene scene;
     private Sidebar sidebar;
     private Node content;
-    private final IndexController controller = new IndexController();
+    private final IndexController controller = IndexController.getInstance();
     private final Icons icons = new Icons();
     private Map<String, SidebarItem> sidebarItems = new HashMap<>();
 
@@ -111,7 +111,10 @@ public class IndexView extends Application {
         sidebarItems.values().forEach(item -> item.setActive(false));
 
         if (newContent.getIdentifier() != null) {
-            sidebarItems.get(newContent.getIdentifier()).setActive(true);
+            SidebarItem itemAtivo = sidebarItems.get(newContent.getIdentifier());
+            if (itemAtivo != null) {
+                itemAtivo.setActive(true);
+            }
         }
 
         this.content = newContent.getContent();
