@@ -1,7 +1,7 @@
 package hitbeat.view.playlists;
 
 import hitbeat.controller.IndexController;
-import hitbeat.controller.playlist.PlaylistsController;
+import hitbeat.controller.playlist.PlaylistController;
 import hitbeat.model.Playlist;
 import hitbeat.view.base.widgets.listview.ListView;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -12,7 +12,7 @@ import javafx.scene.layout.VBox;
 
 public class PlaylistView extends MFXScrollPane{
     private ObservableList<Playlist> playlists;
-    private final PlaylistsController controller = new PlaylistsController();
+    private final PlaylistController controller = new PlaylistController();
     private final IndexController mioloController = IndexController.getInstance();
 
     public PlaylistView() {

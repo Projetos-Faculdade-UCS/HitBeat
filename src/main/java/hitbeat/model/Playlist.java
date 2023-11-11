@@ -6,8 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.hibernate.Hibernate;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -75,12 +73,11 @@ public class Playlist extends BaseModel{
     }
 
     public List<Track> getTracks() {
-        Hibernate.initialize(playlistTracks);
         List<Track> tracks = new ArrayList<>();
 
-        // for (PlaylistTrack playlistTrack : playlistTracks) {
-        //     tracks.add(playlistTrack.getTrack());
-        // }
+        for (PlaylistTrack playlistTrack : playlistTracks) {
+            tracks.add(playlistTrack.getTrack());
+        }
 
         return tracks;
     }

@@ -2,7 +2,7 @@ package hitbeat.view.tracks;
 
 import hitbeat.controller.Icons;
 import hitbeat.controller.player.PlayerController;
-import hitbeat.controller.playlist.PlaylistsController;
+import hitbeat.controller.playlist.PlaylistController;
 import hitbeat.model.Track;
 import hitbeat.view.base.widgets.ListTile;
 import hitbeat.view.base.widgets.RoundedButton;
@@ -25,7 +25,7 @@ public class TrackCell extends BaseCell<Track> {
     private Label subtitleLabel;
     private Label trailingLabel;
     private Icons icons = new Icons();
-    private PlaylistsController playlistsController = new PlaylistsController();
+    private PlaylistController playlistController = new PlaylistController();
 
     public TrackCell(Track track) {
         // Initialize UI components
@@ -95,10 +95,10 @@ public class TrackCell extends BaseCell<Track> {
         addToPlaylistMenu.getItems().add(new MenuItem("")); // nodo ancora
         addToPlaylistMenu.setOnShowing(event -> {
             addToPlaylistMenu.getItems().clear(); 
-            playlistsController.fetchAll().forEach(playlist -> {
+            playlistController.fetchAll().forEach(playlist -> {
                 MenuItem item = new MenuItem(playlist.getName());
                 item.setOnAction(event1 -> {
-                    // playlistsController.addTrack(playlist, this.track);
+                    playlistController.addTrack(playlist, this.track);
                 });
                 addToPlaylistMenu.getItems().add(item);
             });

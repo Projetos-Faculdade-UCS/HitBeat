@@ -13,7 +13,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.With;
 
+@With
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Entity
@@ -35,5 +37,20 @@ public class PlaylistTrack extends BaseModel{
     private Playlist playlist;
 
     private int index;
+
+    public PlaylistTrack() {
+    }
+
+    public PlaylistTrack(Playlist playlist, Track track) {
+        this.playlist = playlist;
+        this.track = track;
+    }
+
+    public PlaylistTrack(Long id, Track track, Playlist playlist, int index) {
+        this.playlist = playlist;
+        this.track = track;
+        this.index = index;
+        this.id = id;
+    }
 
 }

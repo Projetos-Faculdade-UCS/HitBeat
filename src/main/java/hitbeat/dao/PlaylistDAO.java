@@ -18,6 +18,22 @@ public class PlaylistDAO extends BaseDAO<Playlist>{
     }
 
     public List<Track> getAllTracks(Playlist playlist) {
-        return playlist.getTracks();
+        return this.executeMethod(session -> {
+            String hql = "SELECT pt.track FROM PlaylistTrack pt WHERE pt.playlist = :playlist";
+            return session.createQuery(hql, Track.class)
+                    .setParameter("playlist", playlist)
+                    .list();
+        });
     }
+
+    // public void addTrack(Playlist playlist, Track track) {
+    //     this.executeMethod(session -> {
+    //         String hql = "INSERT INTO PlaylistTrack (playlist, track) VALUES (:playlist, :track)";
+    //         session.createQuery(hql, null)
+    //                 .setParameter("playlist", playlist)
+    //                 .setParameter("track", track)
+    //                 .executeUpdate();
+    //         return null;
+    //     });
+    // }
 }

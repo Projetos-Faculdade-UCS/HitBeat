@@ -43,6 +43,5 @@
         <mapping class="hitbeat.model.Playlist"/>
         <mapping class="hitbeat.model.Album"/>
 
-
     </session-factory>
 </hibernate-configuration>
