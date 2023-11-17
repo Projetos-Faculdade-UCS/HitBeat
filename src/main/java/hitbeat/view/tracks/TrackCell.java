@@ -3,7 +3,12 @@ package hitbeat.view.tracks;
 import hitbeat.controller.Icons;
 import hitbeat.controller.player.PlayerController;
 import hitbeat.controller.playlist.PlaylistController;
+import hitbeat.controller.tracks.TracksController;
 import hitbeat.model.Track;
+import hitbeat.view.base.utils.MyButton;
+import hitbeat.view.base.utils.MyContextMenu;
+import hitbeat.view.base.utils.MyMenu;
+import hitbeat.view.base.utils.MyMenuItem;
 import hitbeat.view.base.widgets.ListTile;
 import hitbeat.view.base.widgets.RoundedButton;
 import hitbeat.view.base.widgets.SVGWidget;
@@ -11,9 +16,8 @@ import hitbeat.view.base.widgets.listview.BaseCell;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -26,6 +30,7 @@ public class TrackCell extends BaseCell<Track> {
     private Label trailingLabel;
     private Icons icons = new Icons();
     private PlaylistController playlistController = new PlaylistController();
+    private TracksController tracksController = new TracksController();
 
     public TrackCell(Track track) {
         // Initialize UI components
@@ -59,12 +64,7 @@ public class TrackCell extends BaseCell<Track> {
         subtitleLabel = new Label();
         subtitleLabel.setStyle("-fx-font-size: 14; -fx-text-fill: white;");
 
-        // Create Trailing
-        icons = new Icons();
-
-        
-
-        ListTile listTile = new ListTile(playbox, titleLabel, subtitleLabel, getMenuBtn());
+        ListTile listTile = new ListTile(playbox, titleLabel, subtitleLabel, getMenuBtns());
         this.getChildren().add(listTile);
     }
 
@@ -83,28 +83,38 @@ public class TrackCell extends BaseCell<Track> {
         }
     }
 
-    public MenuButton getMenuBtn() {
+    public HBox getMenuBtns() {
         Node trailingIcon = icons.getOptions(); 
-        MenuButton optionsBtn = new MenuButton("", trailingIcon, null);
+
+        MyButton favoriteBtn = new MyButton("", icons.getFavorite(false));
+        MyButton optionsBtn = new MyButton("", trailingIcon);
+
+        MyContextMenu contextMenu = new MyContextMenu();
+        MyMenu addMenu = new MyMenu("Adicionar à playlist");
+        MyMenuItem removeItem = new MyMenuItem("Remover desta playlist");
         
-        Menu addToPlaylistMenu = new Menu("Adicionar à playlist");
-
-        MenuItem remove = new MenuItem("Remover desta playlist");
-        MenuItem favorite = new MenuItem("Adicionar aos favoritos");
-
-        addToPlaylistMenu.getItems().add(new MenuItem("")); // nodo ancora
-        addToPlaylistMenu.setOnShowing(event -> {
-            addToPlaylistMenu.getItems().clear(); 
+        addMenu.getItems().add(new MenuItem("")); // nodo ancora
+        addMenu.setOnShowing(event -> {
+            addMenu.getItems().clear(); 
             playlistController.fetchAll().forEach(playlist -> {
-                MenuItem item = new MenuItem(playlist.getName());
+                MyMenuItem item = new MyMenuItem(playlist.getName());
                 item.setOnAction(event1 -> {
                     playlistController.addTrack(playlist, this.track);
                 });
-                addToPlaylistMenu.getItems().add(item);
+                addMenu.getItems().add(item);
             });
         });
+        favoriteBtn.setOnMouseClicked(event -> {
+            tracksController.toggleFavorite(this.track);
+            favoriteBtn.setGraphic(icons.getFavorite(this.track.isFavorite()));
+        });
 
-        optionsBtn.getItems().addAll(addToPlaylistMenu, remove, favorite);
-        return optionsBtn;
+        contextMenu.getItems().addAll(addMenu, removeItem);
+        optionsBtn.setOnMouseClicked(event -> {
+            contextMenu.show(optionsBtn, event.getScreenX(), event.getScreenY());
+        });
+        HBox menuBtns = new HBox(favoriteBtn, optionsBtn);
+
+        return menuBtns;
     }
 }

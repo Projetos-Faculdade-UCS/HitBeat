@@ -1,5 +1,6 @@
 package hitbeat.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import hitbeat.model.Playlist;
@@ -8,6 +9,13 @@ import hitbeat.model.Track;
 public class PlaylistDAO extends BaseDAO<Playlist>{
     public PlaylistDAO(){
         super(Playlist.class);
+        
+        if (this.getAll().isEmpty()) {
+            this.bulkCreateOrUpdate(List.of(
+                new Playlist("Musicas Curtidas", "Musicas que o usuario marcou como curtida",
+                    null, new Date(), null)
+            ), "name");
+        }
     }
     
     @Override
@@ -25,15 +33,4 @@ public class PlaylistDAO extends BaseDAO<Playlist>{
                     .list();
         });
     }
-
-    // public void addTrack(Playlist playlist, Track track) {
-    //     this.executeMethod(session -> {
-    //         String hql = "INSERT INTO PlaylistTrack (playlist, track) VALUES (:playlist, :track)";
-    //         session.createQuery(hql, null)
-    //                 .setParameter("playlist", playlist)
-    //                 .setParameter("track", track)
-    //                 .executeUpdate();
-    //         return null;
-    //     });
-    // }
 }

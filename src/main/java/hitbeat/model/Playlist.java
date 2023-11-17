@@ -1,9 +1,7 @@
 package hitbeat.model;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -72,13 +70,4 @@ public class Playlist extends BaseModel{
         this.filePath = filePath;
     }
 
-    public List<Track> getTracks() {
-        List<Track> tracks = new ArrayList<>();
-
-        for (PlaylistTrack playlistTrack : playlistTracks) {
-            tracks.add(playlistTrack.getTrack());
-        }
-
-        return tracks;
-    }
 }

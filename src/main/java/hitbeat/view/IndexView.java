@@ -21,6 +21,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -74,9 +75,12 @@ public class IndexView extends Application {
         sidebarItems.put("library", new SidebarItem("Minha Biblioteca", null, controller::loadLibraryView));
         sidebarItems.put("artists", new SidebarItem("Artistas", icons.getArtists(), controller::loadArtistsView));
         sidebarItems.put("playlists", new SidebarItem("Playlists", icons.getPlaylists(), controller::loadPlaylistsView));
+        ImageView logo = new ImageView("/hitbeat/images/hitbeat-icon.png");
+        logo.setFitWidth(50);
+        logo.setPreserveRatio(true);
 
         return new Sidebar(
-                "HitBeat",
+                "HitBeat", logo,
                 new SidebarTopic(
                         "Minhas Músicas",
                         sidebarItems.get("index"),

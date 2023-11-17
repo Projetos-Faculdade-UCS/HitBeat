@@ -26,4 +26,11 @@ public class Icons {
     public SVGWidget getOptions(){
         return new SVGWidget("/hitbeat/svg/options.svg", 15, Color.WHITE);
     }
+
+    public SVGWidget getFavorite(boolean isFavorite){
+        if (isFavorite) {
+            return new SVGWidget("/hitbeat/svg/heart-fill.svg", 15, Color.WHITE);
+        }
+        return new SVGWidget("/hitbeat/svg/heart.svg", 15, Color.WHITE);
+    }
 }

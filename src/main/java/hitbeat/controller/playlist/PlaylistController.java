@@ -21,14 +21,14 @@ public class PlaylistController extends ModelController<Playlist>{
         return (PlaylistDAO) dao;
     }
 
+    public ObservableList<Track> getAllTracks(Playlist playlist) {
+        return FXCollections.observableArrayList(getDao().getAllTracks(playlist));
+    }
+
     public void createPlaylist(String name){
         List<Playlist> playlists = new ArrayList<>();
         playlists.add(new Playlist(name));
         getDao().bulkCreateOrUpdate(playlists, "name");
-    }
-
-    public ObservableList<Track> getAllTracks(Playlist playlist) {
-        return FXCollections.observableArrayList(getDao().getAllTracks(playlist));
     }
 
     public void addTrack(Playlist playlist, Track track) {
