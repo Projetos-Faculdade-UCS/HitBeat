@@ -9,6 +9,6 @@ public class MyMenuItem extends MenuItem{
     }
 
     private void initUI() {
-        this.setStyle("-fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold;");
+        this.setStyle("-fx-text-fill: white; -fx-font-size: 12; -fx-font-weight: bold; -fx-background-color: #302f2f");
     }
 }

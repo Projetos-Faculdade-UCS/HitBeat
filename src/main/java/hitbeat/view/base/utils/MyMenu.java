@@ -10,6 +10,6 @@ public class MyMenu extends Menu{
     }
 
     private void initUI() {
-        this.setStyle("-fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold;");
+        this.setStyle("-fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold; -fx-background-color: #302f2f");
     }
 }

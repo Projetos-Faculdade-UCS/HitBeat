@@ -83,9 +83,7 @@ public abstract class BaseDAO<T extends BaseModel> {
      */
     public void save(T objectT) {
         executeMethod(session -> {
-            session.beginTransaction();
             session.merge(objectT);
-            session.getTransaction().commit();
             return null;
         });
     }

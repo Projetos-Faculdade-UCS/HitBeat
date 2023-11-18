@@ -27,7 +27,7 @@ public class TrackCell extends BaseCell<Track> {
     private Track track;
     private Label titleLabel;
     private Label subtitleLabel;
-    private Label trailingLabel;
+    private MyButton favoriteBtn;
     private Icons icons = new Icons();
     private PlaylistController playlistController = new PlaylistController();
     private TracksController tracksController = new TracksController();
@@ -77,6 +77,7 @@ public class TrackCell extends BaseCell<Track> {
             if (this.track.getArtist() != null) {
                 subtitleLabel.setText(this.track.getArtist().getName()); // Update if Track has more data
             }
+            favoriteBtn.setGraphic(icons.getFavorite(this.track.isFavorite()));
         } else {
             titleLabel.setText("");
             subtitleLabel.setText("");
@@ -86,7 +87,7 @@ public class TrackCell extends BaseCell<Track> {
     public HBox getMenuBtns() {
         Node trailingIcon = icons.getOptions(); 
 
-        MyButton favoriteBtn = new MyButton("", icons.getFavorite(false));
+        favoriteBtn = new MyButton("", icons.getFavorite(false));
         MyButton optionsBtn = new MyButton("", trailingIcon);
 
         MyContextMenu contextMenu = new MyContextMenu();
