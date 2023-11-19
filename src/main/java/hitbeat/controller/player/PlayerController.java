@@ -9,6 +9,7 @@ import java.util.List;
 import hitbeat.controller.playlist.PlaylistController;
 import hitbeat.dao.TrackDAO;
 import hitbeat.model.Album;
+import hitbeat.model.Artist;
 import hitbeat.model.Genre;
 import hitbeat.model.Playlist;
 import hitbeat.model.Track;
@@ -226,6 +227,23 @@ public class PlayerController {
         List<Track> tracks = playlistController.getAllTracks(playlist);
         addToQueue(tracks);
         playNextTrack();
+    }
+
+    public void play(Artist artist) {
+        TrackDAO trackDAO = new TrackDAO();
+        List<Track> tracks = trackDAO.filter(new HashMap<>() {
+            {
+                put("artist", artist);
+            }
+        });
+
+        if (!tracks.isEmpty()) {
+            clearQueue();
+            playedTracks.clear();
+            playTrackSubject.onNext(tracks.get(0));
+            tracks.remove(0);
+            addToQueue(tracks);
+        }
     }
 
     public void play(Album album) {

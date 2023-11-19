@@ -69,6 +69,11 @@ public class SVGWidget extends StackPane {
         this.build();
     }
 
+    public void setResourcePath(String resourcePath) {
+        this.resourcePath = resourcePath;
+        this.build();
+    }
+
     public void build() {
         ArrayList<String> paths = getSvgPaths();
 
