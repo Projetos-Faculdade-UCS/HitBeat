@@ -43,7 +43,7 @@ public class MusicBox extends HBox {
     private void updateTrackInfo(SongStart song) {
         if (song.getTrack() != null) {
             String vTrackName = song.getTrack().getName();
-            String vArtistName = song.getTrack().getArtist().getName();
+            String vArtistName = song.getTrack().getAlbum().getArtist().getName();
             imageView.setImage(song.getTrack().getCover());
 
             trackName.setText(vTrackName);

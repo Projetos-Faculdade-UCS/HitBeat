@@ -6,9 +6,12 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 
+import hitbeat.controller.playlist.PlaylistController;
 import hitbeat.dao.TrackDAO;
+import hitbeat.model.Album;
+import hitbeat.model.Artist;
 import hitbeat.model.Genre;
-import hitbeat.model.Queue;
+import hitbeat.model.Playlist;
 import hitbeat.model.Track;
 import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
@@ -217,7 +220,29 @@ public class PlayerController {
         play(track);
     }
 
-    public void play(Queue queue) {
+    public void play(Playlist playlist) {
+        clearQueue();
+        playedTracks.clear();
+        PlaylistController playlistController = new PlaylistController();
+        List<Track> tracks = playlistController.getAllTracks(playlist);
+        addToQueue(tracks);
+        playNextTrack();
+    }
+
+    public void play(Artist artist) {
+        TrackDAO trackDAO = new TrackDAO();
+        List<Track> tracks = trackDAO.findByAlbumArtist(artist);
+
+        if (!tracks.isEmpty()) {
+            clearQueue();
+            playedTracks.clear();
+            playTrackSubject.onNext(tracks.get(0));
+            tracks.remove(0);
+            addToQueue(tracks);
+        }
+    }
+
+    public void play(Album album) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

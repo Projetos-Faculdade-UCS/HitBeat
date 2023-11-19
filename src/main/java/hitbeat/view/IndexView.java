@@ -21,6 +21,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -34,7 +35,7 @@ public class IndexView extends Application {
     private Scene scene;
     private Sidebar sidebar;
     private Node content;
-    private final IndexController controller = new IndexController();
+    private final IndexController controller = IndexController.getInstance();
     private final Icons icons = new Icons();
     private Map<String, SidebarItem> sidebarItems = new HashMap<>();
 
@@ -74,9 +75,12 @@ public class IndexView extends Application {
         sidebarItems.put("library", new SidebarItem("Minha Biblioteca", null, controller::loadLibraryView));
         sidebarItems.put("artists", new SidebarItem("Artistas", icons.getArtists(), controller::loadArtistsView));
         sidebarItems.put("playlists", new SidebarItem("Playlists", icons.getPlaylists(), controller::loadPlaylistsView));
+        ImageView logo = new ImageView("/hitbeat/images/hitbeat-icon.png");
+        logo.setFitWidth(50);
+        logo.setPreserveRatio(true);
 
         return new Sidebar(
-                "HitBeat",
+                "HitBeat", logo,
                 new SidebarTopic(
                         "Minhas Músicas",
                         sidebarItems.get("index"),
@@ -111,7 +115,10 @@ public class IndexView extends Application {
         sidebarItems.values().forEach(item -> item.setActive(false));
 
         if (newContent.getIdentifier() != null) {
-            sidebarItems.get(newContent.getIdentifier()).setActive(true);
+            SidebarItem itemAtivo = sidebarItems.get(newContent.getIdentifier());
+            if (itemAtivo != null) {
+                itemAtivo.setActive(true);
+            }
         }
 
         this.content = newContent.getContent();

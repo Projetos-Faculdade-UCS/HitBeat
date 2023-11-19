@@ -1,27 +1,26 @@
 package hitbeat.view.artists;
 
+import hitbeat.controller.player.PlayerController;
 import hitbeat.model.Artist;
+import hitbeat.view.base.widgets.Cover;
 import hitbeat.view.base.widgets.ListTile;
 import hitbeat.view.base.widgets.listview.BaseCell;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
 
 public class ArtistCell extends BaseCell<Artist> {
     private Artist artist;
-    private ImageView artistImage;
+    private Cover artistImage;
     private Label titleLabel;
     private Label subtitleLabel;
-    
+
     public ArtistCell(Artist artist) {
         this.initUI();
         this.updateItem(artist);
     }
 
     private void initUI() {
-        artistImage = new ImageView();
-        artistImage.setPreserveRatio(true); //
-        artistImage.setSmooth(true);
-        artistImage.setFitWidth(60);
+        artistImage = new Cover();
+        artistImage.setFit(100);
 
         titleLabel = new Label();
         titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16; -fx-text-fill: white;");
@@ -31,6 +30,16 @@ public class ArtistCell extends BaseCell<Artist> {
 
         ListTile listTile = new ListTile(artistImage, titleLabel, subtitleLabel, null);
         this.getChildren().add(listTile);
+
+        // on hover, shows the play button
+        this.setOnMouseEntered(e -> {
+            artistImage.showPlayButton(true);
+        });
+
+        // on exit, hides the play button
+        this.setOnMouseExited(e -> {
+            artistImage.showPlayButton(false);
+        });
     }
 
     @Override
@@ -40,12 +49,15 @@ public class ArtistCell extends BaseCell<Artist> {
         if (artist != null) {
             titleLabel.setText(this.artist.getName());
             subtitleLabel.setText(this.artist.getDescription());
-            artistImage.setImage( this.artist.getCover() );
+            artistImage.setCoverImage(this.artist.getCover());
+            artistImage.setPlayButtonAction(() -> {
+                PlayerController.getInstance().play(this.artist);
+            });
         } else {
             titleLabel.setText("");
             subtitleLabel.setText("");
-            artistImage.setImage(null);
+            artistImage.setCoverImage(null);
         }
     }
-    
+
 }

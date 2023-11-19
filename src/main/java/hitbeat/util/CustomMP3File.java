@@ -23,6 +23,7 @@ public class CustomMP3File {
     private String album;
     private String artist;
     private String genre;
+    private String year;
     private byte[] image;
 
     public CustomMP3File(File file) throws IOException, UnsupportedTagException, InvalidDataException, NotSupportedException {
@@ -54,6 +55,10 @@ public class CustomMP3File {
             image = mp3file.getId3v2Tag().getAlbumImage();
         }
         return image;
+    }
+
+    public String getYear() {
+        return year != null ? year : (year = extractData(ID3v2::getYear, ID3v1::getYear));
     }
 
     private String extractData(Function<ID3v2, String> v2Function, Function<ID3v1, String> v1Function) {

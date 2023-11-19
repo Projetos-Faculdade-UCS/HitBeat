@@ -59,6 +59,12 @@
     background-color: transparent;
 }
 
+.rounded-sm {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    border-radius: 10;
+}
+
 .min-button{
     -fx-background-color: transparent !important;
     background-color: transparent !important;
