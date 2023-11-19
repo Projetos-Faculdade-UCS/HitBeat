@@ -58,13 +58,11 @@ public class Artist extends BaseModel {
                     .setMaxResults(4)
                     .getResultList();
 
-            if (album.size() == 1) {
-                return album.get(0).getCover();
-            }
-
             if (album.size() >= 4) {
                 List<Image> images = album.stream().map(Album::getCover).toList();
                 return getImageGrid(images);
+            } else if (album.size() > 0) {
+                return album.get(0).getCover();
             }
         }
         return new Image("/hitbeat/images/artists/artist.jpg");
