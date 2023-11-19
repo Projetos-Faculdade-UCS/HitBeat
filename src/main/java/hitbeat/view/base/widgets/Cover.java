@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 public class Cover extends StackPane {
     private ImageView cover = new ImageView();
@@ -16,15 +17,22 @@ public class Cover extends StackPane {
     public Cover() {
         this.setPrefHeight(fitValue);
         this.setPrefWidth(fitValue);
-        this.setStyle("-fx-background-color: #000000; -fx-background-radius: 10;");
+        this.getStyleClass().addAll("transparent", "rounded-sm");
         this.getChildren().addAll(cover, playButton);
         this.setAlignment(Pos.CENTER);
     }
 
     public void setCoverImage(Image image) {
-        cover.setImage(image);
+        this.image = image;
+        cover.setImage(this.image);
         cover.setFitWidth(fitValue);
         cover.setPreserveRatio(true);
+        
+        Rectangle retangulo = new Rectangle(60, 60);
+        retangulo.setArcWidth(10);
+        retangulo.setArcHeight(10);
+
+        cover.setClip(retangulo);
 
         // on hover, shows the play button
         this.setOnMouseEntered(e -> {
@@ -58,8 +66,6 @@ public class Cover extends StackPane {
         // Create and configure the drop shadow effect
         DropShadow dropShadow = new DropShadow();
         dropShadow.setRadius(5);
-        // dropShadow.setOffsetX(15.0);
-        // dropShadow.setOffsetY(5.0);
         dropShadow.setColor(Color.BLACK);
 
         // Apply the drop shadow effect to the ImageView

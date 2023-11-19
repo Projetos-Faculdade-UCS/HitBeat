@@ -6,6 +6,8 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
+import jakarta.persistence.EntityManager;
+
 public class HibernateUtil {
     private static final SessionFactory sessionFactory = buildSessionFactory();
 
@@ -37,5 +39,9 @@ public class HibernateUtil {
     public static void shutdown() {
         // Close caches and connection pools
         getSessionFactory().close();
+    }
+
+    public static EntityManager getEntityManager() {
+        return getSessionFactory().createEntityManager();
     }
 }
