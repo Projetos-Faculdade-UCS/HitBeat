@@ -150,7 +150,6 @@ public class LibraryDatabaseManager {
                             .filter(artist -> artist.getName().equals(customMP3File.getArtist()))
                             .findFirst()
                             .orElse(null));
-                    track.setPicture(customMP3File.getImage());
                     track.setAlbum(albums.stream()
                             .filter(album -> album.getName().equals(customMP3File.getAlbum()))
                             .findFirst()
@@ -179,7 +178,6 @@ public class LibraryDatabaseManager {
         track.setGenre(genre); // Set the genre reference
         track.setFilePath(customMP3File.getFilePath());
         track.setCreationDate(new Date());
-        track.setPicture(customMP3File.getImage());
 
         trackDAO.save(track); // Save track to database
     }

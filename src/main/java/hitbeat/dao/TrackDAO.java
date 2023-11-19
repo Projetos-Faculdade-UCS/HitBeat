@@ -17,7 +17,6 @@ public class TrackDAO extends BaseDAO<Track> {
                 .withExplicit(newTrack.isExplicit())
                 .withFavorite(newTrack.isFavorite())
                 .withGenre(newTrack.getGenre())
-                .withPicture(newTrack.getPicture())
                 .withSingle(newTrack.isSingle());
     }
 }

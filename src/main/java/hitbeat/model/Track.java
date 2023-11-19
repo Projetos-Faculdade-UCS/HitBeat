@@ -1,7 +1,5 @@
 package hitbeat.model;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -9,14 +7,11 @@ import java.util.Set;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import jakarta.persistence.Basic;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -42,9 +37,6 @@ public class Track extends BaseModel {
     private Date creationDate;
     private int duration;
 
-    @Lob
-    @Basic(fetch=FetchType.LAZY)
-    private byte[] picture;
     private String filePath;
     private boolean explicit;
     private boolean single;
@@ -61,7 +53,7 @@ public class Track extends BaseModel {
     private Artist artist;
 
     @ManyToOne(optional = true)
-    @JoinColumn(name = "album_id")
+    @JoinColumn(name = "album_id")   
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Album album;
 
@@ -71,26 +63,24 @@ public class Track extends BaseModel {
     public Track() {
     }
 
-    public Track(Long id, String name, Date creationDate, int duration, byte[] picture, String filePath,
+    public Track(Long id, String name, Date creationDate, int duration, String filePath,
             boolean explicit, boolean single, boolean favorite, Genre genre) {
         this.id = id;
         this.name = name;
         this.creationDate = creationDate;
         this.duration = duration;
-        this.picture = picture;
         this.filePath = filePath;
         this.explicit = explicit;
         this.single = single;
         this.genre = genre;
     }
 
-    public Track(Long id, String name, Date creationDate, int duration, byte[] picture, String filePath,
+    public Track(Long id, String name, Date creationDate, int duration, String filePath,
             boolean explicit, boolean single, boolean favorite, Genre genre, Artist artist, Album album, Set<PlaylistTrack> playlistTrack) {
         this.id = id;
         this.name = name;
         this.creationDate = creationDate;
         this.duration = duration;
-        this.picture = picture;
         this.filePath = filePath;
         this.explicit = explicit;
         this.single = single;
@@ -100,12 +90,11 @@ public class Track extends BaseModel {
         this.playlistTrack = playlistTrack;
     }
 
-    public Track(String name, Date creationDate, int duration, byte[] picture, String filePath,
+    public Track(String name, Date creationDate, int duration, String filePath,
             boolean explicit, boolean single, boolean favorite, Genre genre) {
         this.name = name;
         this.creationDate = creationDate;
         this.duration = duration;
-        this.picture = picture;
         this.filePath = filePath;
         this.explicit = explicit;
         this.single = single;
@@ -113,11 +102,10 @@ public class Track extends BaseModel {
     }
 
     public Image getCover() {
-        if (this.picture == null) {
+        if (this.album == null || this.album.getCover() == null) {
             return new Image("/hitbeat/images/track.jpg");
         }
-        InputStream inputStream = new ByteArrayInputStream(this.picture);
-        return new Image(inputStream);
+        return this.album.getCover();
     }
 
 }
