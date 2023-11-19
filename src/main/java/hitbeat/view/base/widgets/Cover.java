@@ -1,9 +1,11 @@
 package hitbeat.view.base.widgets;
 
 import javafx.geometry.Pos;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 
 public class Cover extends StackPane {
     private ImageView cover = new ImageView();
@@ -23,6 +25,16 @@ public class Cover extends StackPane {
         cover.setImage(image);
         cover.setFitWidth(fitValue);
         cover.setPreserveRatio(true);
+
+        // on hover, shows the play button
+        this.setOnMouseEntered(e -> {
+            showPlayButton(true);
+        });
+
+        // on exit, hides the play button
+        this.setOnMouseExited(e -> {
+            showPlayButton(false);
+        });
     }
 
     public void setFit(double width) {
@@ -36,13 +48,22 @@ public class Cover extends StackPane {
         if (show) {
             image = new Image("/hitbeat/images/play.png", fitValue, fitValue, false, true);
             playButton.setImage(image);
-            playButton.setTranslateY(-10);
-            playButton.setTranslateX(0);
             playButton.setFitWidth(fitValue);
             playButton.setPickOnBounds(true);
         } else {
             playButton.setImage(null);
         }
+        
+
+        // Create and configure the drop shadow effect
+        DropShadow dropShadow = new DropShadow();
+        dropShadow.setRadius(5);
+        // dropShadow.setOffsetX(15.0);
+        // dropShadow.setOffsetY(5.0);
+        dropShadow.setColor(Color.BLACK);
+
+        // Apply the drop shadow effect to the ImageView
+        playButton.setEffect(dropShadow);
     }
 
     public void setPlayButtonAction(Runnable action) {
@@ -50,5 +71,5 @@ public class Cover extends StackPane {
             action.run();
         });
     }
-    
+
 }
