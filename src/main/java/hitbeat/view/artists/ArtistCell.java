@@ -40,7 +40,6 @@ public class ArtistCell extends BaseCell<Artist> {
             titleLabel.setText(this.artist.getName());
             subtitleLabel.setText(this.artist.getDescription());
             artistImage.setCoverImage(this.artist.getCover());
-            artistImage.showPlayButton(true);
             artistImage.setPlayButtonAction(() -> {
                 PlayerController.getInstance().play(this.artist);
             });
