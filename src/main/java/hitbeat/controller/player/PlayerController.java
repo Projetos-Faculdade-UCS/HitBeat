@@ -231,11 +231,7 @@ public class PlayerController {
 
     public void play(Artist artist) {
         TrackDAO trackDAO = new TrackDAO();
-        List<Track> tracks = trackDAO.filter(new HashMap<>() {
-            {
-                put("artist", artist);
-            }
-        });
+        List<Track> tracks = trackDAO.findByAlbumArtist(artist);
 
         if (!tracks.isEmpty()) {
             clearQueue();

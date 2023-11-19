@@ -12,7 +12,7 @@ public class ArtistCell extends BaseCell<Artist> {
     private Cover artistImage;
     private Label titleLabel;
     private Label subtitleLabel;
-    
+
     public ArtistCell(Artist artist) {
         this.initUI();
         this.updateItem(artist);
@@ -49,5 +49,5 @@ public class ArtistCell extends BaseCell<Artist> {
             artistImage.setCoverImage(null);
         }
     }
-    
+
 }

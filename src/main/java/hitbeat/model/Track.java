@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -28,6 +29,7 @@ import lombok.With;
 @Table(name = "track", uniqueConstraints = {
         @UniqueConstraint(columnNames = "filePath", name = "track_filePath_unique")
 })
+@NamedQuery(name = "Track.findByAlbumArtist", query = "SELECT t FROM Track t WHERE t.album.artist = :artist")
 public class Track extends BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,17 +50,12 @@ public class Track extends BaseModel {
     private Genre genre;
 
     @ManyToOne(optional = true)
-    @JoinColumn(name = "artist_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Artist artist;
-
-    @ManyToOne(optional = true)
-    @JoinColumn(name = "album_id")   
+    @JoinColumn(name = "album_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Album album;
 
     @OneToMany(mappedBy = "track")
-    private Set<PlaylistTrack> playlistTrack= new HashSet<>();
+    private Set<PlaylistTrack> playlistTrack = new HashSet<>();
 
     public Track() {
     }
@@ -76,7 +73,8 @@ public class Track extends BaseModel {
     }
 
     public Track(Long id, String name, Date creationDate, int duration, String filePath,
-            boolean explicit, boolean single, boolean favorite, Genre genre, Artist artist, Album album, Set<PlaylistTrack> playlistTrack) {
+            boolean explicit, boolean single, boolean favorite, Genre genre, Album album,
+            Set<PlaylistTrack> playlistTrack) {
         this.id = id;
         this.name = name;
         this.creationDate = creationDate;
@@ -86,7 +84,6 @@ public class Track extends BaseModel {
         this.single = single;
         this.genre = genre;
         this.album = album;
-        this.artist = artist;
         this.playlistTrack = playlistTrack;
     }
 

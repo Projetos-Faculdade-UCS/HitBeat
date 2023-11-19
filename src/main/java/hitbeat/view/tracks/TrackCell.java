@@ -74,8 +74,8 @@ public class TrackCell extends BaseCell<Track> {
 
         if (track != null) {
             titleLabel.setText(this.track.getName());
-            if (this.track.getArtist() != null) {
-                subtitleLabel.setText(this.track.getArtist().getName()); // Update if Track has more data
+            if (this.track.getAlbum().getArtist() != null) {
+                subtitleLabel.setText(this.track.getAlbum().getArtist().getName()); // Update if Track has more data
             }
             favoriteBtn.setGraphic(icons.getFavorite(this.track.isFavorite()));
         } else {
@@ -85,7 +85,7 @@ public class TrackCell extends BaseCell<Track> {
     }
 
     public HBox getMenuBtns() {
-        Node trailingIcon = icons.getOptions(); 
+        Node trailingIcon = icons.getOptions();
 
         favoriteBtn = new MyButton("", icons.getFavorite(false));
         MyButton optionsBtn = new MyButton("", trailingIcon);
@@ -93,10 +93,10 @@ public class TrackCell extends BaseCell<Track> {
         MyContextMenu contextMenu = new MyContextMenu();
         MyMenu addMenu = new MyMenu("Adicionar à playlist");
         MyMenuItem removeItem = new MyMenuItem("Remover desta playlist");
-        
+
         addMenu.getItems().add(new MenuItem("")); // nodo ancora
         addMenu.setOnShowing(event -> {
-            addMenu.getItems().clear(); 
+            addMenu.getItems().clear();
             playlistController.fetchAll().forEach(playlist -> {
                 MyMenuItem item = new MyMenuItem(playlist.getName());
                 item.setOnAction(event1 -> {

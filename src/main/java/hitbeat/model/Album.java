@@ -8,6 +8,8 @@ import java.util.Set;
 
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -15,7 +17,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import javafx.scene.image.Image;
@@ -46,6 +50,11 @@ public class Album extends BaseModel {
     @Lob
     @Basic(fetch = FetchType.LAZY)
     private byte[] cover;
+
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "artist_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Artist artist;
 
     public Image getCover() {
         if (this.cover == null) {

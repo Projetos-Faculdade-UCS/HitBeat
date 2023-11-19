@@ -88,11 +88,12 @@ public abstract class BaseDAO<T extends BaseModel> {
         });
     }
 
-
     /*
      * Filtra os registros do banco de dados com base em um mapa de parâmetros.
      * Os parâmetros são mapeados para os campos do modelo.
+     * 
      * @param params Um mapa de parâmetros para filtrar os registros.
+     * 
      * @return Uma lista de registros filtrados.
      */
     public List<T> filter(Map<String, Object> params) {
@@ -106,7 +107,6 @@ public abstract class BaseDAO<T extends BaseModel> {
             return query.list();
         });
     }
-
 
     public void saveAll(List<T> objects) {
         executeMethod(session -> {

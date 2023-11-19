@@ -1,12 +1,14 @@
 package hitbeat.model;
 
+import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
+
 import hitbeat.util.HibernateUtil;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import javafx.scene.image.Image;
@@ -22,16 +24,9 @@ import lombok.With;
         @UniqueConstraint(columnNames = "name", name = "artist_name_unique")
 })
 // named query to get the first album of an artist:
-// SELECT Album.*
-// FROM Album
-// JOIN track ON Album.id = track.album_id
-// JOIN artist ON track.artist_id = artist.id
-// WHERE artist.name = 'ArtistName' -- replace 'ArtistName' with the actual artist's name
-// ORDER BY Album.launch_date ASC
-@NamedQuery(
-    name = "Artist.getFirstAlbum", 
-    query = "SELECT a FROM Album a JOIN a.tracks t WHERE t.artist = :artist ORDER BY a.launchDate ASC"
-)
+@NamedQueries({
+        @NamedQuery(name = "Artist.getAlbums", query = "SELECT a FROM Album a WHERE a.artist = :artist")
+})
 public class Artist extends BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,9 +49,9 @@ public class Artist extends BaseModel {
     public Image getCover() {
         if (this.image != null) {
             return new Image(this.image);
-        } else{
+        } else {
             // get the first album of the artist
-            Album album = (Album) this.getEntityManager().createNamedQuery("Artist.getFirstAlbum")
+            Album album = (Album) this.getEntityManager().createNamedQuery("Artist.getAlbums")
                     .setParameter("artist", this)
                     .setMaxResults(1)
                     .getSingleResult();
