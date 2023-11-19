@@ -27,22 +27,12 @@ public class Cover extends StackPane {
         cover.setImage(this.image);
         cover.setFitWidth(fitValue);
         cover.setPreserveRatio(true);
-        
+
         Rectangle retangulo = new Rectangle(60, 60);
         retangulo.setArcWidth(10);
         retangulo.setArcHeight(10);
 
         cover.setClip(retangulo);
-
-        // on hover, shows the play button
-        this.setOnMouseEntered(e -> {
-            showPlayButton(true);
-        });
-
-        // on exit, hides the play button
-        this.setOnMouseExited(e -> {
-            showPlayButton(false);
-        });
     }
 
     public void setFit(double width) {
@@ -61,7 +51,6 @@ public class Cover extends StackPane {
         } else {
             playButton.setImage(null);
         }
-        
 
         // Create and configure the drop shadow effect
         DropShadow dropShadow = new DropShadow();

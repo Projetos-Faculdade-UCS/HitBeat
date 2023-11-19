@@ -30,6 +30,16 @@ public class ArtistCell extends BaseCell<Artist> {
 
         ListTile listTile = new ListTile(artistImage, titleLabel, subtitleLabel, null);
         this.getChildren().add(listTile);
+
+        // on hover, shows the play button
+        this.setOnMouseEntered(e -> {
+            artistImage.showPlayButton(true);
+        });
+
+        // on exit, hides the play button
+        this.setOnMouseExited(e -> {
+            artistImage.showPlayButton(false);
+        });
     }
 
     @Override
