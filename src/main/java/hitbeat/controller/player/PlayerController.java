@@ -6,6 +6,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 
+import hitbeat.controller.playlist.PlaylistController;
 import hitbeat.dao.TrackDAO;
 import hitbeat.model.Album;
 import hitbeat.model.Genre;
@@ -219,7 +220,12 @@ public class PlayerController {
     }
 
     public void play(Playlist playlist) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        clearQueue();
+        playedTracks.clear();
+        PlaylistController playlistController = new PlaylistController();
+        List<Track> tracks = playlistController.getAllTracks(playlist);
+        addToQueue(tracks);
+        playNextTrack();
     }
 
     public void play(Album album) {

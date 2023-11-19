@@ -1,7 +1,6 @@
 package hitbeat.model;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -27,7 +26,7 @@ public class Playlist extends BaseModel{
     private Long id;
     
     @OneToMany(mappedBy="playlist")
-    private Set<PlaylistTrack> playlistTracks = new HashSet<>();
+    private Set<PlaylistTrack> playlistTracks;
 
     @Column(name = "pub_date")
     private Date pubDate;
