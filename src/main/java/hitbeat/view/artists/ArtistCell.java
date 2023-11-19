@@ -20,7 +20,7 @@ public class ArtistCell extends BaseCell<Artist> {
 
     private void initUI() {
         artistImage = new Cover();
-        artistImage.setFit(60);
+        artistImage.setFit(100);
 
         titleLabel = new Label();
         titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16; -fx-text-fill: white;");

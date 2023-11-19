@@ -13,6 +13,7 @@ public class Cover extends StackPane {
     private Image image;
     private ImageView playButton = new ImageView();
     private double fitValue = 150;
+    private Rectangle retangulo;
 
     public Cover() {
         this.setPrefHeight(fitValue);
@@ -28,7 +29,7 @@ public class Cover extends StackPane {
         cover.setFitWidth(fitValue);
         cover.setPreserveRatio(true);
 
-        Rectangle retangulo = new Rectangle(60, 60);
+        retangulo = new Rectangle(fitValue, fitValue);
         retangulo.setArcWidth(10);
         retangulo.setArcHeight(10);
 

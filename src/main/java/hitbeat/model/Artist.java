@@ -1,5 +1,7 @@
 package hitbeat.model;
 
+import java.util.List;
+
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 
@@ -51,13 +53,18 @@ public class Artist extends BaseModel {
             return new Image(this.image);
         } else {
             // get the first album of the artist
-            Album album = (Album) this.getEntityManager().createNamedQuery("Artist.getAlbums")
+            List<Album> album = this.getEntityManager().createNamedQuery("Artist.getAlbums", Album.class)
                     .setParameter("artist", this)
-                    .setMaxResults(1)
-                    .getSingleResult();
+                    .setMaxResults(4)
+                    .getResultList();
 
-            if (album != null) {
-                return album.getCover();
+            if (album.size() == 1) {
+                return album.get(0).getCover();
+            }
+
+            if (album.size() >= 4) {
+                List<Image> images = album.stream().map(Album::getCover).toList();
+                return getImageGrid(images);
             }
         }
         return new Image("/hitbeat/images/artists/artist.jpg");
