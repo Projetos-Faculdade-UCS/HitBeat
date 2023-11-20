@@ -58,7 +58,7 @@ public class Album extends BaseModel {
 
     public Image getCover() {
         if (this.cover == null) {
-            return new Image("/hitbeat/images/track.jpg");
+            return new Image("/hitbeat/images/default.png");
         }
         InputStream inputStream = new ByteArrayInputStream(this.cover);
         return new Image(inputStream);
