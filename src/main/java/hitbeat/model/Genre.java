@@ -46,19 +46,18 @@ public class Genre extends BaseModel {
     }
 
     public Image getCover(double size) {
-        List<Album> tracks = HibernateUtil.getEntityManager().createNamedQuery("Genre.getAlbums", Album.class)
+        List<Album> albums = HibernateUtil.getEntityManager().createNamedQuery("Genre.getAlbums", Album.class)
                 .setParameter("genre", this)
-                .setMaxResults(5)
                 .getResultList();
 
         // remove duplicates
-        tracks = tracks.stream().distinct().toList();
+        // albums = albums.stream().distinct().toList();
 
-        if (tracks.size() >= 4) {
-            List<Image> images = tracks.stream().map(Album::getCover).toList();
+        if (albums.size() >= 4) {
+            List<Image> images = albums.stream().map(Album::getCover).toList();
             return getImageGrid(images, size);
-        } else if (tracks.size() > 0) {
-            return tracks.get(0).getCover();
+        } else if (albums.size() > 0) {
+            return albums.get(0).getCover();
         }
         return new Image("/hitbeat/images/default.png");
     }
