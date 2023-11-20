@@ -22,7 +22,7 @@ public class PlaylistDAO extends BaseDAO<Playlist>{
     protected void updateProperties(Playlist existingEntity, Playlist newEntity) {
         existingEntity.setName(newEntity.getName());
         existingEntity.setDescription(newEntity.getDescription());
-        existingEntity.setFilePath(newEntity.getFilePath());
+        existingEntity.setCover(newEntity.getCover());
     }
 
     public List<Track> getAllTracks(Playlist playlist) {

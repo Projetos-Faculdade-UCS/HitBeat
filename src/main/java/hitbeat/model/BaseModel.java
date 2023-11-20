@@ -11,36 +11,43 @@ import lombok.Data;
 
 @Data
 public class BaseModel {
-    protected Image getImageGrid(List<Image> images) {
+    protected Image getImageGrid(List<Image> images, double size) {
         if (images.isEmpty()) {
-            return new Image("/hitbeat/images/artists/artist.jpg");
+            return new Image("/hitbeat/images/default.png");
         }
-        // only 4 images are allowed
-        images = images.subList(0, Math.min(images.size(), 4));
 
-        int imageSize = 100; // Set this to the actual size of your images
-        int gridSize = 2 * imageSize; // For a 2x2 grid
+        // Limit the number of images to 4
+        int numImages = Math.min(images.size(), 4);
+
+        // Calculate the scaling factor for each image
+        double scale = size / Math.max(images.get(0).getWidth(), images.get(0).getHeight());
+
+        // Create a WritableImage for the grid
+        int gridSize = (int) Math.round(Math.sqrt(numImages) * size);
         WritableImage gridImage = new WritableImage(gridSize, gridSize);
         PixelWriter writer = gridImage.getPixelWriter();
 
-        for (int i = 0; i < images.size(); i++) {
+        for (int i = 0; i < numImages; i++) {
             Image img = images.get(i);
             if (img != null) {
-                int x = (i % 2) * imageSize; // Column: 0 or 1
-                int y = (i / 2) * imageSize; // Row: 0 or 1
+                double x = (i % 2) * size; // Column: 0 or 1
+                double y = (i / 2) * size; // Row: 0 or 1
                 PixelReader reader = img.getPixelReader();
-        
-                for (int readY = 0; readY < img.getHeight() && readY < imageSize; readY++) {
-                    for (int readX = 0; readX < img.getWidth() && readX < imageSize; readX++) {
-                        Color color = reader.getColor(readX, readY);
-                        writer.setColor(x + readX, y + readY, color);
+
+                for (int readY = 0; readY < size; readY++) {
+                    for (int readX = 0; readX < size; readX++) {
+                        // Calculate the corresponding position in the original image
+                        int origX = (int) (readX / scale);
+                        int origY = (int) (readY / scale);
+
+                        Color color = reader.getColor(origX, origY);
+                        writer.setColor((int) (x + readX), (int) (y + readY), color);
                     }
                 }
             }
         }
-        
 
         return gridImage;
     }
-    
+
 }

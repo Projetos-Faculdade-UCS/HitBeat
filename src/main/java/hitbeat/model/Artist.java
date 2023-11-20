@@ -48,7 +48,7 @@ public class Artist extends BaseModel {
         this.image = image;
     }
 
-    public Image getCover() {
+    public Image getCover(double size) {
         if (this.image != null) {
             return new Image(this.image);
         } else {
@@ -60,12 +60,12 @@ public class Artist extends BaseModel {
 
             if (album.size() >= 4) {
                 List<Image> images = album.stream().map(Album::getCover).toList();
-                return getImageGrid(images);
+                return getImageGrid(images, size);
             } else if (album.size() > 0) {
                 return album.get(0).getCover();
             }
         }
-        return new Image("/hitbeat/images/artists/artist.jpg");
+        return new Image("/hitbeat/images/default.png");
     }
 
     public EntityManager getEntityManager() {

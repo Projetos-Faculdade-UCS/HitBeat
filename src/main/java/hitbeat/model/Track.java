@@ -100,7 +100,7 @@ public class Track extends BaseModel {
 
     public Image getCover() {
         if (this.album == null || this.album.getCover() == null) {
-            return new Image("/hitbeat/images/track.jpg");
+            return new Image("/hitbeat/images/default.png");
         }
         return this.album.getCover();
     }

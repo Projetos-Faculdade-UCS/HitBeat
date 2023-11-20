@@ -1,6 +1,7 @@
 package hitbeat.view.base.widgets;
 
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -49,6 +50,8 @@ public class Cover extends StackPane {
             playButton.setImage(image);
             playButton.setFitWidth(fitValue);
             playButton.setPickOnBounds(true);
+
+            playButton.setCursor(Cursor.HAND);
         } else {
             playButton.setImage(null);
         }
@@ -66,6 +69,10 @@ public class Cover extends StackPane {
         playButton.setOnMouseClicked(e -> {
             action.run();
         });
+    }
+
+    public boolean isMouseOverPlayButton() {
+        return playButton.isHover();
     }
 
 }
