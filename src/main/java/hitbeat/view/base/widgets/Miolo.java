@@ -1,5 +1,7 @@
 package hitbeat.view.base.widgets;
 
+import hitbeat.controller.MioloController;
+import hitbeat.controller.MioloUpdated;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -39,6 +41,22 @@ public class Miolo extends StackPane {
     
         // Set the initial content
         setContent(initialPage);
+
+        MioloController.getInstance().setOnContentChanged(this::setContent);
+    }
+
+    private void setContent(MioloUpdated contentUpdated) {
+        setContent(contentUpdated.getContent());
+        setTitle(contentUpdated.getTitle());
+
+        FloatingActionButton fab = contentUpdated.getFab();
+        if (fab != null) {
+            setFab(fab);
+        } else {
+            removeFab();
+        }
+
+        showBackButton(contentUpdated.getShowBackButton());
     }
 
     public void setFab(FloatingActionButton fab) {
@@ -70,8 +88,8 @@ public class Miolo extends StackPane {
         header.backButtonContainer.setOnBackClickedCallback(callback);
     }
 
-    public void showBackButton() {
-        header.showBackButton();
+    public void showBackButton(Boolean show) {
+        header.showBackButton(show);
     }
     
     public void hideBackButton() {
@@ -130,8 +148,8 @@ public class Miolo extends StackPane {
             return titleLabel.getText();
         }
 
-        public void showBackButton() {
-            backButtonContainer.show();
+        public void showBackButton(Boolean show) {
+            backButtonContainer.show(show);
         }
 
         public void hideBackButton() {
@@ -151,9 +169,13 @@ public class Miolo extends StackPane {
             hide(); // Initially hide the back button
         }
 
-        public void show() {
-            if (!this.getChildren().contains(backButton)) {
-                this.getChildren().add(backButton);
+        public void show(Boolean show) {
+            if (show) {
+                if (!this.getChildren().contains(backButton)) {
+                    this.getChildren().add(backButton);
+                }
+            } else {
+                hide();
             }
         }
         

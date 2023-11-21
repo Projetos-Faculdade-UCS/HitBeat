@@ -1,7 +1,5 @@
 package hitbeat.controller;
 
-import java.util.function.Consumer;
-
 import hitbeat.model.Playlist;
 import hitbeat.view.StartPage;
 import hitbeat.view.artists.ArtistsView;
@@ -13,10 +11,12 @@ import hitbeat.view.playlists.CreatePlaylist;
 import hitbeat.view.playlists.DetailPlaylist;
 import hitbeat.view.playlists.PlaylistView;
 import hitbeat.view.tracks.TracksView;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import javafx.application.Platform;
 
 public class MioloController {
-    private Consumer<ContentUpdated> contentChangedConsumer;
+    private BehaviorSubject<MioloUpdated> contentChangedSubject = BehaviorSubject.create();
     private Miolo miolo;
 
     private MioloController() {
@@ -48,52 +48,50 @@ public class MioloController {
 
     public void loadStartPage() {
         StartPage startPage = new StartPage();
-        updateContent(new ContentUpdated(startPage, "index"));
+        updateContent(new MioloUpdated(startPage, "index", "Início"));
     }
 
     public void loadTracksView() {
         TracksView tracksView = new TracksView();
-        updateContent(new ContentUpdated(tracksView, "tracks"));
+        updateContent(new MioloUpdated(tracksView, "tracks", "Todas"));
     }
 
     public void loadGenresView() {
         GenresView genresView = new GenresView();
-        updateContent(new ContentUpdated(genresView, "genres"));
+        updateContent(new MioloUpdated(genresView, "genres", "Gêneros"));
     }
 
     public void loadLibraryView() {
         LibraryPage libraryPage = new LibraryPage();
-        updateContent(new ContentUpdated(libraryPage, "library"));
+        updateContent(new MioloUpdated(libraryPage, "library", "Minha Biblioteca"));
     }
 
     public void loadArtistsView() {
         ArtistsView artistsView = new ArtistsView();
-        updateContent(new ContentUpdated(artistsView, "artists"));
+        updateContent(new MioloUpdated(artistsView, "artists", "Artistas"));
     }
 
     public void loadPlaylistsView() {
         PlaylistView playlistsView = new PlaylistView();
-        updateContent(new ContentUpdated(playlistsView, "playlists"));
+        updateContent(new MioloUpdated(playlistsView, "playlists", "Playlists", playlistsView.getFab()));
     }
 
     public void loadPlaylistCreateView() {
         CreatePlaylist createPlaylist = new CreatePlaylist();
-        updateContent(new ContentUpdated(createPlaylist, "createPlaylist"));
+        updateContent(new MioloUpdated(createPlaylist, "createPlaylist", "Criar Playlist"));
     }
 
     public void loadPlayListDetailView(Playlist playlist) {
         DetailPlaylist detailPlaylist = new DetailPlaylist(playlist);
-        updateContent(new ContentUpdated(detailPlaylist, "detailPlaylist"));
+        updateContent(new MioloUpdated(detailPlaylist, "detailPlaylist", playlist.getName()));
     }
 
-    private void updateContent(ContentUpdated updatedContent) {
-        miolo.removeFab();
-        if (contentChangedConsumer != null) {
-            contentChangedConsumer.accept(updatedContent);
-        }
+    private void updateContent(MioloUpdated updatedContent) {
+        updatedContent.setShowBackButton(true);
+        contentChangedSubject.onNext(updatedContent);
     }
 
-    public void setContentChangedConsumer(Consumer<ContentUpdated> contentChangedConsumer) {
-        this.contentChangedConsumer = contentChangedConsumer;
+    public void setOnContentChanged(Consumer<MioloUpdated> consumer) {
+        contentChangedSubject.subscribe(consumer);
     }
 }

@@ -3,9 +3,9 @@ package hitbeat.view;
 import java.util.HashMap;
 import java.util.Map;
 
-import hitbeat.controller.ContentUpdated;
 import hitbeat.controller.Icons;
 import hitbeat.controller.MioloController;
+import hitbeat.controller.MioloUpdated;
 import hitbeat.view.Player.Footer;
 import hitbeat.view.base.widgets.Miolo;
 import hitbeat.view.sidebar.Sidebar;
@@ -55,7 +55,8 @@ public class IndexView extends Application {
 
     private void setupEventHandlers() {
         MioloController controller = MioloController.getInstance();
-        controller.setContentChangedConsumer(this::updateContent);
+        // controller.setContentChangedConsumer(this::updateContent);
+        controller.setOnContentChanged(this::updateContent);
     }
 
     private Sidebar setupSidebar() {
@@ -114,7 +115,7 @@ public class IndexView extends Application {
         primaryStage.show();
     }
 
-    public void updateContent(ContentUpdated newContent) {
+    public void updateContent(MioloUpdated newContent) {
         sidebarItems.values().forEach(item -> item.setActive(false));
 
         if (newContent.getIdentifier() != null) {
@@ -123,8 +124,6 @@ public class IndexView extends Application {
                 itemAtivo.setActive(true);
             }
         }
-
-        this.miolo.setContent(newContent.getContent());
     }
 
     private void setContentLayout(Pane contentWrapper) {

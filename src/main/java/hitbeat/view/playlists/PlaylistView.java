@@ -27,7 +27,15 @@ public class PlaylistView extends MFXScrollPane {
         ListView<Playlist> listView = new ListView<>(playlists, playlist -> {
             return new PlaylistCell(playlist);
         });
+        
+        this.setContent(listView);
 
+        // grow this pane to fill the parent
+        this.setFitToWidth(true);
+        this.setFitToHeight(true);
+    }
+
+    public FloatingActionButton getFab(){
         FloatingActionButton addPlaylistButton = new FloatingActionButton();
         Image add = new Image("/hitbeat/images/add-rounded.png", 30, 30, false, false);
         addPlaylistButton.setIcon(add);
@@ -35,12 +43,6 @@ public class PlaylistView extends MFXScrollPane {
             MioloController.getInstance().loadPlaylistCreateView();
         });
 
-        MioloController.getInstance().setFab(addPlaylistButton);
-        
-        this.setContent(listView);
-
-        // grow this pane to fill the parent
-        this.setFitToWidth(true);
-        this.setFitToHeight(true);
+        return addPlaylistButton;
     }
 }
