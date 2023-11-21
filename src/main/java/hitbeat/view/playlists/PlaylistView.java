@@ -17,6 +17,7 @@ public class PlaylistView extends MFXScrollPane {
 
     public PlaylistView() {
         super();
+        MioloController.getInstance().setTitle("Playlists");
 
         playlists = controller.fetchAll();
 
