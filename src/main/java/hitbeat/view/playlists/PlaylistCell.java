@@ -1,6 +1,6 @@
 package hitbeat.view.playlists;
 
-import hitbeat.controller.IndexController;
+import hitbeat.controller.MioloController;
 import hitbeat.controller.player.PlayerController;
 import hitbeat.model.Playlist;
 import hitbeat.view.base.widgets.Cover;
@@ -12,16 +12,17 @@ import javafx.scene.text.Text;
 public class PlaylistCell extends BaseCell<Playlist> {
     private Text playlistName = new Text("");
     private Cover playlistCover = new Cover();
-    private IndexController mioloController = IndexController.getInstance();
 
     public PlaylistCell(Playlist playlist) {
         VBox playlistCard = new VBox();
+        playlistCard.setSpacing(8);
         playlistCard.setPrefHeight(80);
 
         playlistCover.setFit(150);
 
         playlistName.setStyle("-fx-font-weight: bold; -fx-font-size: 16;");
         playlistName.setFill(Color.WHITE);
+
         playlistCard.getChildren().addAll(playlistCover, playlistName);
 
         updateItem(playlist);
@@ -36,7 +37,6 @@ public class PlaylistCell extends BaseCell<Playlist> {
         this.setOnMouseExited(e -> {
             playlistCover.showPlayButton(false);
         });
-
     }
 
     @Override
@@ -45,8 +45,9 @@ public class PlaylistCell extends BaseCell<Playlist> {
             playlistName.setText(item.getName());
             playlistCover.setCoverImage(item.getCover(150));
             this.setOnMouseClicked(e -> {
-                if (!playlistCover.isMouseOverPlayButton())
-                    mioloController.loadPlayListDetailView(item);
+                if (!playlistCover.isMouseOverPlayButton()){
+                    MioloController.getInstance().loadPlayListDetailView(item);
+                }
             });
 
             playlistCover.setPlayButtonAction(() -> {

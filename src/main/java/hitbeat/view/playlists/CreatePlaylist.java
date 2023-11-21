@@ -1,6 +1,6 @@
 package hitbeat.view.playlists;
 
-import hitbeat.controller.IndexController;
+import hitbeat.controller.MioloController;
 import hitbeat.controller.playlist.PlaylistController;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
@@ -12,7 +12,6 @@ import javafx.scene.text.Text;
 public class CreatePlaylist extends MFXScrollPane{
     // private ObservableList<Playlist> playlists;
     private final PlaylistController controller = new PlaylistController();
-    private final IndexController mioloController = IndexController.getInstance();
 
     public CreatePlaylist() {
         super();
@@ -30,7 +29,7 @@ public class CreatePlaylist extends MFXScrollPane{
         saveButton.setStyle("-fx-background-color: #2195f3; -fx-text-fill: #ffffff;");
         saveButton.onMouseClickedProperty().set((event) -> {
             controller.createPlaylist(nameField.getText());
-            mioloController.loadPlaylistsView();
+            MioloController.getInstance().loadPlaylistsView();
         });
         VBox page = new VBox(); 
         page.getChildren().addAll(title, nameField, saveButton);

@@ -5,10 +5,11 @@ import java.util.Map;
 
 import hitbeat.controller.ContentUpdated;
 import hitbeat.controller.Icons;
-import hitbeat.controller.IndexController;
+import hitbeat.controller.MioloController;
 import hitbeat.view.Player.Footer;
 // ... Other imports ...
 import hitbeat.view.base.mementos.ContentMemento;
+import hitbeat.view.base.widgets.Miolo;
 import hitbeat.view.base.widgets.SVGWidget;
 import hitbeat.view.sidebar.Sidebar;
 import hitbeat.view.sidebar.SidebarItem;
@@ -36,20 +37,20 @@ public class IndexView extends Application {
     private BorderPane root;
     private Scene scene;
     private Sidebar sidebar;
-    private Node content;
-    private final IndexController controller = IndexController.getInstance();
+    private Miolo miolo;
     private final Icons icons = new Icons();
     private Map<String, SidebarItem> sidebarItems = new HashMap<>();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         root = new BorderPane();
-        content = new StartPage();
-        this.setContentLayout((Pane) content);
+        miolo = new Miolo();
+        MioloController.getInstance().setMiolo(miolo);
+        this.setContentLayout((Pane) miolo);
         sidebar = setupSidebar();
         Footer footer = new Footer();
 
-        root.setCenter(content);
+        root.setCenter(miolo);
         root.setLeft(sidebar);
         root.setBottom(footer);
 
@@ -58,17 +59,20 @@ public class IndexView extends Application {
 
         setupEventHandlers();
 
-        controller.setOnRestoreCallback(this::restoreFromMemento); // Setup the callback for restoration
+        // controller.setOnRestoreCallback(this::restoreFromMemento); // Setup the callback for restoration
 
         setupScene(primaryStage);
     }
 
     private void setupEventHandlers() {
+        MioloController controller = MioloController.getInstance();
         controller.setContentChangedConsumer(this::updateContent);
-        controller.setSaveStateRequestConsumer(this::saveToMemento);
+        // controller.setSaveStateRequestConsumer(this::saveToMemento);
     }
 
     private Sidebar setupSidebar() {
+        MioloController controller = MioloController.getInstance();
+
         SidebarItem index = new SidebarItem("Início", icons.getHome(), controller::loadStartPage);
         index.setActive(true);
         sidebarItems.put("index", index);
@@ -78,6 +82,7 @@ public class IndexView extends Application {
         sidebarItems.put("artists", new SidebarItem("Artistas", icons.getArtists(), controller::loadArtistsView));
         sidebarItems.put("playlists",
                 new SidebarItem("Playlists", icons.getPlaylists(), controller::loadPlaylistsView));
+
         ImageView logo = new ImageView("/hitbeat/images/hitbeat-icon.png");
         logo.setFitWidth(50);
         logo.setPreserveRatio(true);
@@ -136,8 +141,8 @@ public class IndexView extends Application {
             }
         }
 
-        this.content = newContent.getContent();
-        root.setCenter(wrapContentWithBackButton());
+        this.miolo.setContent(newContent.getContent());
+        // root.setCenter(wrapContentWithBackButton());
     }
 
     public ContentMemento saveToMemento() {
@@ -162,21 +167,21 @@ public class IndexView extends Application {
         return content;
     }
 
-    private StackPane wrapContentWithBackButton() {
-        StackPane contentWrapper = new StackPane(this.content);
+    // private StackPane wrapContentWithBackButton() {
+    //     // StackPane contentWrapper = new StackPane(this.content);
 
-        // Check if there are any saved mementos before adding the back button
-        if (controller.hasMemento()) {
-            // set the content with a top padding of the size of the back button
-            content.setStyle("-fx-padding: " + 2 * BACK_BUTTON_SIZE + " 0 0 0; -fx-background-color: transparent;");
-            MFXButton backButton = createBackButton();
-            contentWrapper.getChildren().add(backButton);
-        }
+    //     // // Check if there are any saved mementos before adding the back button
+    //     // if (controller.hasMemento()) {
+    //     //     // set the content with a top padding of the size of the back button
+    //     //     content.setStyle("-fx-padding: " + 2 * BACK_BUTTON_SIZE + " 0 0 0; -fx-background-color: transparent;");
+    //     //     MFXButton backButton = createBackButton();
+    //     //     contentWrapper.getChildren().add(backButton);
+    //     // }
 
-        setContentLayout(contentWrapper);
+    //     // setContentLayout(contentWrapper);
 
-        return contentWrapper;
-    }
+    //     // return contentWrapper;
+    // }
 
     private void setContentLayout(Pane contentWrapper) {
         Layout.getInstance().setContentWidth(contentWrapper.widthProperty());
@@ -193,7 +198,7 @@ public class IndexView extends Application {
         StackPane.setAlignment(backButton, Pos.TOP_LEFT);
         StackPane.setMargin(backButton, new Insets(10));
 
-        backButton.setOnAction(e -> controller.restoreLastState());
+        // backButton.setOnAction(e -> controller.restoreLastState());
 
         return backButton;
     }

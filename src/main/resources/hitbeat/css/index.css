@@ -76,3 +76,27 @@
     -mfx-ripple-color: -main-color;
     -fx-background-radius: 100;
 }
+
+.fab {
+    -fx-background-color: -main-color;
+    background-color: -main-color;
+    -fx-text-fill: white;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    border-radius: 100;
+    -fx-padding: 0px;
+    padding: 0px;
+    -fx-pref-height: 40px;
+    -fx-pref-width: 40px;
+}
+
+.fab .mfx-ripple-generator {
+    -mfx-auto-clip: true;
+    -mfx-ripple-color: -main-color;
+    -fx-background-radius: 100;
+}
+
+.mfx-scroll-pane {
+    -fx-background-color: transparent;
+    background-color: transparent;
+}
