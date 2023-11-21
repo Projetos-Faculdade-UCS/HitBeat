@@ -14,13 +14,15 @@ import hitbeat.view.sidebar.Sidebar;
 import hitbeat.view.sidebar.SidebarItem;
 import hitbeat.view.sidebar.SidebarTopic;
 import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.css.themes.MFXThemeManager;
-import io.github.palexdev.materialfx.css.themes.Themes;
+import io.github.palexdev.materialfx.theming.JavaFXThemes;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.UserAgentBuilder;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -74,7 +76,8 @@ public class IndexView extends Application {
         sidebarItems.put("tracks", new SidebarItem("Todas", icons.getTracks(), controller::loadTracksView));
         sidebarItems.put("library", new SidebarItem("Minha Biblioteca", null, controller::loadLibraryView));
         sidebarItems.put("artists", new SidebarItem("Artistas", icons.getArtists(), controller::loadArtistsView));
-        sidebarItems.put("playlists", new SidebarItem("Playlists", icons.getPlaylists(), controller::loadPlaylistsView));
+        sidebarItems.put("playlists",
+                new SidebarItem("Playlists", icons.getPlaylists(), controller::loadPlaylistsView));
         ImageView logo = new ImageView("/hitbeat/images/hitbeat-icon.png");
         logo.setFitWidth(50);
         logo.setPreserveRatio(true);
@@ -87,8 +90,7 @@ public class IndexView extends Application {
                         sidebarItems.get("genres"),
                         sidebarItems.get("tracks"),
                         sidebarItems.get("artists"),
-                        sidebarItems.get("playlists")
-                        ),
+                        sidebarItems.get("playlists")),
                 new SidebarTopic(
                         "Gerenciar",
                         sidebarItems.get("library")));
@@ -102,10 +104,23 @@ public class IndexView extends Application {
         primaryStage.setMinHeight(600);
         primaryStage.setMinWidth(800);
 
+        Image applicationIcon = new Image(getClass().getResourceAsStream("/hitbeat/images/hitbeat-icon.png"));
+        primaryStage.getIcons().add(applicationIcon);
+
         // Set border radius
         scene.setFill(Color.TRANSPARENT);
 
-        MFXThemeManager.addOn(scene, Themes.DEFAULT, Themes.LEGACY);
+        UserAgentBuilder.builder()
+                .themes(JavaFXThemes.MODENA) // Optional if you don't need JavaFX's default theme, still recommended
+                                             // though
+                .themes(MaterialFXStylesheets.forAssemble(true)) // Adds the MaterialFX's default theme. The boolean
+                                                                 // argument is to include legacy controls
+                .setDeploy(true) // Whether to deploy each theme's assets on a temporary dir on the disk
+                .setResolveAssets(true) // Whether to try resolving @import statements and resources urls
+                .build() // Assembles all the added themes into a single CSSFragment (very powerful class
+                         // check its documentation)
+                .setGlobal();
+
         primaryStage.setScene(scene);
         primaryStage.setTitle("HitBeat");
         primaryStage.show();
