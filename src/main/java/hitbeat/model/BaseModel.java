@@ -40,10 +40,14 @@ public class BaseModel {
                         int origX = (int) (readX / scale);
                         int origY = (int) (readY / scale);
 
-                        Color color = reader.getColor(origX, origY);
-                        writer.setColor((int) (x + readX), (int) (y + readY), color);
+                        // Ensure origX and origY are within bounds
+                        if (origX >= 0 && origX < img.getWidth() && origY >= 0 && origY < img.getHeight()) {
+                            Color color = reader.getColor(origX, origY);
+                            writer.setColor((int) (x + readX), (int) (y + readY), color);
+                        }
                     }
                 }
+
             }
         }
 
