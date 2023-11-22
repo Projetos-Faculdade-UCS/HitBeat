@@ -153,6 +153,14 @@
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
           <version>3.3.0</version>
+          <configuration>
+            <archive>
+              <manifest>
+                <addClasspath>true</addClasspath>
+                <mainClass>hitbeat.App</mainClass>
+              </manifest>
+            </archive>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
@@ -171,24 +179,7 @@
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.4.5</version>
         </plugin>
-        
-        <!-- <plugin>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok-maven-plugin</artifactId>
-            <version>1.18.22</version>
-            <executions>
-                <execution>
-                    <phase>generate-sources</phase>
-                    <goals>
-                        <goal>delombok</goal>
-                    </goals>
-                    <configuration>
-                        <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
-                        <outputDirectory>${project.build.directory}/delombok</outputDirectory>
-                    </configuration>
-                </execution>
-            </executions>
-        </plugin> -->
+
         <plugin>
           <groupId>org.openjfx</groupId>
           <artifactId>javafx-maven-plugin</artifactId>
@@ -205,23 +196,19 @@
     </pluginManagement>
 
     <plugins>
-        <!-- <plugin>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok-maven-plugin</artifactId>
-            <version>1.18.20.0</version> 
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-shade-plugin</artifactId>
+            <version>3.5.1</version> <!-- Use the latest version available -->
             <executions>
                 <execution>
-                    <phase>generate-sources</phase>
+                    <phase>package</phase>
                     <goals>
-                        <goal>delombok</goal>
+                        <goal>shade</goal>
                     </goals>
-                    <configuration>
-                        <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
-                        <outputDirectory>${project.build.directory}/delombok</outputDirectory>
-                    </configuration>
                 </execution>
             </executions>
-        </plugin> -->
+        </plugin>
     </plugins>
   </build>
 </project>
