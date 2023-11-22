@@ -69,6 +69,9 @@ public class IndexView extends Application {
         sidebarItems.put("tracks", new SidebarItem("Todas", icons.getTracks(), controller::loadTracksView));
         sidebarItems.put("library", new SidebarItem("Minha Biblioteca", null, controller::loadLibraryView));
         sidebarItems.put("artists", new SidebarItem("Artistas", icons.getArtists(), controller::loadArtistsView));
+        sidebarItems.put("albums", new SidebarItem("Álbuns", icons.getAlbum(), controller::loadArtistsView));
+        sidebarItems.put("favorites", new SidebarItem("Favoritas", icons.getFavorite(true), controller::loadFavoritesView));
+
         sidebarItems.put("playlists",
                 new SidebarItem("Playlists", icons.getPlaylists(), controller::loadPlaylistsView));
 
@@ -81,10 +84,12 @@ public class IndexView extends Application {
                 new SidebarTopic(
                         "Minhas Músicas",
                         sidebarItems.get("index"),
-                        sidebarItems.get("genres"),
                         sidebarItems.get("tracks"),
-                        sidebarItems.get("artists"),
-                        sidebarItems.get("playlists")),
+                        sidebarItems.get("favorites"),
+                        sidebarItems.get("playlists"),
+                        sidebarItems.get("genres"),
+                        sidebarItems.get("artists")
+                        ),
                 new SidebarTopic(
                         "Gerenciar",
                         sidebarItems.get("library")));

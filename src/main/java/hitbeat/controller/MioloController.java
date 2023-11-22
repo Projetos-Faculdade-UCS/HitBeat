@@ -5,6 +5,7 @@ import hitbeat.view.StartPage;
 import hitbeat.view.artists.ArtistsView;
 import hitbeat.view.base.widgets.FloatingActionButton;
 import hitbeat.view.base.widgets.Miolo;
+import hitbeat.view.favorites.FavoritesView;
 import hitbeat.view.genres.GenresView;
 import hitbeat.view.library.LibraryPage;
 import hitbeat.view.playlists.CreatePlaylist;
@@ -84,6 +85,11 @@ public class MioloController {
     public void loadPlayListDetailView(Playlist playlist) {
         DetailPlaylist detailPlaylist = new DetailPlaylist(playlist);
         updateContent(new MioloUpdated(detailPlaylist, "detailPlaylist", playlist.getName()));
+    }
+
+    public void loadFavoritesView() {
+        FavoritesView favoritesView = new FavoritesView();
+        updateContent(new MioloUpdated(favoritesView, "favorites", "Favoritas"));
     }
 
     private void updateContent(MioloUpdated updatedContent) {
