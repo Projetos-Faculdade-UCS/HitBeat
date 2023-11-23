@@ -38,8 +38,10 @@
         <!-- Mention annotated class -->
         <mapping class="hitbeat.model.Track"/>
         <mapping class="hitbeat.model.Genre"/>
-        <mapping class="hitbeat.model.Queue"/>
         <mapping class="hitbeat.model.Artist"/>
+        <mapping class="hitbeat.model.PlaylistTrack"/>
+        <mapping class="hitbeat.model.Playlist"/>
+        <mapping class="hitbeat.model.Album"/>
 
     </session-factory>
 </hibernate-configuration>

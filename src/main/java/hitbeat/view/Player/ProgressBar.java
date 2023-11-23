@@ -3,64 +3,89 @@ package hitbeat.view.Player;
 import hitbeat.controller.player.PlayerController;
 import hitbeat.view.base.widgets.Margin;
 import hitbeat.view.base.wrappers.Slider;
-import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
+public class ProgressBar extends HBox {
+    private final Label minValueLabel;
+    private final Label maxValueLabel;
+    private final Slider progressSlider;
 
-public class ProgressBar extends HBox{
-    Label minValueLabel;
-    Label maxValueLabel;
-    Slider progressSlider;
-    
-    private boolean isDragging = false;
+    private volatile boolean isDragging = false;
 
     public ProgressBar() {
         super(1);
 
         PlayerController player = PlayerController.getInstance();
-        
-        // ------infos de duracao---------
+
+        // Initialize UI components once to avoid unnecessary object creation.
         progressSlider = new Slider();
-        progressSlider.setMin(0);
-        progressSlider.setValue(0);
         minValueLabel = new Label("00:00");
         maxValueLabel = new Label("00:00");
-        
-        // ------estilos---------
+
+        // Style setup
+        applyStyles();
+
+        // Event handlers setup
+        setupEventHandlers(player);
+
+        // Layout setup
+        layoutComponents();
+    }
+
+    private void applyStyles() {
         minValueLabel.getStyleClass().add("label");
         maxValueLabel.getStyleClass().add("label");
         progressSlider.getStyleClass().add("progress-slider");
         this.setId("progress-bar");
+    }
 
-        // ------atualizador do tempo---------
-        Timeline progressManager = player.getProgressManager(this);
+    private void setupEventHandlers(PlayerController player) {
+        player.setOnSongStart(song -> Platform.runLater(() -> {
+            double duration = song.getDuration().toSeconds();
+            progressSlider.setMin(0);
+            progressSlider.setMax(duration);
+            progressSlider.setValue(0);
+            minValueLabel.setText("00:00");
+            maxValueLabel.setText(formatTime(duration));
+        }));
 
-        progressSlider.setOnMousePressed(event -> isDragging=true );
-        progressSlider.setOnMouseReleased(event ->{
+        player.setOnProgress(progress -> Platform.runLater(() -> {
+            if (!isDragging) {
+                double currentTime = progress.getCurrentTime();
+                progressSlider.setValue(currentTime);
+                minValueLabel.setText(formatTime(currentTime));
+            }
+        }));
+
+        progressSlider.setOnMousePressed(event -> isDragging = true);
+
+        progressSlider.setOnMouseReleased(event -> {
             player.seek(progressSlider.getValue());
-            isDragging=false;
+            isDragging = false;
         });
-        progressManager.setCycleCount(Timeline.INDEFINITE);
-        progressManager.play();
+    }
 
+    private void layoutComponents() {
         HBox.setHgrow(progressSlider, Priority.ALWAYS);
         Margin minLabel = new Margin(minValueLabel, 0, 10, 0, 0);
         Margin maxLabel = new Margin(maxValueLabel, 0, 0, 0, 6);
-
         getChildren().addAll(minLabel, progressSlider, maxLabel);
     }
 
-    public void setProgressIndicators(double duracao, double tempoAtual) {
-        if (isDragging){
-            minValueLabel.setText( this.formatTime(progressSlider.getValue()) );
-            return;
-        }
-        progressSlider.setMax(duracao);
-        maxValueLabel.setText(this.formatTime(duracao));
-        progressSlider.setValue(tempoAtual);
-        minValueLabel.setText(this.formatTime(tempoAtual));
+    public void setProgressIndicators(double duration, double currentTime) {
+        Platform.runLater(() -> {
+            if (!isDragging) {
+                progressSlider.setMax(duration);
+                progressSlider.setValue(currentTime);
+                minValueLabel.setText(formatTime(currentTime));
+                maxValueLabel.setText(formatTime(duration));
+            } else {
+                minValueLabel.setText(formatTime(progressSlider.getValue()));
+            }
+        });
     }
 
     private String formatTime(double time) {

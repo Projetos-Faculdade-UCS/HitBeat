@@ -2,11 +2,12 @@ package hitbeat.view.genres;
 
 import hitbeat.controller.genres.GenresController;
 import hitbeat.model.Genre;
+import hitbeat.view.BaseView;
 import hitbeat.view.base.widgets.listview.ListView;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import javafx.collections.ObservableList;
 
-public class GenresView extends MFXScrollPane {
+public class GenresView extends MFXScrollPane implements BaseView{
     private ObservableList<Genre> genres;
     private final GenresController controller = new GenresController();
 
@@ -30,6 +31,10 @@ public class GenresView extends MFXScrollPane {
         this.setFitToWidth(true);
         this.setFitToHeight(true);
 
+    }
 
+    @Override
+    public Object getData() {
+        return null;
     }
 }

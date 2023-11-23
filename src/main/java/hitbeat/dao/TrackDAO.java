@@ -1,31 +1,17 @@
 package hitbeat.dao;
 
-import java.util.Date;
+import java.util.List;
 
-import hitbeat.model.Genre;
+import hitbeat.model.Artist;
 import hitbeat.model.Track;
+import hitbeat.util.HibernateUtil;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 
 public class TrackDAO extends BaseDAO<Track> {
 
     public TrackDAO() {
         super(Track.class);
-    }
-
-    public static void mockData() {
-        GenreDAO genreDAO = new GenreDAO();
-        Genre genre = genreDAO.first();
-        Date dataAtual = new Date();
-
-        Track track = new Track();
-        track.setName("Track 1");
-        track.setCreationDate(dataAtual);
-        track.setDuration(100);
-        track.setExplicit(false);
-        track.setFavorite(false);
-        track.setGenre(genre);
-        track.setArtist(null);
-        TrackDAO trackDAO = new TrackDAO();
-        trackDAO.save(track);
     }
 
     @Override
@@ -37,7 +23,19 @@ public class TrackDAO extends BaseDAO<Track> {
                 .withExplicit(newTrack.isExplicit())
                 .withFavorite(newTrack.isFavorite())
                 .withGenre(newTrack.getGenre())
-                .withPicture(newTrack.getPicture())
                 .withSingle(newTrack.isSingle());
+    }
+
+    public List<Track> findByAlbumArtist(Artist artist) {
+        EntityManager em = HibernateUtil.getEntityManager();
+        TypedQuery<Track> query = em.createNamedQuery("Track.findByAlbumArtist", Track.class);
+        query.setParameter("artist", artist);
+        return query.getResultList();
+    }
+
+    public List<Track> getFavorites() {
+        EntityManager em = HibernateUtil.getEntityManager();
+        TypedQuery<Track> query = em.createNamedQuery("Track.getFavorites", Track.class);
+        return query.getResultList();
     }
 }

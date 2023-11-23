@@ -10,10 +10,11 @@ Projeto para a disciplina "Projeto Temático I" da Universidade de Caxias do Sul
 
 ## Dependências
 
+* Java 21.0.1
+* JavaFx
 * Maven
 * libavformat-dev
 * ffmpeg
-* JavaFx
 * [MaterialFX](https://github.com/palexdev/MaterialFX/)
 
 ## Instruções para execução
