@@ -2,6 +2,7 @@ package hitbeat.view.playlists;
 
 import hitbeat.controller.MioloController;
 import hitbeat.controller.playlist.PlaylistController;
+import hitbeat.view.BaseView;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import io.github.palexdev.materialfx.controls.MFXTextField;
@@ -9,7 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
-public class CreatePlaylist extends MFXScrollPane{
+public class CreatePlaylist extends MFXScrollPane implements BaseView{
     // private ObservableList<Playlist> playlists;
     private final PlaylistController controller = new PlaylistController();
 
@@ -35,5 +36,10 @@ public class CreatePlaylist extends MFXScrollPane{
         page.getChildren().addAll(title, nameField, saveButton);
 
         this.setContent(page);
+    }
+
+    @Override
+    public Object getData() {
+        return null;
     }
 }

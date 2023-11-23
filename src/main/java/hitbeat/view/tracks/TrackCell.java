@@ -1,9 +1,11 @@
 package hitbeat.view.tracks;
 
 import hitbeat.controller.Icons;
+import hitbeat.controller.MioloController;
 import hitbeat.controller.player.PlayerController;
 import hitbeat.controller.playlist.PlaylistController;
 import hitbeat.controller.tracks.TracksController;
+import hitbeat.model.Playlist;
 import hitbeat.model.Track;
 import hitbeat.view.base.utils.MyButton;
 import hitbeat.view.base.utils.MyContextMenu;
@@ -30,6 +32,7 @@ public class TrackCell extends BaseCell<Track> {
     private MyButton favoriteBtn;
     private Icons icons = new Icons();
     private PlaylistController playlistController = new PlaylistController();
+    private MioloController mioloController = MioloController.getInstance();
     private TracksController tracksController = new TracksController();
 
     public TrackCell(Track track) {
@@ -92,7 +95,6 @@ public class TrackCell extends BaseCell<Track> {
 
         MyContextMenu contextMenu = new MyContextMenu();
         MyMenu addMenu = new MyMenu("Adicionar à playlist");
-        MyMenuItem removeItem = new MyMenuItem("Remover desta playlist");
 
         addMenu.getItems().add(new MenuItem("")); // nodo ancora
         addMenu.setOnShowing(event -> {
@@ -109,8 +111,22 @@ public class TrackCell extends BaseCell<Track> {
             tracksController.toggleFavorite(this.track);
             favoriteBtn.setGraphic(icons.getFavorite(this.track.isFavorite()));
         });
+        contextMenu.getItems().addAll(addMenu);
+    
+        MyMenuItem removeItem = new MyMenuItem("Remover desta playlist");
+        Object data1 = mioloController.getCurrentState().getData();
+        if (data1 instanceof Playlist) {
+            contextMenu.getItems().add(removeItem);
+        }
+        removeItem.setOnAction(event -> {
+            Object data = mioloController.getCurrentState().getData();
+            if (data instanceof Playlist) {
+                Playlist playlist = (Playlist) data;
+                playlistController.removeTrack(playlist, this.track);
+                mioloController.loadPlayListDetailView(playlist);
+            }
+        });
 
-        contextMenu.getItems().addAll(addMenu, removeItem);
         optionsBtn.setOnMouseClicked(event -> {
             contextMenu.show(optionsBtn, event.getScreenX(), event.getScreenY());
         });

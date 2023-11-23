@@ -9,6 +9,8 @@ import hitbeat.dao.PlaylistTrackDAO;
 import hitbeat.model.Playlist;
 import hitbeat.model.PlaylistTrack;
 import hitbeat.model.Track;
+import hitbeat.util.HibernateUtil;
+import jakarta.persistence.EntityManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -37,5 +39,16 @@ public class PlaylistController extends ModelController<Playlist>{
 
         PlaylistTrackDAO playlistTrackDAO = new PlaylistTrackDAO();
         playlistTrackDAO.bulkCreateOrUpdate(playlistTracks, "id");
+    }
+
+    public void removeTrack(Playlist playlist, Track track) {
+        EntityManager em = HibernateUtil.getEntityManager();
+        em.getTransaction().begin();
+        em.createNamedQuery("PlaylistTrack.delete")
+                .setParameter("playlist", playlist)
+                .setParameter("track", track)
+                .executeUpdate();
+        em.getTransaction().commit();
+
     }
 }

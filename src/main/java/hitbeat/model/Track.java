@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -29,7 +30,10 @@ import lombok.With;
 @Table(name = "track", uniqueConstraints = {
         @UniqueConstraint(columnNames = "filePath", name = "track_filePath_unique")
 })
-@NamedQuery(name = "Track.findByAlbumArtist", query = "SELECT t FROM Track t WHERE t.album.artist = :artist")
+@NamedQueries({
+    @NamedQuery(name = "Track.findByAlbumArtist", query = "SELECT t FROM Track t WHERE t.album.artist = :artist"),
+    @NamedQuery(name = "Track.getFavorites", query = "select t from Track t where t.favorite = true")
+})
 public class Track extends BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

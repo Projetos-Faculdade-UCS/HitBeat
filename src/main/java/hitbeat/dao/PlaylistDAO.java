@@ -1,6 +1,5 @@
 package hitbeat.dao;
 
-import java.util.Date;
 import java.util.List;
 
 import hitbeat.model.Playlist;
@@ -9,13 +8,6 @@ import hitbeat.model.Track;
 public class PlaylistDAO extends BaseDAO<Playlist>{
     public PlaylistDAO(){
         super(Playlist.class);
-        
-        if (this.getAll().isEmpty()) {
-            this.bulkCreateOrUpdate(List.of(
-                new Playlist("Musicas Curtidas", "Musicas que o usuario marcou como curtida",
-                    null, new Date(), null)
-            ), "name");
-        }
     }
     
     @Override

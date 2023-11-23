@@ -2,12 +2,13 @@ package hitbeat.view.library;
 
 import hitbeat.controller.library.LibraryController;
 import hitbeat.util.CustomMP3File;
+import hitbeat.view.BaseView;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-public class LibraryPage extends VBox {
+public class LibraryPage extends VBox implements BaseView{
 
     private LibraryController controller;
 
@@ -75,4 +76,10 @@ public class LibraryPage extends VBox {
     public void setFilesFromFolder(ObservableList<CustomMP3File> files) {
         mp3FileList.setFiles(files);
     }
+
+    @Override
+    public Object getData() {
+        return null;
+    }
+
 }

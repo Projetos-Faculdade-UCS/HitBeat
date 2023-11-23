@@ -33,4 +33,9 @@ public class TrackDAO extends BaseDAO<Track> {
         return query.getResultList();
     }
 
+    public List<Track> getFavorites() {
+        EntityManager em = HibernateUtil.getEntityManager();
+        TypedQuery<Track> query = em.createNamedQuery("Track.getFavorites", Track.class);
+        return query.getResultList();
+    }
 }

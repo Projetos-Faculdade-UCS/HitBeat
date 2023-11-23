@@ -33,4 +33,8 @@ public class Icons {
         }
         return new SVGWidget("/hitbeat/svg/heart.svg", 15, Color.WHITE);
     }
+
+    public SVGWidget getAlbum(){
+        return new SVGWidget("/hitbeat/svg/album.svg", 15, Color.WHITE);
+    }
 }

@@ -5,6 +5,7 @@ import hitbeat.view.StartPage;
 import hitbeat.view.artists.ArtistsView;
 import hitbeat.view.base.widgets.FloatingActionButton;
 import hitbeat.view.base.widgets.Miolo;
+import hitbeat.view.favorites.FavoritesView;
 import hitbeat.view.genres.GenresView;
 import hitbeat.view.library.LibraryPage;
 import hitbeat.view.playlists.CreatePlaylist;
@@ -16,7 +17,7 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import javafx.application.Platform;
 
 public class MioloController {
-    private BehaviorSubject<MioloUpdated> contentChangedSubject = BehaviorSubject.create();
+    private BehaviorSubject<MioloState> contentChangedSubject = BehaviorSubject.create();
     private Miolo miolo;
 
     private MioloController() {
@@ -48,50 +49,59 @@ public class MioloController {
 
     public void loadStartPage() {
         StartPage startPage = new StartPage();
-        updateContent(new MioloUpdated(startPage, "index", "Início"));
+        updateMiolo(new MioloState(startPage, "index", "Início"));
     }
 
     public void loadTracksView() {
         TracksView tracksView = new TracksView();
-        updateContent(new MioloUpdated(tracksView, "tracks", "Todas"));
+        updateMiolo(new MioloState(tracksView, "tracks", "Todas"));
     }
 
     public void loadGenresView() {
         GenresView genresView = new GenresView();
-        updateContent(new MioloUpdated(genresView, "genres", "Gêneros"));
+        updateMiolo(new MioloState(genresView, "genres", "Gêneros"));
     }
 
     public void loadLibraryView() {
         LibraryPage libraryPage = new LibraryPage();
-        updateContent(new MioloUpdated(libraryPage, "library", "Minha Biblioteca"));
+        updateMiolo(new MioloState(libraryPage, "library", "Minha Biblioteca"));
     }
 
     public void loadArtistsView() {
         ArtistsView artistsView = new ArtistsView();
-        updateContent(new MioloUpdated(artistsView, "artists", "Artistas"));
+        updateMiolo(new MioloState(artistsView, "artists", "Artistas"));
     }
 
     public void loadPlaylistsView() {
         PlaylistView playlistsView = new PlaylistView();
-        updateContent(new MioloUpdated(playlistsView, "playlists", "Playlists", playlistsView.getFab()));
+        updateMiolo(new MioloState(playlistsView, "playlists", "Playlists", playlistsView.getFab()));
     }
 
     public void loadPlaylistCreateView() {
         CreatePlaylist createPlaylist = new CreatePlaylist();
-        updateContent(new MioloUpdated(createPlaylist, "createPlaylist", "Criar Playlist"));
+        updateMiolo(new MioloState(createPlaylist, "createPlaylist", "Criar Playlist"));
     }
 
     public void loadPlayListDetailView(Playlist playlist) {
         DetailPlaylist detailPlaylist = new DetailPlaylist(playlist);
-        updateContent(new MioloUpdated(detailPlaylist, "detailPlaylist", playlist.getName()));
+        updateMiolo(new MioloState(detailPlaylist, "detailPlaylist", playlist.getName()));
     }
 
-    private void updateContent(MioloUpdated updatedContent) {
+    public void loadFavoritesView() {
+        FavoritesView favoritesView = new FavoritesView();
+        updateMiolo(new MioloState(favoritesView, "favorites", "Favoritas"));
+    }
+
+    private void updateMiolo(MioloState updatedContent) {
         updatedContent.setShowBackButton(true);
         contentChangedSubject.onNext(updatedContent);
     }
 
-    public void setOnContentChanged(Consumer<MioloUpdated> consumer) {
+    public void setOnContentChanged(Consumer<MioloState> consumer) {
         contentChangedSubject.subscribe(consumer);
+    }
+
+    public MioloState getCurrentState() {
+        return contentChangedSubject.getValue();
     }
 }

@@ -3,6 +3,7 @@ package hitbeat.view.playlists;
 import hitbeat.controller.playlist.PlaylistController;
 import hitbeat.model.Playlist;
 import hitbeat.model.Track;
+import hitbeat.view.BaseView;
 import hitbeat.view.base.widgets.listview.ListView;
 import hitbeat.view.tracks.TrackCell;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
@@ -12,13 +13,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
-public class DetailPlaylist extends MFXScrollPane{
+public class DetailPlaylist extends MFXScrollPane implements BaseView{
     private ObservableList<Track> tracks;
     private final PlaylistController controller = new PlaylistController();
+    private Playlist playlist;
 
     public DetailPlaylist(Playlist playlist) {
         super(null);
-
+        this.playlist = playlist;
         tracks = controller.getAllTracks(playlist);
 
         ListView<Track> listView = new ListView<>(tracks, track -> {
@@ -40,4 +42,10 @@ public class DetailPlaylist extends MFXScrollPane{
         this.setFitToWidth(true);
         this.setFitToHeight(true);
     }
+
+    @Override
+    public Object getData() {
+        return this.playlist;
+    }
+
 }
