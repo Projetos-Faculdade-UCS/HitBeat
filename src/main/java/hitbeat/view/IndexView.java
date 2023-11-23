@@ -5,7 +5,7 @@ import java.util.Map;
 
 import hitbeat.controller.Icons;
 import hitbeat.controller.MioloController;
-import hitbeat.controller.MioloUpdated;
+import hitbeat.controller.MioloState;
 import hitbeat.view.Player.Footer;
 import hitbeat.view.base.widgets.Miolo;
 import hitbeat.view.sidebar.Sidebar;
@@ -120,7 +120,7 @@ public class IndexView extends Application {
         primaryStage.show();
     }
 
-    public void updateContent(MioloUpdated newContent) {
+    public void updateContent(MioloState newContent) {
         sidebarItems.values().forEach(item -> item.setActive(false));
 
         if (newContent.getIdentifier() != null) {

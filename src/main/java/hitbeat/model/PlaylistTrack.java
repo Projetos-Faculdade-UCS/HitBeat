@@ -1,6 +1,8 @@
 package hitbeat.model;
 
 
+import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -20,6 +22,9 @@ import lombok.With;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name="Playlist_Track")
+@NamedQueries({
+     @NamedQuery(name = "PlaylistTrack.delete", query = "DELETE FROM PlaylistTrack pt WHERE pt.playlist = :playlist AND pt.track = :track"),
+})
 public class PlaylistTrack extends BaseModel{    
 
     @Id

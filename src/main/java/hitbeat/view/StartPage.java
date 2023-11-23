@@ -3,7 +3,7 @@ package hitbeat.view;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
-public class StartPage extends Pane {
+public class StartPage extends Pane implements BaseView{
 
     private Label contentLabel;
 
@@ -21,5 +21,10 @@ public class StartPage extends Pane {
 
     public void setContentText(String text) {
         contentLabel.setText(text);
+    }
+
+    @Override
+    public Object getData() {
+        return null;
     }
 }

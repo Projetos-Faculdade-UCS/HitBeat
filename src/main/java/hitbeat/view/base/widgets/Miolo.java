@@ -1,7 +1,7 @@
 package hitbeat.view.base.widgets;
 
 import hitbeat.controller.MioloController;
-import hitbeat.controller.MioloUpdated;
+import hitbeat.controller.MioloState;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -45,18 +45,18 @@ public class Miolo extends StackPane {
         MioloController.getInstance().setOnContentChanged(this::setContent);
     }
 
-    private void setContent(MioloUpdated contentUpdated) {
-        setContent(contentUpdated.getContent());
-        setTitle(contentUpdated.getTitle());
+    private void setContent(MioloState contentState) {
+        setContent(contentState.getContent());
+        setTitle(contentState.getTitle());
 
-        FloatingActionButton fab = contentUpdated.getFab();
+        FloatingActionButton fab = contentState.getFab();
         if (fab != null) {
             setFab(fab);
         } else {
             removeFab();
         }
 
-        showBackButton(contentUpdated.getShowBackButton());
+        showBackButton(contentState.getShowBackButton());
     }
 
     public void setFab(FloatingActionButton fab) {
