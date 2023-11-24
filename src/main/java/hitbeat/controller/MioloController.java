@@ -91,12 +91,12 @@ public class MioloController {
 
     public void loadPlaylistCreateView() {
         CreatePlaylist createPlaylist = new CreatePlaylist();
-        updateMiolo(new MioloState(createPlaylist, "createPlaylist", "Criar Playlist"));
+        updateMiolo(new MioloState(createPlaylist, "playlists", "Criar Playlist"));
     }
 
     public void loadPlayListDetailView(Playlist playlist) {
         DetailPlaylist detailPlaylist = new DetailPlaylist(playlist);
-        updateMiolo(new MioloState(detailPlaylist, "detailPlaylist", playlist.getName()));
+        updateMiolo(new MioloState(detailPlaylist, "playlists" + playlist.getId().toString(), playlist.getName()));
     }
 
     public void loadFavoritesView() {
