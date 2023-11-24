@@ -3,6 +3,10 @@
     background-color: #1e1e1e;
     -fx-padding: 12px;
     padding: 12px;
+    /* only top left */
+    -fx-border-radius: 20px 0 0 0;
+    border-radius: 20px 0 0 0;
+    -fx-background-radius: 20px 0 0 0;
 }
 
 .sidebar .sidebar-button {

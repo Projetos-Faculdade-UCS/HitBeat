@@ -107,6 +107,7 @@ public class IndexView extends Application {
         primaryStage.getIcons().add(applicationIcon);
 
         scene.setFill(Color.TRANSPARENT);
+        // primaryStage.initStyle(StageStyle.TRANSPARENT);
 
         UserAgentBuilder.builder()
                 .themes(JavaFXThemes.MODENA)

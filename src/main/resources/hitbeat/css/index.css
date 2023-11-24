@@ -9,6 +9,7 @@
     background-color: #212121;
     -fx-border-radius: 20px;
     border-radius: 20px;
+    -fx-background-radius: 20px;
 }
 
 .center-one {

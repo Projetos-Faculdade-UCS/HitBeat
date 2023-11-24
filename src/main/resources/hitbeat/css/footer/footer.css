@@ -27,6 +27,10 @@
     -fx-pref-width: 100%;
     -fx-background-color: #302f2f;
     background-color: #302f2f;
+    /* rounded border on bottom */
+    -fx-background-radius: 0 0 20px 20px;
+    -fx-border-radius: 0 0 20px 20px;
+    border-radius: 0 0 20px 20px;
 }
 .side-box{
     -fx-alignment: center;
