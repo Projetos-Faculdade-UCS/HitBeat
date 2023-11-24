@@ -1,5 +1,7 @@
 package hitbeat.controller;
 
+import java.util.Stack;
+
 import hitbeat.model.Playlist;
 import hitbeat.view.StartPage;
 import hitbeat.view.artists.ArtistsView;
@@ -19,6 +21,7 @@ import javafx.application.Platform;
 public class MioloController {
     private BehaviorSubject<MioloState> contentChangedSubject = BehaviorSubject.create();
     private Miolo miolo;
+    private Stack<MioloStateMemento> mementoStack = new Stack<>();
 
     private MioloController() {
     }
@@ -49,7 +52,16 @@ public class MioloController {
 
     public void loadStartPage() {
         StartPage startPage = new StartPage();
-        updateMiolo(new MioloState(startPage, "index", "Início"));
+
+        MioloState state = new MioloState(startPage, "index", "Início");
+
+        
+            mementoStack.clear();
+
+            MioloStateMemento memento = state.createMemento();
+            mementoStack.push(memento);
+
+        updateMiolo(state, true);
     }
 
     public void loadTracksView() {
@@ -92,8 +104,13 @@ public class MioloController {
         updateMiolo(new MioloState(favoritesView, "favorites", "Favoritas"));
     }
 
-    private void updateMiolo(MioloState updatedContent) {
-        updatedContent.setShowBackButton(true);
+    private void updateMiolo(MioloState updatedContent, boolean... isStartPage) {
+        MioloState currentState = getCurrentState();
+        if (currentState != null && isStartPage.length == 0) {
+            mementoStack.push(currentState.createMemento());
+        }
+
+        updatedContent.setShowBackButton(mementoStack.size() > 1);
         contentChangedSubject.onNext(updatedContent);
     }
 
@@ -103,5 +120,16 @@ public class MioloController {
 
     public MioloState getCurrentState() {
         return contentChangedSubject.getValue();
+    }
+
+    public void restoreFromMemento() {
+        if (mementoStack.size() < 1) {
+            return;
+        }
+        MioloStateMemento memento = mementoStack.pop();
+        MioloState mioloState = new MioloState(memento.getContent(), memento.getIdentifier(), memento.getTitle(),
+                memento.getFab());
+        mioloState.setShowBackButton(memento.getShowBackButton());
+        contentChangedSubject.onNext(mioloState);
     }
 }

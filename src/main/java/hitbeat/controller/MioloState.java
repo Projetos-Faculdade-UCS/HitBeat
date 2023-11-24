@@ -49,4 +49,16 @@ public class MioloState{
 
         return data;
     }
+
+    public MioloStateMemento createMemento() {
+        return new MioloStateMemento(content, identifier, title, fab, showBackButton);
+    }
+
+    public void restoreFromMemento(MioloStateMemento memento) {
+        this.content = memento.getContent();
+        this.identifier = memento.getIdentifier();
+        this.title = memento.getTitle();
+        this.fab = memento.getFab();
+        this.showBackButton = memento.getShowBackButton();
+    }
 }

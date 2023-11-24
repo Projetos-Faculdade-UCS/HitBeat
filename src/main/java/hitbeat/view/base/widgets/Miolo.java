@@ -20,27 +20,24 @@ public class Miolo extends StackPane {
     private Node content = new Region();
     private VBox contentContainer = new VBox();
 
-    public Miolo(Node initialPage) {
+    public Miolo() {
         super();
-    
+
         this.setAlignment(Pos.CENTER);
-    
+
         contentContainer.setAlignment(Pos.TOP_LEFT);
         contentContainer.setSpacing(0);
         contentContainer.setPadding(new Insets(0));
         contentContainer.getChildren().addAll(this.header, this.content);
-    
+
         VBox.setVgrow(content, javafx.scene.layout.Priority.ALWAYS);
         VBox.setVgrow(contentContainer, javafx.scene.layout.Priority.ALWAYS);
-    
+
         this.getChildren().addAll(contentContainer, fab);
-    
+
         setOnBackClickedCallback(() -> {
-            System.out.println("Back clicked");
+            MioloController.getInstance().restoreFromMemento();
         });
-    
-        // Set the initial content
-        setContent(initialPage);
 
         MioloController.getInstance().setOnContentChanged(this::setContent);
     }
@@ -91,10 +88,10 @@ public class Miolo extends StackPane {
     public void showBackButton(Boolean show) {
         header.showBackButton(show);
     }
-    
+
     public void hideBackButton() {
         header.hideBackButton();
-    }    
+    }
 
     class FabContainer extends GridPane {
         public FabContainer() {
@@ -178,7 +175,6 @@ public class Miolo extends StackPane {
                 hide();
             }
         }
-        
 
         public void hide() {
             if (this.getChildren().contains(backButton)) {
