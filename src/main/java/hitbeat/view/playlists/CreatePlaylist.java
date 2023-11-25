@@ -24,15 +24,22 @@ public class CreatePlaylist extends MFXScrollPane implements BaseView{
         nameField.setFloatingText("Nome");
         nameField.setPrefHeight(30);
         nameField.prefWidthProperty().bind(this.widthProperty());
+
+        MFXTextField descriptionField = new MFXTextField();
+        descriptionField.setFloatingText("Descrição");
+        descriptionField.setPrefHeight(30);
+        descriptionField.prefWidthProperty().bind(this.widthProperty());
+
         
         MFXButton saveButton = new MFXButton("Salvar");
         saveButton.setStyle("-fx-background-color: #2195f3; -fx-text-fill: #ffffff;");
         saveButton.onMouseClickedProperty().set((event) -> {
-            controller.createPlaylist(nameField.getText());
+            controller.createPlaylist(nameField.getText(), descriptionField.getText());
             MioloController.getInstance().loadPlaylistsView();
         });
         VBox page = new VBox(); 
-        page.getChildren().addAll(title, nameField, saveButton);
+        page.getChildren().addAll(title, nameField, descriptionField, saveButton);
+        page.setSpacing(10);
         this.getStylesheets().add(getClass().getResource("/hitbeat/css/form.css").toExternalForm());
         this.setContent(page);
     }
