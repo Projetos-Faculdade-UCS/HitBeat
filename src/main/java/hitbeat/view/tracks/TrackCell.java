@@ -12,6 +12,8 @@ import hitbeat.view.base.widgets.ListTile;
 import hitbeat.view.base.widgets.RoundedButton;
 import hitbeat.view.base.widgets.SVGWidget;
 import hitbeat.view.base.widgets.listview.BaseCell;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
@@ -34,6 +36,7 @@ public class TrackCell extends BaseCell<Track> {
     private PlaylistController playlistController = new PlaylistController();
     private MioloController mioloController = MioloController.getInstance();
     private TracksController tracksController = new TracksController();
+    private BehaviorSubject<Track> trackRemovedSubject = BehaviorSubject.create();
 
     public TrackCell(Track track) {
         // Initialize UI components
@@ -68,6 +71,10 @@ public class TrackCell extends BaseCell<Track> {
         ListTile listTile = new ListTile(playbox, title, subtitle, getMenuBtns());
         this.getChildren().add(listTile);
         this.getStylesheets().add(getClass().getResource("/hitbeat/css/track.css").toExternalForm());
+    }
+
+    public void setOnTrackRemoved(Consumer<Track> consumer) {
+        trackRemovedSubject.subscribe(consumer);
     }
 
     @Override
@@ -113,7 +120,7 @@ public class TrackCell extends BaseCell<Track> {
             if (data instanceof Playlist) {
                 Playlist playlist = (Playlist) data;
                 playlistController.removeTrack(playlist, this.track);
-                mioloController.loadPlayListDetailView(playlist);
+                trackRemovedSubject.onNext(track);
             }
         });
 

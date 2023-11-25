@@ -34,7 +34,7 @@ public class IndexView extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         root = new BorderPane();
-        miolo = new Miolo(new StartPage());
+        miolo = new Miolo();
         MioloController controller = MioloController.getInstance();
         controller.setMiolo(miolo);
         this.setContentLayout((Pane) miolo);
@@ -51,6 +51,7 @@ public class IndexView extends Application {
         setupEventHandlers();
 
         setupScene(primaryStage);
+        controller.loadStartPage();
     }
 
     private void setupEventHandlers() {
@@ -70,7 +71,8 @@ public class IndexView extends Application {
         sidebarItems.put("library", new SidebarItem("Minha Biblioteca", null, controller::loadLibraryView));
         sidebarItems.put("artists", new SidebarItem("Artistas", icons.getArtists(), controller::loadArtistsView));
         sidebarItems.put("albums", new SidebarItem("Álbuns", icons.getAlbum(), controller::loadArtistsView));
-        sidebarItems.put("favorites", new SidebarItem("Favoritas", icons.getFavorite(true), controller::loadFavoritesView));
+        sidebarItems.put("favorites",
+                new SidebarItem("Favoritas", icons.getFavorite(true), controller::loadFavoritesView));
 
         sidebarItems.put("playlists",
                 new SidebarItem("Playlists", icons.getPlaylists(), controller::loadPlaylistsView));
@@ -88,8 +90,7 @@ public class IndexView extends Application {
                         sidebarItems.get("favorites"),
                         sidebarItems.get("playlists"),
                         sidebarItems.get("genres"),
-                        sidebarItems.get("artists")
-                        ),
+                        sidebarItems.get("artists")),
                 new SidebarTopic(
                         "Gerenciar",
                         sidebarItems.get("library")));
