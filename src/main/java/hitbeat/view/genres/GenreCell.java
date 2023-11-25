@@ -1,5 +1,6 @@
 package hitbeat.view.genres;
 
+import hitbeat.controller.MioloController;
 import hitbeat.controller.player.PlayerController;
 import hitbeat.model.Genre;
 import hitbeat.view.base.widgets.Cover;
@@ -53,6 +54,10 @@ public class GenreCell extends BaseCell<Genre> {
         // on exit, hides the play button
         this.setOnMouseExited(e -> {
             cover.showPlayButton(false);
+        });
+
+        this.setOnMouseClicked(event -> {
+            MioloController.getInstance().loadGenreDetailsView(this.genre);
         });
     }
 

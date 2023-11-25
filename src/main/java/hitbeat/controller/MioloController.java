@@ -2,12 +2,14 @@ package hitbeat.controller;
 
 import java.util.Stack;
 
+import hitbeat.model.Genre;
 import hitbeat.model.Playlist;
 import hitbeat.view.StartPage;
 import hitbeat.view.artists.ArtistsView;
 import hitbeat.view.base.widgets.FloatingActionButton;
 import hitbeat.view.base.widgets.Miolo;
 import hitbeat.view.favorites.FavoritesView;
+import hitbeat.view.genres.GenreDetail;
 import hitbeat.view.genres.GenresView;
 import hitbeat.view.library.LibraryPage;
 import hitbeat.view.playlists.CreatePlaylist;
@@ -102,6 +104,12 @@ public class MioloController {
     public void loadFavoritesView() {
         FavoritesView favoritesView = new FavoritesView();
         updateMiolo(new MioloState(favoritesView, "favorites", "Favoritas"));
+    }
+
+    public void loadGenreDetailsView(Genre genre) {
+        GenreDetail genreDetail = new GenreDetail(genre);
+        updateMiolo(new MioloState(genreDetail, "genres" + genre.getId().toString(),
+        genre.getName()));
     }
 
     private void updateMiolo(MioloState updatedContent, boolean... isStartPage) {

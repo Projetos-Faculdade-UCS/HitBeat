@@ -1,10 +1,12 @@
 package hitbeat.view.library;
 
+import hitbeat.controller.MioloController;
 import hitbeat.controller.library.LibraryController;
 import hitbeat.util.CustomMP3File;
 import hitbeat.view.BaseView;
-import io.github.palexdev.materialfx.controls.MFXButton;
+import hitbeat.view.base.widgets.FloatingActionButton;
 import javafx.collections.ObservableList;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
@@ -23,6 +25,8 @@ public class LibraryPage extends VBox implements BaseView{
         configureChildren();
 
         getStylesheets().add("hitbeat/css/library/library.css");
+
+        MioloController.getInstance().setFab(getFab());
     }
 
     private void initializeStyling() {
@@ -32,7 +36,6 @@ public class LibraryPage extends VBox implements BaseView{
     private void configureChildren() {
         addDragAndDrop();
         addFilesBoxToScrollPane();
-        addSaveButton();
     }
 
     private void addDragAndDrop() {
@@ -58,21 +61,6 @@ public class LibraryPage extends VBox implements BaseView{
         mp3FileList = new MP3FileList(controller);
     }
 
-    private void addSaveButton() {
-        MFXButton saveButton = createSaveButton();
-        getChildren().add(saveButton);
-    }
-
-    private MFXButton createSaveButton() {
-        MFXButton saveButton = new MFXButton("Save");
-        saveButton.getStyleClass().addAll("save-button", "button-raised");
-        saveButton.setOnAction(e -> {
-            controller.saveToDatabase();
-            setFilesFromFolder(controller.getFiles());
-        });
-        return saveButton;
-    }
-
     public void setFilesFromFolder(ObservableList<CustomMP3File> files) {
         mp3FileList.setFiles(files);
     }
@@ -80,6 +68,18 @@ public class LibraryPage extends VBox implements BaseView{
     @Override
     public Object getData() {
         return null;
+    }
+
+    public FloatingActionButton getFab(){
+        FloatingActionButton addPlaylistButton = new FloatingActionButton();
+        Image add = new Image("/hitbeat/images/save.png", 20, 20, false, false);
+        addPlaylistButton.setIcon(add);
+        addPlaylistButton.setOnAction(e -> {
+            controller.saveToDatabase();
+            setFilesFromFolder(controller.getFiles());
+        });
+
+        return addPlaylistButton;
     }
 
 }
