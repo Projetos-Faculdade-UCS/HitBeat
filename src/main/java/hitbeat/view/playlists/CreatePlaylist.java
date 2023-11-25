@@ -23,7 +23,6 @@ public class CreatePlaylist extends MFXScrollPane implements BaseView{
         MFXTextField nameField = new MFXTextField();
         nameField.setFloatingText("Nome");
         nameField.setPrefHeight(30);
-        nameField.setStyle("-fx-background-color: transparent; -fx-text-fill: #000000;");
         nameField.prefWidthProperty().bind(this.widthProperty());
         
         MFXButton saveButton = new MFXButton("Salvar");
@@ -34,7 +33,7 @@ public class CreatePlaylist extends MFXScrollPane implements BaseView{
         });
         VBox page = new VBox(); 
         page.getChildren().addAll(title, nameField, saveButton);
-
+        this.getStylesheets().add(getClass().getResource("/hitbeat/css/form.css").toExternalForm());
         this.setContent(page);
     }
 

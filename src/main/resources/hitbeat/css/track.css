@@ -1,0 +1,40 @@
+.context-menu {
+    -fx-background-color: #302f2f;
+    -fx-text-fill: #fff; /* Cor do texto */
+    -fx-font-size: 14;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+.context-menu:hover {
+    -fx-text-fill: #fff;
+}
+.menu {
+    -fx-text-fill: #fff; /* Cor do texto */
+    -fx-font-size: 14;
+    
+}
+.menu:hover {
+    -fx-background-color: -main-color;
+    -fx-text-fill: #fff; /* Cor do texto */
+}
+.menu-item {
+    -fx-text-fill: #fff; /* Cor do texto */
+    -fx-font-size: 12;
+}
+.menu-item:focused {
+    -fx-background-color: -main-color;
+    -fx-text-fill: #fff; /* Cor do texto */
+}
+
+.title{
+    -fx-font-size: 16;
+    -fx-text-fill: #fff;
+}
+
+.subtitle{
+    -fx-font-size: 14;
+    -fx-text-fill: #fff;
+}
+.label{
+    -fx-text-fill: #fff;
+}
