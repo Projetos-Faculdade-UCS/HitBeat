@@ -5,6 +5,7 @@ import hitbeat.view.BaseView;
 import hitbeat.view.base.widgets.listview.ListView;
 import hitbeat.view.tracks.TrackCell;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
+import io.github.palexdev.mfxcore.controls.Text;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -15,14 +16,27 @@ public class GenericTrackList extends MFXScrollPane implements BaseView {
     public GenericTrackList() {
         super(null);
 
-        TrackCell trackCell = new TrackCell(null);
-        trackCell.setOnTracksChange(tracks -> {
-            this.tracks.setAll(tracks);
-        });
+        Text placeholder = new Text("Nenhuma música adicionada");
+        placeholder.getStyleClass().add("placeholder");
 
         listView = new ListView<>(tracks, track -> {
+            TrackCell trackCell = new TrackCell(track);
+            trackCell.setOnTrackRemoved(removedTrack -> {
+                this.tracks.remove(removedTrack);
+            });
             return trackCell;
         });
+
+        this.tracks.subscribe(() -> {
+            if (tracks.size() == 0) {
+                listView.setPlaceholder(placeholder);
+            } else {
+                listView.setPlaceholder(null);
+                listView.setItems(tracks);
+            }
+        });
+
+        listView.setPlaceholder(placeholder);
 
         this.setContent(listView);
 
@@ -38,6 +52,5 @@ public class GenericTrackList extends MFXScrollPane implements BaseView {
 
     public void setTracks(ObservableList<Track> tracks) {
         this.tracks.setAll(tracks);
-        listView.setItems(tracks);
     }
 }
