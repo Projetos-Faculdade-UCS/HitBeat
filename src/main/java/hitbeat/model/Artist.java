@@ -13,6 +13,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,7 +29,8 @@ import lombok.With;
 })
 // named query to get the first album of an artist:
 @NamedQueries({
-        @NamedQuery(name = "Artist.getAlbums", query = "SELECT a FROM Album a WHERE a.artist = :artist")
+        @NamedQuery(name = "Artist.getAlbums", query = "SELECT a FROM Album a WHERE a.artist = :artist"),
+        @NamedQuery(name = "Artist.getTracks", query = "SELECT t FROM Track t WHERE t.album.artist = :artist")
 })
 public class Artist extends BaseModel {
     @Id
@@ -70,5 +73,13 @@ public class Artist extends BaseModel {
 
     public EntityManager getEntityManager() {
         return HibernateUtil.getEntityManager();
+    }
+
+    public ObservableList<Track> getTracks() {
+        List<Track> tracks = this.getEntityManager().createNamedQuery("Artist.getTracks", Track.class)
+                .setParameter("artist", this)
+                .getResultList();
+
+        return FXCollections.observableArrayList(tracks);
     }
 }

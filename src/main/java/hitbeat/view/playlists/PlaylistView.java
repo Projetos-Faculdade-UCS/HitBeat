@@ -41,7 +41,7 @@ public class PlaylistView extends MFXScrollPane implements BaseView{
         Image add = new Image("/hitbeat/images/add-rounded.png", 30, 30, false, false);
         addPlaylistButton.setIcon(add);
         addPlaylistButton.setOnAction(e -> {
-            MioloController.getInstance().loadPlaylistCreateView();
+            MioloController.getInstance().push(new CreatePlaylist(), "addPlaylist", "Adicionar Playlist");
         });
 
         return addPlaylistButton;

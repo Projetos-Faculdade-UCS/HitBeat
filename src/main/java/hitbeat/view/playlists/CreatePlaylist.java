@@ -30,7 +30,7 @@ public class CreatePlaylist extends MFXScrollPane implements BaseView{
         saveButton.setStyle("-fx-background-color: #2195f3; -fx-text-fill: #ffffff;");
         saveButton.onMouseClickedProperty().set((event) -> {
             controller.createPlaylist(nameField.getText());
-            MioloController.getInstance().loadPlaylistsView();
+            MioloController.getInstance().restoreFromMemento();
         });
         VBox page = new VBox(); 
         page.getChildren().addAll(title, nameField, saveButton);

@@ -57,7 +57,7 @@ public class GenreCell extends BaseCell<Genre> {
         });
 
         this.setOnMouseClicked(event -> {
-            MioloController.getInstance().loadGenreDetailsView(this.genre);
+            MioloController.getInstance().push(new GenreDetail(genre), "genres", genre.getName());
         });
     }
 
