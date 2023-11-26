@@ -254,6 +254,27 @@ public class PlayerController {
         }
     }
 
+    public void play(List<Track> tracks, int index) {
+        // split the list in the index, the second half is the queue, the first half is
+        // the played tracks
+        List<Track> playedTracks = tracks.subList(0, index);
+        playedTracks = new ArrayList<>(playedTracks);
+        playedTracks = playedTracks.reversed();
+
+        List<Track> queue = tracks.subList(index, tracks.size());
+
+        clearQueue();
+        this.playedTracks.clear();
+        this.playedTracks.addAll(playedTracks);
+        addToQueue(queue);
+        playNextTrack();
+    }
+
+    public void play(List<Track> tracks, Track track) {
+        int index = tracks.indexOf(track);
+        play(tracks, index);
+    }
+
     public void resetSong() {
         if (hasSong()) {
             song.seek(song.getStartTime());
