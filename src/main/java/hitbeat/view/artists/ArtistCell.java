@@ -1,5 +1,6 @@
 package hitbeat.view.artists;
 
+import hitbeat.controller.MioloController;
 import hitbeat.controller.player.PlayerController;
 import hitbeat.model.Artist;
 import hitbeat.view.base.widgets.Cover;
@@ -39,6 +40,10 @@ public class ArtistCell extends BaseCell<Artist> {
         // on exit, hides the play button
         this.setOnMouseExited(e -> {
             artistImage.showPlayButton(false);
+        });
+
+        this.setOnMouseClicked(e -> {
+            MioloController.getInstance().push(new ArtistDetailView(artist), "artists", artist.getName());
         });
     }
 
