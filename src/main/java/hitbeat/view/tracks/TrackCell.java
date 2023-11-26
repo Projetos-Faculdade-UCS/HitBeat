@@ -67,7 +67,6 @@ public class TrackCell extends BaseCell<Track> {
                 List<Track> tracks = (List<Track>) data;
                 PlayerController.getInstance().play(tracks, this.track);
             }
-            // PlayerController.getInstance().play(this.track);
         });
 
         // Create Title
