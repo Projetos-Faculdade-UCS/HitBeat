@@ -36,7 +36,7 @@ public class PlaylistView extends MFXScrollPane implements BaseView{
         this.setFitToHeight(true);
     }
 
-    public FloatingActionButton getFab(){
+    public static FloatingActionButton getFab(){
         FloatingActionButton addPlaylistButton = new FloatingActionButton();
         Image add = new Image("/hitbeat/images/add-rounded.png", 30, 30, false, false);
         addPlaylistButton.setIcon(add);

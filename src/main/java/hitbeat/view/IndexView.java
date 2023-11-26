@@ -94,7 +94,7 @@ public class IndexView extends Application {
 
         sidebarItems.put("playlists",
                 new SidebarItem("Playlists", icons.getPlaylists(), () -> {
-                    controller.push(new PlaylistView(), "playlists", "Playlists");
+                    controller.push(new PlaylistView(), "playlists", "Playlists", PlaylistView.getFab());
                 }));
 
         ImageView logo = new ImageView("/hitbeat/images/hitbeat-icon.png");
