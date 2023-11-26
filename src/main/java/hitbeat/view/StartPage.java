@@ -1,9 +1,11 @@
 package hitbeat.view;
 
+import java.util.Map;
+
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
-public class StartPage extends Pane implements BaseView{
+public class StartPage extends Pane implements BaseView {
 
     private Label contentLabel;
 
@@ -24,7 +26,7 @@ public class StartPage extends Pane implements BaseView{
     }
 
     @Override
-    public Object getData() {
+    public Map<String, Object> getData() {
         return null;
     }
 }

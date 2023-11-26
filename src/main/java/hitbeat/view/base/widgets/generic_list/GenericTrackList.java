@@ -1,5 +1,8 @@
 package hitbeat.view.base.widgets.generic_list;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import hitbeat.model.Track;
 import hitbeat.view.BaseView;
 import hitbeat.view.base.widgets.listview.ListView;
@@ -46,8 +49,10 @@ public class GenericTrackList extends MFXScrollPane implements BaseView {
     }
 
     @Override
-    public Object getData() {
-        return this.tracks;
+    public Map<String, Object> getData() {
+        return new HashMap<String, Object>() {{
+            put("tracks", tracks);
+        }};
     }
 
     public void setTracks(ObservableList<Track> tracks) {

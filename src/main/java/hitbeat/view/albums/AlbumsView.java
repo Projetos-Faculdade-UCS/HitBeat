@@ -1,5 +1,7 @@
 package hitbeat.view.albums;
 
+import java.util.Map;
+
 import hitbeat.controller.Albums.AlbumsController;
 import hitbeat.model.Album;
 import hitbeat.view.BaseView;
@@ -26,7 +28,7 @@ public class AlbumsView extends MFXScrollPane implements BaseView {
     }
 
     @Override
-    public Object getData() {
-        return albums;
+    public Map<String, Object> getData() {
+        return Map.of("albums", albums);
     }
 }

@@ -1,5 +1,7 @@
 package hitbeat.view.tracks;
 
+import java.util.List;
+
 import hitbeat.controller.Icons;
 import hitbeat.controller.MioloController;
 import hitbeat.controller.player.PlayerController;
@@ -59,7 +61,13 @@ public class TrackCell extends BaseCell<Track> {
         playbox.setPickOnBounds(false);
 
         playBtn.setOnMouseClicked(event -> {
-            PlayerController.getInstance().playSingleTrack(this.track);
+            // get data must return a list of tracks
+            Object data = mioloController.getCurrentState().getData().get("tracks");
+            if (data instanceof List) {
+                List<Track> tracks = (List<Track>) data;
+                PlayerController.getInstance().play(tracks, this.track);
+            }
+            // PlayerController.getInstance().play(this.track);
         });
 
         // Create Title
@@ -121,7 +129,7 @@ public class TrackCell extends BaseCell<Track> {
         contextMenu.getItems().addAll(addMenu);
     
         MyMenuItem removeItem = new MyMenuItem("Remover desta playlist");
-        Object data1 = mioloController.getCurrentState().getData();
+        Object data1 = mioloController.getCurrentState().getData().get("playlist");
         if (data1 instanceof Playlist) {
             contextMenu.getItems().add(removeItem);
         }

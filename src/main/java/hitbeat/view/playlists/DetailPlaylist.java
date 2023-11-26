@@ -1,5 +1,7 @@
 package hitbeat.view.playlists;
 
+import java.util.Map;
+
 import hitbeat.controller.playlist.PlaylistController;
 import hitbeat.model.Playlist;
 import hitbeat.view.base.widgets.generic_list.GenericTrackList;
@@ -15,8 +17,12 @@ public class DetailPlaylist extends GenericTrackList {
     }
 
     @Override
-    public Object getData() {
-        return this.playlist;
+    public Map<String, Object> getData() {
+        Map<String, Object> data = super.getData();
+
+        data.put("playlist", playlist);
+
+        return data;
     }
 
 }

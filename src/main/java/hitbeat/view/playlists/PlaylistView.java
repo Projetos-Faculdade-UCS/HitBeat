@@ -1,5 +1,7 @@
 package hitbeat.view.playlists;
 
+import java.util.Map;
+
 import hitbeat.controller.MioloController;
 import hitbeat.controller.playlist.PlaylistController;
 import hitbeat.model.Playlist;
@@ -49,7 +51,7 @@ public class PlaylistView extends MFXScrollPane implements BaseView {
     }
 
     @Override
-    public Object getData() {
+    public Map<String, Object> getData() {
         return null;
     }
 }
