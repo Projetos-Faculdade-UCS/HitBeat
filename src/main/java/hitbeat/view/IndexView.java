@@ -7,6 +7,7 @@ import hitbeat.controller.Icons;
 import hitbeat.controller.MioloController;
 import hitbeat.controller.MioloState;
 import hitbeat.view.Player.Footer;
+import hitbeat.view.albums.AlbumsView;
 import hitbeat.view.artists.ArtistsView;
 import hitbeat.view.base.widgets.Miolo;
 import hitbeat.view.favorites.FavoritesView;
@@ -85,7 +86,7 @@ public class IndexView extends Application {
             controller.push(new ArtistsView(), "artists", "Artistas");
         }));
         sidebarItems.put("albums", new SidebarItem("Álbuns", icons.getAlbum(), () -> {
-            controller.push(new ArtistsView(), "albums", "Álbuns");
+            controller.push(new AlbumsView(), "albums", "Álbuns");
         }));
         sidebarItems.put("favorites",
                 new SidebarItem("Favoritas", icons.getFavorite(true), () -> {
@@ -110,7 +111,8 @@ public class IndexView extends Application {
                         sidebarItems.get("favorites"),
                         sidebarItems.get("playlists"),
                         sidebarItems.get("genres"),
-                        sidebarItems.get("artists")),
+                        sidebarItems.get("artists"),
+                        sidebarItems.get("albums")),
                 new SidebarTopic(
                         "Gerenciar",
                         sidebarItems.get("library")));

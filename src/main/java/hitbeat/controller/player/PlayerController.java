@@ -243,7 +243,15 @@ public class PlayerController {
     }
 
     public void play(Album album) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        List<Track> tracks = album.getTracks();
+
+        if (!tracks.isEmpty()) {
+            clearQueue();
+            playedTracks.clear();
+            playTrackSubject.onNext(tracks.get(0));
+            tracks.remove(0);
+            addToQueue(tracks);
+        }
     }
 
     public void resetSong() {
