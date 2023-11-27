@@ -1,6 +1,8 @@
 package hitbeat.view;
 
+import javafx.animation.KeyFrame;
 import javafx.animation.ScaleTransition;
+import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -51,6 +53,8 @@ public class LoadingPage extends BorderPane {
         private MediaPlayer pulseSound = new MediaPlayer(
                 new Media(getClass().getResource("/hitbeat/audio/pulse.mp3").toString()));
 
+        private Timeline pulseTimeline;
+
         public PulsingIcon() {
             super();
 
@@ -72,8 +76,8 @@ public class LoadingPage extends BorderPane {
         }
 
         private void addPulsingEffect() {
-            Duration duration = Duration.seconds(.8);
-            scaleTransition = new ScaleTransition(duration, imageView);
+            Duration pulseDuration = Duration.seconds(1);
+            scaleTransition = new ScaleTransition(pulseDuration, imageView);
             scaleTransition.setFromX(1.0);
             scaleTransition.setFromY(1.0);
             scaleTransition.setToX(1.2);
@@ -83,12 +87,16 @@ public class LoadingPage extends BorderPane {
 
             pulseSound.setVolume(0.5);
 
-            scaleTransition.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue.toSeconds() == 0.0) {
-                    pulseSound.seek(Duration.seconds(0));
-                    pulseSound.play();
-                }
-            });
+            // Manually handle the pulsing effect using a Timeline
+            pulseTimeline = new Timeline(
+                    new KeyFrame(Duration.seconds(0), event -> {
+                        pulseSound.seek(Duration.seconds(0));
+                        pulseSound.play();
+                    }),
+                    new KeyFrame(pulseDuration));
+
+            pulseTimeline.setCycleCount(Timeline.INDEFINITE);
+            pulseTimeline.play();
 
             scaleTransition.play();
         }
@@ -97,6 +105,8 @@ public class LoadingPage extends BorderPane {
             scaleTransition.stop();
             scaleTransition = null;
             imageView = null;
+            pulseTimeline.stop();
+            pulseTimeline = null;
             pulseSound.stop();
             pulseSound.dispose();
             pulseSound = null;
