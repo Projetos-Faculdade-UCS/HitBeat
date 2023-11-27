@@ -1,0 +1,12 @@
+.mfx-text-field {
+    -fx-background-color: transparent;
+    background-color: transparent;
+    -mfx-background-color: transparent;
+    -fx-text-fill: white;
+    -mfx-float-mode: INLINE;
+    -mfx-text-limit: 50;
+}
+.mfx-text-field .floating-text{
+    -fx-text-fill: white ;
+    -fx-background-color: transparent ;
+}

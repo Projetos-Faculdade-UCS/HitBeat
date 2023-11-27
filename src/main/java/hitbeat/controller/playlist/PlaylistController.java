@@ -27,9 +27,9 @@ public class PlaylistController extends ModelController<Playlist>{
         return FXCollections.observableArrayList(getDao().getAllTracks(playlist));
     }
 
-    public void createPlaylist(String name){
+    public void createPlaylist(String name, String description){
         List<Playlist> playlists = new ArrayList<>();
-        playlists.add(new Playlist(name));
+        playlists.add(new Playlist(name, description));
         getDao().bulkCreateOrUpdate(playlists, "name");
     }
 
