@@ -7,10 +7,17 @@ import hitbeat.controller.Icons;
 import hitbeat.controller.MioloController;
 import hitbeat.controller.MioloState;
 import hitbeat.view.Player.Footer;
+import hitbeat.view.albums.AlbumsView;
+import hitbeat.view.artists.ArtistsView;
 import hitbeat.view.base.widgets.Miolo;
+import hitbeat.view.favorites.FavoritesView;
+import hitbeat.view.genres.GenresView;
+import hitbeat.view.library.LibraryPage;
+import hitbeat.view.playlists.PlaylistView;
 import hitbeat.view.sidebar.Sidebar;
 import hitbeat.view.sidebar.SidebarItem;
 import hitbeat.view.sidebar.SidebarTopic;
+import hitbeat.view.tracks.TracksView;
 import io.github.palexdev.materialfx.theming.JavaFXThemes;
 import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
 import io.github.palexdev.materialfx.theming.UserAgentBuilder;
@@ -66,16 +73,30 @@ public class IndexView extends Application {
         SidebarItem index = new SidebarItem("Início", icons.getHome(), controller::loadStartPage);
         index.setActive(true);
         sidebarItems.put("index", index);
-        sidebarItems.put("genres", new SidebarItem("Gêneros", icons.getGenres(), controller::loadGenresView));
-        sidebarItems.put("tracks", new SidebarItem("Todas", icons.getTracks(), controller::loadTracksView));
-        sidebarItems.put("library", new SidebarItem("Minha Biblioteca", null, controller::loadLibraryView));
-        sidebarItems.put("artists", new SidebarItem("Artistas", icons.getArtists(), controller::loadArtistsView));
-        sidebarItems.put("albums", new SidebarItem("Álbuns", icons.getAlbum(), controller::loadArtistsView));
+        sidebarItems.put("genres", new SidebarItem("Gêneros", icons.getGenres(), ()->{
+            controller.push(new GenresView(), "genres", "Gêneros");
+        }));
+        sidebarItems.put("tracks", new SidebarItem("Todas", icons.getTracks(), () -> {
+            controller.push(new TracksView(), "tracks", "Todas");
+        }));
+        sidebarItems.put("library", new SidebarItem("Minha Biblioteca", null, () -> {
+            controller.push(new LibraryPage(), "library", "Minha Biblioteca");
+        }));
+        sidebarItems.put("artists", new SidebarItem("Artistas", icons.getArtists(), () -> {
+            controller.push(new ArtistsView(), "artists", "Artistas");
+        }));
+        sidebarItems.put("albums", new SidebarItem("Álbuns", icons.getAlbum(), () -> {
+            controller.push(new AlbumsView(), "albums", "Álbuns");
+        }));
         sidebarItems.put("favorites",
-                new SidebarItem("Favoritas", icons.getFavorite(true), controller::loadFavoritesView));
+                new SidebarItem("Favoritas", icons.getFavorite(true), () -> {
+                    controller.push(new FavoritesView(), "favorites", "Favoritas");
+                }));
 
         sidebarItems.put("playlists",
-                new SidebarItem("Playlists", icons.getPlaylists(), controller::loadPlaylistsView));
+                new SidebarItem("Playlists", icons.getPlaylists(), () -> {
+                    controller.push(new PlaylistView(), "playlists", "Playlists", PlaylistView.getFab());
+                }));
 
         ImageView logo = new ImageView("/hitbeat/images/hitbeat-icon.png");
         logo.setFitWidth(50);
@@ -90,7 +111,8 @@ public class IndexView extends Application {
                         sidebarItems.get("favorites"),
                         sidebarItems.get("playlists"),
                         sidebarItems.get("genres"),
-                        sidebarItems.get("artists")),
+                        sidebarItems.get("artists"),
+                        sidebarItems.get("albums")),
                 new SidebarTopic(
                         "Gerenciar",
                         sidebarItems.get("library")));

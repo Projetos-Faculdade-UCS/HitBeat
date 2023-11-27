@@ -11,9 +11,4 @@ public class TracksView extends GenericTrackList {
         this.setTracks(controller.fetchAll());
     }
 
-    @Override
-    public Object getData() {
-        return null;
-    }
-
 }

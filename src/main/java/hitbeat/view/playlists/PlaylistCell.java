@@ -46,7 +46,7 @@ public class PlaylistCell extends BaseCell<Playlist> {
             playlistCover.setCoverImage(item.getCover(150));
             this.setOnMouseClicked(e -> {
                 if (!playlistCover.isMouseOverPlayButton()){
-                    MioloController.getInstance().loadPlayListDetailView(item);
+                    MioloController.getInstance().push(new DetailPlaylist(item), "playlists", item.getName());
                 }
             });
 

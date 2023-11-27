@@ -1,5 +1,7 @@
 package hitbeat.controller;
 
+import java.util.Map;
+
 import hitbeat.view.BaseView;
 import hitbeat.view.base.widgets.FloatingActionButton;
 import javafx.scene.Node;
@@ -40,8 +42,8 @@ public class MioloState{
      * assim pode conter qualquer tipo de dado.
      * @return Object
      */
-    public Object getData() {
-        Object data = null;
+    public Map<String, Object> getData() {
+        Map<String, Object> data = null;
     
         if (content instanceof BaseView) {
             data = ((BaseView) content).getData();

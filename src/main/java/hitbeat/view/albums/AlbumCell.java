@@ -1,27 +1,27 @@
-package hitbeat.view.artists;
+package hitbeat.view.albums;
 
 import hitbeat.controller.MioloController;
 import hitbeat.controller.player.PlayerController;
-import hitbeat.model.Artist;
+import hitbeat.model.Album;
 import hitbeat.view.base.widgets.Cover;
 import hitbeat.view.base.widgets.ListTile;
 import hitbeat.view.base.widgets.listview.BaseCell;
 import javafx.scene.control.Label;
 
-public class ArtistCell extends BaseCell<Artist> {
-    private Artist artist;
-    private Cover artistImage;
+public class AlbumCell extends BaseCell<Album> {
+    private Album album;
+    private Cover albumImage;
     private Label titleLabel;
     private Label subtitleLabel;
 
-    public ArtistCell(Artist artist) {
+    public AlbumCell(Album album) {
         this.initUI();
-        this.updateItem(artist);
+        this.updateItem(album);
     }
 
     private void initUI() {
-        artistImage = new Cover();
-        artistImage.setFit(100);
+        albumImage = new Cover();
+        albumImage.setFit(100);
 
         titleLabel = new Label();
         titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16; -fx-text-fill: white;");
@@ -29,39 +29,39 @@ public class ArtistCell extends BaseCell<Artist> {
         subtitleLabel = new Label();
         subtitleLabel.setStyle("-fx-font-size: 14; -fx-text-fill: white;");
 
-        ListTile listTile = new ListTile(artistImage, titleLabel, subtitleLabel, null);
+        ListTile listTile = new ListTile(albumImage, titleLabel, subtitleLabel, null);
         this.getChildren().add(listTile);
 
         // on hover, shows the play button
         this.setOnMouseEntered(e -> {
-            artistImage.showPlayButton(true);
+            albumImage.showPlayButton(true);
         });
 
         // on exit, hides the play button
         this.setOnMouseExited(e -> {
-            artistImage.showPlayButton(false);
+            albumImage.showPlayButton(false);
         });
 
         this.setOnMouseClicked(e -> {
-            MioloController.getInstance().push(new ArtistDetailView(artist), "artists", artist.getName());
+            MioloController.getInstance().push(new AlbumDetailView(album), "albums", album.getName());
         });
     }
 
     @Override
-    public void updateItem(Artist artist) {
-        this.artist = artist;
+    public void updateItem(Album album) {
+        this.album = album;
 
-        if (artist != null) {
-            titleLabel.setText(this.artist.getName());
-            subtitleLabel.setText(this.artist.getDescription());
-            artistImage.setCoverImage(this.artist.getCover(100));
-            artistImage.setPlayButtonAction(() -> {
-                PlayerController.getInstance().play(this.artist);
+        if (album != null) {
+            titleLabel.setText(this.album.getName());
+            // subtitleLabel.setText(this.album.getDescription());
+            albumImage.setCoverImage(this.album.getCover());
+            albumImage.setPlayButtonAction(() -> {
+                PlayerController.getInstance().play(this.album);
             });
         } else {
             titleLabel.setText("");
             subtitleLabel.setText("");
-            artistImage.setCoverImage(null);
+            albumImage.setCoverImage(null);
         }
     }
 

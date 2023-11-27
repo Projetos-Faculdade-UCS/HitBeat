@@ -1,5 +1,7 @@
 package hitbeat.view.playlists;
 
+import java.util.Map;
+
 import hitbeat.controller.MioloController;
 import hitbeat.controller.playlist.PlaylistController;
 import hitbeat.model.Playlist;
@@ -11,10 +13,11 @@ import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 
-public class PlaylistView extends MFXScrollPane implements BaseView{
+public class PlaylistView extends MFXScrollPane implements BaseView {
     private ObservableList<Playlist> playlists;
     private final PlaylistController controller = new PlaylistController();
-    // private final IndexController mioloController = IndexController.getInstance();
+    // private final IndexController mioloController =
+    // IndexController.getInstance();
 
     public PlaylistView() {
         super();
@@ -28,7 +31,7 @@ public class PlaylistView extends MFXScrollPane implements BaseView{
         ListView<Playlist> listView = new ListView<>(playlists, playlist -> {
             return new PlaylistCell(playlist);
         });
-        
+
         this.setContent(listView);
 
         // grow this pane to fill the parent
@@ -36,19 +39,19 @@ public class PlaylistView extends MFXScrollPane implements BaseView{
         this.setFitToHeight(true);
     }
 
-    public FloatingActionButton getFab(){
+    public static FloatingActionButton getFab() {
         FloatingActionButton addPlaylistButton = new FloatingActionButton();
         Image add = new Image("/hitbeat/images/add-rounded.png", 30, 30, false, false);
         addPlaylistButton.setIcon(add);
         addPlaylistButton.setOnAction(e -> {
-            MioloController.getInstance().loadPlaylistCreateView();
+            MioloController.getInstance().push(new CreatePlaylist(), "addPlaylist", "Adicionar Playlist");
         });
 
         return addPlaylistButton;
     }
 
     @Override
-    public Object getData() {
+    public Map<String, Object> getData() {
         return null;
     }
 }

@@ -1,5 +1,7 @@
 package hitbeat.view.tracks;
 
+import java.util.List;
+
 import hitbeat.controller.Icons;
 import hitbeat.controller.MioloController;
 import hitbeat.controller.player.PlayerController;
@@ -59,7 +61,12 @@ public class TrackCell extends BaseCell<Track> {
         playbox.setPickOnBounds(false);
 
         playBtn.setOnMouseClicked(event -> {
-            PlayerController.getInstance().playSingleTrack(this.track);
+            // get data must return a list of tracks
+            Object data = mioloController.getCurrentState().getData().get("tracks");
+            if (data instanceof List) {
+                List<Track> tracks = (List<Track>) data;
+                PlayerController.getInstance().play(tracks, this.track);
+            }
         });
 
         title = new Label();
@@ -106,11 +113,12 @@ public class TrackCell extends BaseCell<Track> {
             tracksController.toggleFavorite(this.track);
             favoriteBtn.setGraphic(icons.getFavorite(this.track.isFavorite()));
         });
-        
+
         contextMenu.getItems().add( this.getMenuAdd() );
 
         MenuItem removeItem = new MenuItem("Remover da playlist");
-        Object data1 = mioloController.getCurrentState().getData();
+        Object data1 = mioloController.getCurrentState().getData().get("playlist");
+
         if (data1 instanceof Playlist) {
             removeItem.getStyleClass().add("custom-menu-item");
             contextMenu.getItems().add(removeItem);

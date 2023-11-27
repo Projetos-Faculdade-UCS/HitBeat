@@ -26,6 +26,7 @@ import lombok.With;
 // named query to get all albums from a genre (the genre is related to the
 // track, and the track is related to the album)
 @NamedQuery(name = "Genre.getAlbums", query = "SELECT t.album FROM Track t WHERE t.genre = :genre")
+@NamedQuery(name = "Genre.getTracks", query = "SELECT t FROM Track t WHERE t.genre = :genre")
 public class Genre extends BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,5 +61,11 @@ public class Genre extends BaseModel {
             return albums.get(0).getCover();
         }
         return new Image("/hitbeat/images/default.png");
+    }
+
+    public List<Track> getTracks() {
+        return HibernateUtil.getEntityManager().createNamedQuery("Genre.getTracks", Track.class)
+                .setParameter("genre", this)
+                .getResultList();
     }
 }
