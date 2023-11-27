@@ -43,7 +43,9 @@ public class AlbumCell extends BaseCell<Album> {
         });
 
         this.setOnMouseClicked(e -> {
-            MioloController.getInstance().push(new AlbumDetailView(album), "albums", album.getName());
+            if (!albumImage.isMouseOverPlayButton()) {
+                MioloController.getInstance().push(new AlbumDetailView(album), "albums", album.getName());
+            }
         });
     }
 

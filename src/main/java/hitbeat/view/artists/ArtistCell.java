@@ -43,7 +43,8 @@ public class ArtistCell extends BaseCell<Artist> {
         });
 
         this.setOnMouseClicked(e -> {
-            MioloController.getInstance().push(new ArtistDetailView(artist), "artists", artist.getName());
+            if (!artistImage.isMouseOverPlayButton())
+                MioloController.getInstance().push(new ArtistDetailView(artist), "artists", artist.getName());
         });
     }
 
