@@ -5,8 +5,7 @@ import io.github.palexdev.materialfx.theming.JavaFXThemes;
 import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
 import io.github.palexdev.materialfx.theming.UserAgentBuilder;
 import javafx.application.Application;
-import javafx.concurrent.Service;
-import javafx.concurrent.Task;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -17,39 +16,22 @@ public class MainApp extends Application {
     private LoadingPage loadingPage;
     private Scene scene;
 
-    // Service for handling the asynchronous initialization
-    private static class LoadingService extends Service<Void> {
-        @Override
-        protected Task<Void> createTask() {
-            return new Task<>() {
-                @Override
-                protected Void call() {
-                    HibernateUtil.init();
-                    return null;
-                }
-            };
-        }
-    }
-
     @Override
     public void start(Stage primaryStage) throws Exception {
-
-        LoadingService loadingService = new LoadingService();
-
-        loadingService.setOnSucceeded(event -> {
-            // Initialization is complete, launch the main application
-            loadingPage.dispose();
-
-            index = new IndexView();
-
-            scene.setRoot(index);
-        });
-        
         loadingPage = new LoadingPage();
         setupScene(primaryStage);
-        
-        loadingService.start();
 
+        // Inicialização assíncrona
+        new Thread(() -> {
+            HibernateUtil.init();
+
+            // Carregamento concluído
+            Platform.runLater(() -> {
+                loadingPage.dispose();
+                index = new IndexView();
+                scene.setRoot(index);
+            });
+        }).start();
     }
 
     private void setupScene(Stage primaryStage) {
