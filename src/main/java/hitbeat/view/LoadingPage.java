@@ -24,7 +24,7 @@ public class LoadingPage extends BorderPane {
         pulsingIcon = new PulsingIcon();
 
         // Create Text
-        Text loadingText = new Text("Loading...");
+        Text loadingText = new Text("Carregando...");
         loadingText.getStyleClass().add("loading-text");
 
         // StackPane to stack CircularProgressIndicator and loadingText
