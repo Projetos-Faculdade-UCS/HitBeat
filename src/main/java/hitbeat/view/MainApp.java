@@ -24,8 +24,6 @@ public class MainApp extends Application {
             return new Task<>() {
                 @Override
                 protected Void call() {
-                    // Simulate a time-consuming initialization process
-                    // You may replace this with the actual initialization code
                     HibernateUtil.init();
                     return null;
                 }
