@@ -124,7 +124,7 @@ public class TrackCell extends BaseCell<Track> {
             contextMenu.getItems().add(removeItem);
         }
         removeItem.setOnAction(event -> {
-            Object data = mioloController.getCurrentState().getData();
+            Object data = mioloController.getCurrentState().getData().get("playlist");
             if (data instanceof Playlist) {
                 Playlist playlist = (Playlist) data;
                 playlistController.removeTrack(playlist, this.track);
