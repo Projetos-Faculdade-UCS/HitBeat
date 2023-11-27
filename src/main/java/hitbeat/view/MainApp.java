@@ -40,6 +40,8 @@ public class MainApp extends Application {
 
         loadingService.setOnSucceeded(event -> {
             // Initialization is complete, launch the main application
+            loadingPage.dispose();
+
             index = new IndexView();
 
             scene.setRoot(index);

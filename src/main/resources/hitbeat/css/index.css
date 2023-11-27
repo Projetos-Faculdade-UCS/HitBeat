@@ -131,3 +131,13 @@
     -fx-font-weight: bold;
     font-weight: bold;
 }
+
+.loading-text {
+    -fx-text-fill: white;
+    -fx-fill: white !important;
+    fill: white;
+    -fx-font-size: 18px;
+    font-size: 18px;
+    -fx-font-weight: bold;
+    font-weight: bold;
+}
