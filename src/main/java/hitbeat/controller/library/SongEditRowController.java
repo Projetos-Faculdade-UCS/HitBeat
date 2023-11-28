@@ -29,5 +29,9 @@ public class SongEditRowController {
     public void artistTextListener(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         file.setArtist(newValue);
     }
+
+    public void albumTextListener(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+        file.setAlbum(newValue);
+    }
    
 }
