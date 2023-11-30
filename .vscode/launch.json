@@ -6,13 +6,6 @@
     "configurations": [
         {
             "type": "java",
-            "name": "IndexView",
-            "request": "launch",
-            "mainClass": "hitbeat.view.IndexView",
-            "projectName": "hitbeat"
-        },
-        {
-            "type": "java",
             "name": "App",
             "request": "launch",
             "mainClass": "hitbeat.App",
