@@ -4,6 +4,7 @@
 	-fx-background-radius: 10;
 	-fx-border-radius: 10;
 	border-radius: 10;
+	-fx-spacing: 10;
 }
 
 .list-view .list-cell {
@@ -18,7 +19,7 @@
 	border-width: 1;
 }
 
-.list-view .hidden-list-cell {
+.list-view .list-cell:empty {
 	-fx-background-color: transparent;
 	background-color: transparent;
 	-fx-background-radius: 10;

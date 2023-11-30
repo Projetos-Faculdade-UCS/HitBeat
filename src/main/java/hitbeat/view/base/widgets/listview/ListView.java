@@ -42,7 +42,7 @@ public class ListView<T> extends javafx.scene.control.ListView<T> {
 
 
         this.setPadding(new javafx.geometry.Insets(0, 8, 0, 8));
-
+        
     }
 
     class ListCell extends javafx.scene.control.ListCell<T> {
@@ -50,8 +50,6 @@ public class ListView<T> extends javafx.scene.control.ListView<T> {
 
         public ListCell() {
             cell = cellBuilder.build(null);
-            this.getStyleClass().add("list-cell");
-            this.setPadding(new javafx.geometry.Insets(0, 8, 16, 8));
         }
 
         @Override
@@ -69,21 +67,13 @@ public class ListView<T> extends javafx.scene.control.ListView<T> {
                 cell.prefWidthProperty().unbind();
             setText(null);
             setGraphic(null);
-            getStyleClass().add("hidden-list-cell");
         }
 
         private void updateCellWithItem(T item) {
             cell.updateItem(item);
             cell.prefWidthProperty().bind(Layout.getInstance().getContentWidth().subtract(58));
 
-            // Margin margin = new Margin(cell, 0, 0, 8, 0);
-
             setGraphic(cell);
-            setOnMouseClicked(event -> {
-                // System.out.println("Clicked on " + genre.getName());
-            });
-            getStyleClass().remove("hidden-list-cell");
         }
     }
-
 }
