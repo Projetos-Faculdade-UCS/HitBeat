@@ -33,8 +33,6 @@ public class ListView<T> extends javafx.scene.control.ListView<T> {
 
     private void init() {
         this.getStylesheets().add("hitbeat/css/listview/listview.css");
-        this.getStyleClass().add("list-view");
-        this.getStyleClass().add("transparent");
 
         this.setCellFactory(item -> {
             return new ListCell();

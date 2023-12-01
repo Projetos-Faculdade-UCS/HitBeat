@@ -13,8 +13,21 @@
 	-fx-background-radius: 10;
 	-fx-border-radius: 10;
 	border-radius: 10;
-	-fx-border-color: white;
-	border-color: white;
+	-fx-border-color: transparent;
+	border-color: transparent;
+	-fx-border-width: 1;
+	border-width: 1;
+	/* border only at bottom */	
+}
+
+.list-view .list-cell:hover {
+	-fx-background-color: rgba(128, 128, 128, 0.253);
+	background-color: rgba(128, 128, 128, 0.253);
+	-fx-background-radius: 10;
+	-fx-border-radius: 10;
+	border-radius: 10;
+	-fx-border-color: transparent;
+	border-color: transparent;
 	-fx-border-width: 1;
 	border-width: 1;
 }
