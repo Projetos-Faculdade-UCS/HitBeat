@@ -70,6 +70,7 @@ public class ListView<T> extends javafx.scene.control.ListView<T> {
         private void updateCellWithItem(T item) {
             cell.updateItem(item);
             cell.prefWidthProperty().bind(Layout.getInstance().getContentWidth().subtract(58));
+            cell.getStyleClass().add("my-cell");
 
             setGraphic(cell);
         }

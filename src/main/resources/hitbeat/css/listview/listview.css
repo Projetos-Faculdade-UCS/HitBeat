@@ -20,16 +20,9 @@
 	/* border only at bottom */	
 }
 
-.list-view .list-cell:hover {
+.my-cell:hover {
 	-fx-background-color: rgba(128, 128, 128, 0.253);
 	background-color: rgba(128, 128, 128, 0.253);
-	-fx-background-radius: 10;
-	-fx-border-radius: 10;
-	border-radius: 10;
-	-fx-border-color: transparent;
-	border-color: transparent;
-	-fx-border-width: 1;
-	border-width: 1;
 }
 
 .list-view .list-cell:empty {
@@ -42,4 +35,14 @@
 	border-color: transparent;
 	-fx-border-width: 1;
 	border-width: 1;
+}
+
+.my-cell {
+	-fx-background-color: rgba(128, 128, 128, 0.041);
+	background-color: rgba(128, 128, 128, 0.041);
+	-fx-background-radius: 10;
+	-fx-border-radius: 10;
+	border-radius: 10;
+	/* shadow */
+	-fx-effect: dropshadow(three-pass-box, rgb(0, 0, 0), 15, 0, 5, 5);
 }
