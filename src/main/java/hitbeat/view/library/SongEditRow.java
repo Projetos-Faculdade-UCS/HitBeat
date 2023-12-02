@@ -16,6 +16,7 @@ public class SongEditRow extends BaseCell<CustomMP3File> {
     private Field titleField;
     private Field genreField;
     private Field artistField;
+    private Field albumField;
     private Field filePathField;
     private int deferredLayoutPasses = 0;
 
@@ -37,7 +38,6 @@ public class SongEditRow extends BaseCell<CustomMP3File> {
         initializeFields();
         addFieldsToLayout();
         if (deferredLayoutPasses == 0) {
-            System.out.println("request layout");
             Platform.runLater(() -> {
                 requestLayout();
                 deferredLayoutPasses++;
@@ -49,6 +49,7 @@ public class SongEditRow extends BaseCell<CustomMP3File> {
         titleField = createField("", "Título", controller::titleTextListener);
         genreField = createField("", "Gênero", controller::genreTextListener);
         artistField = createField("", "Artista", controller::artistTextListener);
+        albumField = createField("", "Álbum", controller::albumTextListener);
         filePathField = createField("", "Caminho do arquivo", null);
         filePathField.setEnabled(false);
     }
@@ -64,7 +65,7 @@ public class SongEditRow extends BaseCell<CustomMP3File> {
     }
 
     private void addFieldsToLayout() {
-        root.getChildren().addAll(titleField, genreField, artistField, filePathField);
+        root.getChildren().addAll(titleField, genreField, artistField, albumField, filePathField);
         root.setSpacing(10);
     }
 

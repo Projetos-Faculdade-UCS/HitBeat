@@ -10,9 +10,4 @@ public class FavoritesView extends GenericTrackList {
         super();
         this.setTracks(controller.getFavorites());
     }
-
-    @Override
-    public Object getData() {
-        return null;
-    }
 }

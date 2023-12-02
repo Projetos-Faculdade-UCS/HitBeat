@@ -125,13 +125,17 @@ public class LibraryDatabaseManager {
                                                                         .equals(customMP3File.getArtist()))
                                                         .findFirst()
                                                         .orElse(null));
+                                        String year = customMP3File.getYear();
+                                        if (year != null && !year.isEmpty()) {
+                                                LocalDate localDate = LocalDate.of(Integer.parseInt(year), 1,
+                                                                1);
+                                                Date date = java.sql.Date.valueOf(localDate);
+                                                album.setLaunchDate(date);
+                                        }
 
-                                        LocalDate localDate = LocalDate.of(Integer.parseInt(customMP3File.getYear()), 1,
-                                                        1);
-                                        Date date = java.sql.Date.valueOf(localDate);
-
-                                        album.setLaunchDate(date);
-                                        album.setCover(customMP3File.getImage());
+                                        byte[] image = customMP3File.getImage();
+                                        if (image != null && image.length > 0)
+                                                album.setCover(image);
 
                                         return album;
                                 })

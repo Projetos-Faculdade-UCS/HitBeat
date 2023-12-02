@@ -4,60 +4,68 @@ import hitbeat.controller.MioloController;
 import hitbeat.controller.player.PlayerController;
 import hitbeat.model.Playlist;
 import hitbeat.view.base.widgets.Cover;
+import hitbeat.view.base.widgets.ListTile;
 import hitbeat.view.base.widgets.listview.BaseCell;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
+import javafx.scene.control.Label;
 
 public class PlaylistCell extends BaseCell<Playlist> {
-    private Text playlistName = new Text("");
-    private Cover playlistCover = new Cover();
+    private Playlist playlist;
+    private Cover playlistImage;
+    private Label titleLabel;
+    private Label subtitleLabel;
 
     public PlaylistCell(Playlist playlist) {
-        VBox playlistCard = new VBox();
-        playlistCard.setSpacing(8);
-        playlistCard.setPrefHeight(80);
+        this.initUI();
+        this.updateItem(playlist);
+    }
 
-        playlistCover.setFit(150);
+    private void initUI() {
+        playlistImage = new Cover();
+        playlistImage.setFit(100);
 
-        playlistName.setStyle("-fx-font-weight: bold; -fx-font-size: 16;");
-        playlistName.setFill(Color.WHITE);
+        titleLabel = new Label();
+        titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16; -fx-text-fill: white;");
 
-        playlistCard.getChildren().addAll(playlistCover, playlistName);
+        subtitleLabel = new Label();
+        subtitleLabel.setStyle("-fx-font-size: 14; -fx-text-fill: white;");
 
-        updateItem(playlist);
-        this.getChildren().add(playlistCard);
+        ListTile listTile = new ListTile(playlistImage, titleLabel, subtitleLabel, null);
+        this.getChildren().add(listTile);
 
         // on hover, shows the play button
         this.setOnMouseEntered(e -> {
-            playlistCover.showPlayButton(true);
+            playlistImage.showPlayButton(true);
         });
 
         // on exit, hides the play button
         this.setOnMouseExited(e -> {
-            playlistCover.showPlayButton(false);
+            playlistImage.showPlayButton(false);
+        });
+
+        this.setOnMouseClicked(e -> {
+            if (!playlistImage.isMouseOverPlayButton()) {
+                MioloController.getInstance().push(new DetailPlaylist(playlist), "playlists", playlist.getName());
+            }
         });
     }
 
     @Override
-    public void updateItem(Playlist item) {
-        if (item != null) {
-            playlistName.setText(item.getName());
-            playlistCover.setCoverImage(item.getCover(150));
-            this.setOnMouseClicked(e -> {
-                if (!playlistCover.isMouseOverPlayButton()){
-                    MioloController.getInstance().loadPlayListDetailView(item);
-                }
-            });
+    public void updateItem(Playlist playlist) {
+        this.playlist = playlist;
 
-            playlistCover.setPlayButtonAction(() -> {
-                PlayerController.getInstance().play(item);
+        if (playlist != null) {
+            titleLabel.setText(this.playlist.getName());
+            // subtitleLabel.setText(this.playlist.getDescription());
+            playlistImage.setCoverImage(this.playlist.getCover(50));
+            playlistImage.setPlayButtonAction(() -> {
+                PlayerController.getInstance().play(this.playlist);
             });
-
+            subtitleLabel.setText(this.playlist.getDescription());
         } else {
-            playlistName.setText("");
-            playlistCover.setCoverImage(null);
+            titleLabel.setText("");
+            subtitleLabel.setText("");
+            playlistImage.setCoverImage(null);
         }
-
     }
+
 }

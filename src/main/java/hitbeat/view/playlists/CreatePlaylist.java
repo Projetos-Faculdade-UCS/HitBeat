@@ -1,5 +1,7 @@
 package hitbeat.view.playlists;
 
+import java.util.Map;
+
 import hitbeat.controller.MioloController;
 import hitbeat.controller.playlist.PlaylistController;
 import hitbeat.view.BaseView;
@@ -10,7 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
-public class CreatePlaylist extends MFXScrollPane implements BaseView{
+public class CreatePlaylist extends MFXScrollPane implements BaseView {
     // private ObservableList<Playlist> playlists;
     private final PlaylistController controller = new PlaylistController();
 
@@ -19,7 +21,7 @@ public class CreatePlaylist extends MFXScrollPane implements BaseView{
         Text title = new Text("Nova Playlist");
         title.setStyle("-fx-font-size: 24px;");
         title.setFill(Color.WHITE);
-        
+
         MFXTextField nameField = new MFXTextField();
         nameField.setFloatingText("Nome");
         nameField.setPrefHeight(30);
@@ -35,7 +37,7 @@ public class CreatePlaylist extends MFXScrollPane implements BaseView{
         saveButton.setStyle("-fx-background-color: #2195f3; -fx-text-fill: #ffffff;");
         saveButton.onMouseClickedProperty().set((event) -> {
             controller.createPlaylist(nameField.getText(), descriptionField.getText());
-            MioloController.getInstance().loadPlaylistsView();
+            MioloController.getInstance().restoreFromMemento();
         });
         VBox page = new VBox(); 
         page.getChildren().addAll(title, nameField, descriptionField, saveButton);
@@ -45,7 +47,7 @@ public class CreatePlaylist extends MFXScrollPane implements BaseView{
     }
 
     @Override
-    public Object getData() {
+    public Map<String, Object> getData() {
         return null;
     }
 }
