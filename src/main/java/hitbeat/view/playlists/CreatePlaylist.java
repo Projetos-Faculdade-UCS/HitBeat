@@ -3,6 +3,7 @@ package hitbeat.view.playlists;
 import java.util.Map;
 
 import hitbeat.controller.MioloController;
+import hitbeat.controller.MioloState;
 import hitbeat.controller.playlist.PlaylistController;
 import hitbeat.view.BaseView;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -37,7 +38,9 @@ public class CreatePlaylist extends MFXScrollPane implements BaseView {
         saveButton.setStyle("-fx-background-color: #2195f3; -fx-text-fill: #ffffff;");
         saveButton.onMouseClickedProperty().set((event) -> {
             controller.createPlaylist(nameField.getText(), descriptionField.getText());
-            MioloController.getInstance().restoreFromMemento();
+            MioloController.getInstance().replaceFromMemento(
+                new MioloState(new PlaylistView(), "playlists", "Playlists")
+            );
         });
         VBox page = new VBox(); 
         page.getChildren().addAll(title, nameField, descriptionField, saveButton);

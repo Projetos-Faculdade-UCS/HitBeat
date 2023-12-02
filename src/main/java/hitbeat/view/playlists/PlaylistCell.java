@@ -1,11 +1,14 @@
 package hitbeat.view.playlists;
 
+import hitbeat.controller.Icons;
 import hitbeat.controller.MioloController;
+import hitbeat.controller.MioloState;
 import hitbeat.controller.player.PlayerController;
 import hitbeat.model.Playlist;
 import hitbeat.view.base.widgets.Cover;
 import hitbeat.view.base.widgets.ListTile;
 import hitbeat.view.base.widgets.listview.BaseCell;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 public class PlaylistCell extends BaseCell<Playlist> {
@@ -29,7 +32,16 @@ public class PlaylistCell extends BaseCell<Playlist> {
         subtitleLabel = new Label();
         subtitleLabel.setStyle("-fx-font-size: 14; -fx-text-fill: white;");
 
-        ListTile listTile = new ListTile(playlistImage, titleLabel, subtitleLabel, null);
+        Button delBtn = new Button();
+        delBtn.setGraphic( new Icons().getDelete());
+        delBtn.setStyle("-fx-background-color: transparent;");
+        delBtn.setOnAction(e -> {
+            System.out.println("deleting playlist");
+             MioloController.getInstance().replaceFromMemento(
+                new MioloState(new PlaylistView(), "playlists", "Playlists")
+            );
+        });
+        ListTile listTile = new ListTile(playlistImage, titleLabel, subtitleLabel, delBtn);
         this.getChildren().add(listTile);
 
         // on hover, shows the play button
