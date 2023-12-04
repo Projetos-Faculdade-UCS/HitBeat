@@ -145,3 +145,7 @@
 .mfx-text-field {
     -mfx-main: -hitbeat-main-color;
 }
+
+.new-playlist-cover-edit {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0), 10, 0.6, 0, 0);
+}

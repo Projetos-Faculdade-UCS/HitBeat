@@ -76,9 +76,12 @@ public class CreatePlaylist extends MFXScrollPane implements BaseView {
         coverField.setAlignment(Pos.CENTER);
         coverField.getStyleClass().add("cover-field");
         SVGWidget editIcon = new Icons().getEdit();
+        
+        
         VBox editIconBox = new VBox(editIcon, new Label("Escolher capa"));
         editIconBox.setAlignment(Pos.CENTER);
         editIconBox.setSpacing(2);
+        editIconBox.getStyleClass().add("new-playlist-cover-edit");
         coverField.getChildren().addAll(cover, editIconBox);
 
         coverField.setOnMouseClicked(e -> {
