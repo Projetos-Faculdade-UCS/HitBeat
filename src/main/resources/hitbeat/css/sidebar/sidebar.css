@@ -18,5 +18,5 @@
 }
 
 .sidebar .sidebar-button.active {
-    -fx-text-fill: -main-color;
+    -fx-text-fill: -hitbeat-main-color;
 }

@@ -14,7 +14,7 @@
     
 }
 .menu:hover {
-    -fx-background-color: -main-color;
+    -fx-background-color: -hitbeat-main-color;
     -fx-text-fill: #fff; /* Cor do texto */
 }
 .menu-item {
@@ -22,7 +22,7 @@
     -fx-font-size: 12;
 }
 .menu-item:focused {
-    -fx-background-color: -main-color;
+    -fx-background-color: -hitbeat-main-color;
     -fx-text-fill: #fff; /* Cor do texto */
 }
 

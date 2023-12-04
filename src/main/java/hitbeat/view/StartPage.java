@@ -17,7 +17,7 @@ public class StartPage extends Pane implements BaseView {
     public StartPage() {
         contentLabel = new Label("Bem vindo ao HitBeat!");
 
-        contentLabel.setStyle("-fx-font-size: 20px; -fx-text-fill: #8A2BE2;");
+        contentLabel.getStyleClass().add("welcome-text-label");
 
         this.getChildren().add(contentLabel);
         if (tracksController.fetchAll().size() == 0) {
@@ -29,6 +29,9 @@ public class StartPage extends Pane implements BaseView {
                 this.widthProperty().subtract(contentLabel.widthProperty()).divide(2));
         contentLabel.layoutYProperty().bind(
                 this.heightProperty().subtract(contentLabel.heightProperty()).divide(2).subtract(labalHighDiff));
+
+        // add stylesheets
+        this.getStylesheets().add("/hitbeat/css/start-page/start-page.css");
     }
 
     public void setContentText(String text) {
@@ -43,17 +46,17 @@ public class StartPage extends Pane implements BaseView {
     public VBox getTutorialCard() {
         tutorialCard = new VBox();
         tutorialCard.setSpacing(10);
-        tutorialCard.setStyle("-fx-background-color: #302f2f; -fx-padding: 10px; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-border-color: #8A2BE2; -fx-border-width: 1px;");
+        tutorialCard.getStyleClass().add("tutorial-card");
 
         Label tutorialLabel = new Label("Comece adicionando músicas! :D");
-        tutorialLabel.setStyle("-fx-font-size: 20px; -fx-text-fill: #ffffff;");
-        tutorialCard.getChildren().add(tutorialLabel);
+        tutorialLabel.getStyleClass().addAll("tutorial-label", "main-text");
 
-        Label tutorialContentLabel = new Label("1. Entre em 'Minha Biblioteca'.\n2. Adicione uma pasta.\n3. Clique no disquete para salvar.");
-        tutorialContentLabel.setStyle("-fx-font-size: 15px; -fx-text-fill: #ffffff;");
-        tutorialCard.getChildren().add(tutorialContentLabel);
+        Label tutorialContentLabel = new Label(
+                "1. Entre em 'Minha Biblioteca'.\n2. Adicione uma pasta.\n3. Clique no disquete para salvar.");
+        tutorialContentLabel.getStyleClass().addAll("tutorial-content-label", "main-text");
+        tutorialCard.getChildren().addAll(tutorialLabel, tutorialContentLabel);
 
-        //center the tutorial card
+        // center the tutorial card
         tutorialCard.layoutXProperty().bind(
                 this.widthProperty().subtract(tutorialCard.widthProperty()).divide(2));
         tutorialCard.layoutYProperty().bind(

@@ -1,0 +1,29 @@
+.tutorial-card {
+    -fx-background-color: #302f2f;
+    background-color: #302f2f;
+    -fx-padding: 10px;
+    padding: 10px;
+    -fx-border-radius: 10px;
+    border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-border-color: -main-theme-color;
+    border-color: -main-theme-color;
+    -fx-border-width: 1px;
+    border-width: 1px;
+}
+
+.tutorial-card .tutorial-label {
+    -fx-font-size: 20px;
+    font-size: 20px;
+}
+
+.tutorial-card .tutorial-content-label {
+    -fx-font-size: 15px;
+    font-size: 15px;
+}
+
+.welcome-text-label {
+    -fx-font-size: 28px;
+    font-size: 28px;
+    -fx-text-fill: -hitbeat-main-color;
+}

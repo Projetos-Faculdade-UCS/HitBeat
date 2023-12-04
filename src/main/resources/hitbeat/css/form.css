@@ -15,7 +15,7 @@
 }
 .cover-field{
     -fx-pref-height: 100px;
-    -fx-pref-width: 250px !important;
+    -fx-pref-width: 250px ;
     -fx-background-color: transparent;
 }
 .label{
