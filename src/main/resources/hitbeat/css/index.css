@@ -149,3 +149,7 @@
 .new-playlist-cover-edit {
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0), 10, 0.6, 0, 0);
 }
+
+.elevated-play-btn {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0), 15, 0.6, 0, 0);
+}

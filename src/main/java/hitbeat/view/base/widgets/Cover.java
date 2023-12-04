@@ -2,11 +2,9 @@ package hitbeat.view.base.widgets;
 
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class Cover extends StackPane {
@@ -22,6 +20,7 @@ public class Cover extends StackPane {
         this.getStyleClass().addAll("transparent", "rounded-sm");
         this.getChildren().addAll(cover, playButton);
         this.setAlignment(Pos.CENTER);
+        playButton.getStyleClass().add("elevated-play-btn");
     }
 
     public void setCoverImage(Image image) {
@@ -55,14 +54,6 @@ public class Cover extends StackPane {
         } else {
             playButton.setImage(null);
         }
-
-        // Create and configure the drop shadow effect
-        DropShadow dropShadow = new DropShadow();
-        dropShadow.setRadius(5);
-        dropShadow.setColor(Color.BLACK);
-
-        // Apply the drop shadow effect to the ImageView
-        playButton.setEffect(dropShadow);
     }
 
     public void setPlayButtonAction(Runnable action) {
