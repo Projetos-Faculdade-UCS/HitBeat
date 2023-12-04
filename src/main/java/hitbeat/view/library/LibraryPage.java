@@ -4,6 +4,7 @@ import java.util.Map;
 
 import hitbeat.controller.Icons;
 import hitbeat.controller.MioloController;
+import hitbeat.controller.MioloState;
 import hitbeat.controller.library.LibraryController;
 import hitbeat.util.CustomMP3File;
 import hitbeat.view.BaseView;
@@ -29,8 +30,6 @@ public class LibraryPage extends VBox implements BaseView {
         configureChildren();
 
         getStylesheets().add("hitbeat/css/library/library.css");
-
-        MioloController.getInstance().setFab(getFab());
     }
 
     private void initializeStyling() {
@@ -79,7 +78,7 @@ public class LibraryPage extends VBox implements BaseView {
         addPlaylistButton.setOnAction(e -> {
             controller.saveToDatabase();
             setFilesFromFolder(controller.getFiles());
-            MioloController.getInstance().push(new TracksView(), "tracks", "Todas Músicas");
+            MioloController.getInstance().replace(new MioloState(new TracksView(), "tracks", "Músicas"));
         });
 
         return addPlaylistButton;

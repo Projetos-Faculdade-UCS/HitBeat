@@ -66,7 +66,8 @@ public class IndexView extends BorderPane {
             controller.push(new TracksView(), "tracks", "Todas Músicas");
         }));
         sidebarItems.put("library", new SidebarItem("Minha Biblioteca", icons.getLib(), () -> {
-            controller.push(new LibraryPage(), "library", "Minha Biblioteca");
+            LibraryPage libraryPage = new LibraryPage();
+            controller.push(libraryPage, "library", "Minha Biblioteca", libraryPage.getFab());
         }));
         sidebarItems.put("artists", new SidebarItem("Artistas", icons.getArtists(), () -> {
             controller.push(new ArtistsView(), "artists", "Artistas");
