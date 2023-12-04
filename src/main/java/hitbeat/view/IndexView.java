@@ -62,10 +62,10 @@ public class IndexView extends BorderPane {
         sidebarItems.put("genres", new SidebarItem("Gêneros", icons.getGenres(), () -> {
             controller.push(new GenresView(), "genres", "Gêneros");
         }));
-        sidebarItems.put("tracks", new SidebarItem("Todas", icons.getTracks(), () -> {
-            controller.push(new TracksView(), "tracks", "Todas");
+        sidebarItems.put("tracks", new SidebarItem("Músicas", icons.getTracks(), () -> {
+            controller.push(new TracksView(), "tracks", "Todas Músicas");
         }));
-        sidebarItems.put("library", new SidebarItem("Minha Biblioteca", null, () -> {
+        sidebarItems.put("library", new SidebarItem("Minha Biblioteca", icons.getLib(), () -> {
             controller.push(new LibraryPage(), "library", "Minha Biblioteca");
         }));
         sidebarItems.put("artists", new SidebarItem("Artistas", icons.getArtists(), () -> {

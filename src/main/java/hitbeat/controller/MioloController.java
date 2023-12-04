@@ -94,4 +94,14 @@ public class MioloController {
         mioloState.setShowBackButton(memento.getShowBackButton());
         contentChangedSubject.onNext(mioloState);
     }
+
+    public void replace(MioloState mioloState) {
+        if (mementoStack.size() < 1) {
+            return;
+        }
+        mementoStack.pop();
+        
+        mioloState.setShowBackButton(mementoStack.size() > 1);
+        contentChangedSubject.onNext(mioloState);
+    }
 }
