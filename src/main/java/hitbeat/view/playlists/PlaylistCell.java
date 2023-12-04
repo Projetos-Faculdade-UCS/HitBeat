@@ -2,20 +2,25 @@ package hitbeat.view.playlists;
 
 import hitbeat.controller.Icons;
 import hitbeat.controller.MioloController;
-import hitbeat.controller.MioloState;
 import hitbeat.controller.player.PlayerController;
+import hitbeat.controller.playlist.PlaylistController;
 import hitbeat.model.Playlist;
 import hitbeat.view.base.widgets.Cover;
 import hitbeat.view.base.widgets.ListTile;
 import hitbeat.view.base.widgets.listview.BaseCell;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 public class PlaylistCell extends BaseCell<Playlist> {
     private Playlist playlist;
+    private PlaylistController controller = new PlaylistController();
     private Cover playlistImage;
     private Label titleLabel;
     private Label subtitleLabel;
+    private BehaviorSubject<Playlist> onRemoveSubject = BehaviorSubject.create();
+
 
     public PlaylistCell(Playlist playlist) {
         this.initUI();
@@ -36,10 +41,8 @@ public class PlaylistCell extends BaseCell<Playlist> {
         delBtn.setGraphic( new Icons().getDelete());
         delBtn.setStyle("-fx-background-color: transparent;");
         delBtn.setOnAction(e -> {
-            System.out.println("deleting playlist");
-             MioloController.getInstance().replaceFromMemento(
-                new MioloState(new PlaylistView(), "playlists", "Playlists")
-            );
+            controller.delete(playlist);
+            onRemoveSubject.onNext(this.playlist);
         });
         ListTile listTile = new ListTile(playlistImage, titleLabel, subtitleLabel, delBtn);
         this.getChildren().add(listTile);
@@ -59,6 +62,10 @@ public class PlaylistCell extends BaseCell<Playlist> {
                 MioloController.getInstance().push(new DetailPlaylist(playlist), "playlists", playlist.getName());
             }
         });
+    }
+
+    public void setOnPlaylistRemoved(Consumer<Playlist> onRemove) {
+        onRemoveSubject.subscribe(onRemove);
     }
 
     @Override

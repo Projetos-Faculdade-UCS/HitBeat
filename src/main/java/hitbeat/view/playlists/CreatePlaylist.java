@@ -63,7 +63,7 @@ public class CreatePlaylist extends MFXScrollPane implements BaseView {
         saveBtn.setIcon(new Icons().getSave());
         saveBtn.setOnAction(e -> {
             controller.createPlaylist(nameField.getText(), descriptionField.getText(), image);
-            MioloController.getInstance().replaceFromMemento(
+            MioloController.getInstance().replace(
                 new MioloState(new PlaylistView(), "playlists", "Playlists", PlaylistView.getFab())
             );
         });

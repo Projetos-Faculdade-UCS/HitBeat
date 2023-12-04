@@ -66,4 +66,13 @@ public class PlaylistController extends ModelController<Playlist>{
         return Optional.ofNullable(new Image(fileChooser.showOpenDialog(null).toURI().toString()));
         
     }
+
+    public void delete(Playlist playlist) {
+        EntityManager em = HibernateUtil.getEntityManager();
+        em.getTransaction().begin();
+        em.createNamedQuery("Playlist.delete")
+                .setParameter("playlist", playlist)
+                .executeUpdate();
+        em.getTransaction().commit();
+    }
 }

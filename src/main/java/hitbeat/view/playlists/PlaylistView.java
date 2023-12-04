@@ -1,5 +1,6 @@
 package hitbeat.view.playlists;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import hitbeat.controller.MioloController;
@@ -27,7 +28,11 @@ public class PlaylistView extends MFXScrollPane implements BaseView {
         playlistHeader.setPrefHeight(50);
 
         ListView<Playlist> listView = new ListView<>(playlists, playlist -> {
-            return new PlaylistCell(playlist);
+            PlaylistCell playlistCell = new PlaylistCell(playlist);
+            playlistCell.setOnPlaylistRemoved(playlistRm -> {
+                playlists.remove(playlistRm);
+            });
+            return playlistCell;
         });
 
         this.setContent(listView);
@@ -51,6 +56,8 @@ public class PlaylistView extends MFXScrollPane implements BaseView {
 
     @Override
     public Map<String, Object> getData() {
-        return null;
+        return new HashMap<String, Object>() {{
+            put("playlists", playlists);
+        }};
     }
 }
