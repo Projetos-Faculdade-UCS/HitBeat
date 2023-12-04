@@ -7,7 +7,6 @@
 
 #playPauseBtn .mfx-ripple-generator {
     -mfx-auto-clip: true;
-    -mfx-ripple-color: -hitbeat-main-color;
 }
 
 .mfx-button {

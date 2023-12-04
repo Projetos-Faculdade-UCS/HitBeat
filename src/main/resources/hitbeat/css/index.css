@@ -47,6 +47,8 @@
 /* define main color */
 .root {
     -hitbeat-main-color: #cf352e;
+    -hitbeat-main-color-hover: #cf352e33;
+    -hitbeat-main-color-pressed: #cf352e66;
 }
 
 .transparent {
@@ -152,4 +154,14 @@
 
 .elevated-play-btn {
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0), 15, 0.6, 0, 0);
+}
+
+.mfx-slider .thumb-container:hover .thumb-radius {
+    -mfx-color: -hitbeat-main-color-hover;
+    color: -hitbeat-main-color-hover;
+}
+
+.mfx-slider .thumb-container:pressed .thumb-radius {
+    -mfx-color: -hitbeat-main-color-pressed;
+    color: -hitbeat-main-color-pressed;
 }
