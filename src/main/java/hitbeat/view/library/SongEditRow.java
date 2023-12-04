@@ -76,11 +76,13 @@ public class SongEditRow extends BaseCell<CustomMP3File> {
             titleField.setText(file.getTitle());
             genreField.setText(file.getGenre());
             artistField.setText(file.getArtist());
+            albumField.setText(file.getAlbum());
             filePathField.setText(file.getFilePath());
         } else {
             titleField.setText("");
             genreField.setText("");
             artistField.setText("");
+            albumField.setText("");
             filePathField.setText("");
         }
     }
