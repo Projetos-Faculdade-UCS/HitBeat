@@ -10,3 +10,16 @@
     -fx-text-fill: white ;
     -fx-background-color: transparent ;
 }
+.form{
+    -fx-padding: 15px;
+}
+.cover-field{
+    -fx-pref-height: 100px;
+    -fx-pref-width: 250px !important;
+    -fx-background-color: transparent;
+}
+.label{
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}

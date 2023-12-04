@@ -16,8 +16,6 @@ import javafx.scene.layout.HBox;
 public class PlaylistView extends MFXScrollPane implements BaseView {
     private ObservableList<Playlist> playlists;
     private final PlaylistController controller = new PlaylistController();
-    // private final IndexController mioloController =
-    // IndexController.getInstance();
 
     public PlaylistView() {
         super();
@@ -44,7 +42,8 @@ public class PlaylistView extends MFXScrollPane implements BaseView {
         Image add = new Image("/hitbeat/images/add-rounded.png", 30, 30, false, false);
         addPlaylistButton.setIcon(add);
         addPlaylistButton.setOnAction(e -> {
-            MioloController.getInstance().push(new CreatePlaylist(), "addPlaylist", "Adicionar Playlist");
+            CreatePlaylist createPlaylist = new CreatePlaylist();
+            MioloController.getInstance().push(createPlaylist, "addPlaylist", "Adicionar Playlist", createPlaylist.getFab());
         });
 
         return addPlaylistButton;

@@ -76,9 +76,15 @@ public class Playlist extends BaseModel {
         this.name = name;
     }
 
-      public Playlist(String name, String description) {
+    public Playlist(String name, String description) {
         this.name = name;
         this.description = description;
+    }
+
+    public Playlist(String name, String description, byte[] cover) {
+        this.name = name;
+        this.description = description;
+        this.cover = cover;
     }
 
     public Playlist(String name, String description, byte[] cover, Date pubDate, Set<PlaylistTrack> playlistTracks) {
