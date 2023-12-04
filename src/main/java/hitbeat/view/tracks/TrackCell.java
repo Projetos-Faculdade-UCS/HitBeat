@@ -136,6 +136,7 @@ public class TrackCell extends BaseCell<Track> {
             contextMenu.show(optionsBtn, event.getScreenX(), event.getScreenY());
         });
         HBox menuBtns = new HBox(favoriteBtn, optionsBtn);
+        menuBtns.setAlignment(Pos.CENTER);
         return menuBtns;
     }
 
