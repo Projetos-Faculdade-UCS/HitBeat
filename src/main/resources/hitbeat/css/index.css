@@ -1,8 +1,4 @@
-.sidebar-button {
-    -fx-background-color: #2195f300;
-    background-color: #2195f300;
-    -fx-text-fill: blue;
-}
+
 .root {
     -fx-background-color: #212121;
     background-color: #212121;
@@ -51,7 +47,7 @@
 
 /* define main color */
 .root {
-    -main-color: #8A2BE2;
+    -hitbeat-main-color: #cf352e;
 }
 
 .transparent {
@@ -66,21 +62,21 @@
 }
 
 .min-button {
-    -fx-background-color: transparent !important;
-    background-color: transparent !important;
+    -fx-background-color: transparent;
+    background-color: transparent;
     -fx-padding: 0px;
     padding: 0px;
 }
 
 .min-button .mfx-ripple-generator {
     -mfx-auto-clip: true;
-    -mfx-ripple-color: -main-color;
+    -mfx-ripple-color: -hitbeat-main-color;
     -fx-background-radius: 100;
 }
 
 .fab {
-    -fx-background-color: -main-color;
-    background-color: -main-color;
+    -fx-background-color: -hitbeat-main-color;
+    background-color: -hitbeat-main-color;
     -fx-text-fill: white;
     -fx-background-radius: 15;
     -fx-border-radius: 15;
@@ -93,7 +89,7 @@
 
 .fab .mfx-ripple-generator {
     -mfx-auto-clip: true;
-    -mfx-ripple-color: -main-color;
+    -mfx-ripple-color: -hitbeat-main-color;
     -fx-background-radius: 100;
 }
 
@@ -115,7 +111,7 @@
     font-size: 18px;
     -fx-font-weight: bold;
     font-weight: bold;
-    -fx-fill: white !important;
+    -fx-fill: white;
     fill: white;
     -fx-text-alignment: left;
     -fx-text-fill: white;
@@ -123,7 +119,7 @@
 
 .placeholder {
     -fx-text-fill: white;
-    -fx-fill: white !important;
+    -fx-fill: white;
     fill: white;
     -fx-font-size: 24px;
     font-size: 24px;
@@ -133,10 +129,16 @@
 
 .loading-text {
     -fx-text-fill: white;
-    -fx-fill: white !important;
+    -fx-fill: white;
     fill: white;
     -fx-font-size: 18px;
     font-size: 18px;
     -fx-font-weight: bold;
     font-weight: bold;
+}
+
+.main-text {
+    -fx-text-fill: white;
+    -fx-fill: white;
+    fill: white;
 }
