@@ -167,3 +167,7 @@
     -mfx-color: -hitbeat-main-color-pressed;
     color: -hitbeat-main-color-pressed;
 }
+
+.flames {
+    -fx-effect: dropshadow(three-pass-box, rgb(255, 255, 255), 2, 0.3, 0, 0);
+}

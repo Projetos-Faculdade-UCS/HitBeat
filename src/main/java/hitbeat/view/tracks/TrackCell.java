@@ -160,12 +160,15 @@ public class TrackCell extends BaseCell<Track> {
         playbox.setPickOnBounds(false);
 
         if (isPlaying) {
-            System.out.println("Playing " + this.track.getName());
+            title.getStyleClass().remove("title-playing");
             title.getStyleClass().add("title-playing");
-            Image flames = new Image("/hitbeat/gifs/fire2.gif");
+            Image flames = new Image("/hitbeat/gifs/FIREBALL.gif");
             ImageView flamesView = new ImageView(flames);
-            flamesView.setFitHeight(25);
-            flamesView.setFitWidth(25);
+            flamesView.getStyleClass().add("flames");
+            flamesView.setOpacity(0.6);
+            flamesView.setPreserveRatio(true);
+            flamesView.setFitHeight(30);
+            flamesView.setFitWidth(30);
             playbox.getChildren().add(flamesView);
 
         }else{
