@@ -80,3 +80,38 @@
 .mfx-slider {
     -mfx-main-color: -hitbeat-main-color;
 }
+
+.repeat-btn.repeat .svg-path {
+    -fx-fill: -hitbeat-main-color;
+    fill: -hitbeat-main-color;
+}
+
+.repeat-btn .repeat-indicator {
+    -fx-fill: white;
+    fill: white;
+    -fx-opacity: 0;
+    opacity: 0;
+    -fx-translate-y: 8px;
+}
+
+.repeat-btn.repeat .repeat-indicator {
+    -fx-fill: -hitbeat-main-color;
+    fill: -hitbeat-main-color;
+    -fx-opacity: 1;
+    opacity: 1;
+}
+
+
+.repeat-btn .repeat-one {
+    -fx-fill: white;
+    fill: white;
+    -fx-opacity: 0;
+    opacity: 0;
+}
+
+.repeat-btn.repeat-one .repeat-one {
+    -fx-fill: -hitbeat-main-color;
+    fill: -hitbeat-main-color;
+    -fx-opacity: 1;
+    opacity: 1;
+}

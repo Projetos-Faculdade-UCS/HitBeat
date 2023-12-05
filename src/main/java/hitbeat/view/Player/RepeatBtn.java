@@ -13,51 +13,57 @@ import javafx.scene.text.Text;
 public class RepeatBtn extends MFXButton {
     public RepeatBtn() {
         super("");
+        this.getStyleClass().add("repeat-btn");
 
         PlayerController player = PlayerController.getInstance();
 
         SVGWidget svgRepeat = new SVGWidget(
-                "/hitbeat/svg/repeat.svg", 16, Color.WHITE);
+                "/hitbeat/svg/repeat.svg", 18, Color.WHITE);
 
         Circle repeatIndicator = new Circle(2);
-        repeatIndicator.setFill(Color.WHITE);
-        repeatIndicator.setVisible(false);
+        repeatIndicator.getStyleClass().add("repeat-indicator");
 
         Text repeatOne = new Text("1");
-        repeatOne.setFill(Color.WHITE);
-        repeatOne.setVisible(false);
+        repeatOne.getStyleClass().add("repeat-one");
 
         StackPane.setAlignment(svgRepeat, Pos.CENTER);
         StackPane.setAlignment(repeatIndicator, Pos.BOTTOM_CENTER);
-        repeatIndicator.setStyle("-fx-translate-y: 8px;");
+        StackPane.setAlignment(repeatOne, Pos.CENTER);
 
         StackPane stack = new StackPane();
-        stack.getChildren().addAll(svgRepeat, repeatIndicator);
+        stack.getChildren().addAll(svgRepeat, repeatIndicator, repeatOne);
 
         player.setOnRepeat(repeat -> {
-            if (repeat == RepeatMode.REPEAT_ALL) {
-                repeatIndicator.setVisible(true);
-                repeatIndicator.setFill(Color.BLUEVIOLET);
-                svgRepeat.setColor(Color.BLUEVIOLET);
-                repeatOne.setVisible(false);
-                stack.getChildren().remove(repeatOne);
-            }else if (repeat == RepeatMode.REPEAT_ONE) {
-                repeatIndicator.setVisible(true);
-                repeatIndicator.setFill(Color.BLUEVIOLET);
-                svgRepeat.setColor(Color.BLUEVIOLET);
-                repeatOne.setVisible(true);
-                stack.getChildren().add(repeatOne);
-            } 
-            else {
-                repeatIndicator.setVisible(false);
-                repeatIndicator.setFill(Color.WHITE);
-                svgRepeat.setColor(Color.WHITE);
-                repeatOne.setVisible(false);
-                stack.getChildren().remove(repeatOne);
-            }
+            setRepeatOne(repeat == RepeatMode.REPEAT_ONE);
+            setRepeat(repeat == RepeatMode.REPEAT_ALL || repeat == RepeatMode.REPEAT_ONE);
         });
         this.setOnMouseClicked(event -> player.toggleRepeat());
         this.setGraphic(stack);
+    }
+
+    private void setRepeatOne(boolean repeatOne) {
+        if (repeatOne) {
+            this.getStyleClass().add("repeat-one");
+        } else {
+            this.getStyleClass().remove("repeat-one");
+        }
+    }
+
+    private void setRepeat(boolean repeat) {
+        if (repeat) {
+            this.addRepeat();
+        } else {
+            this.removeRepeat();
+        }
+    }
+
+    private void addRepeat() {
+        this.getStyleClass().remove("repeat");
+        this.getStyleClass().add("repeat");
+    }
+
+    private void removeRepeat() {
+        this.getStyleClass().remove("repeat");
     }
 
 }
