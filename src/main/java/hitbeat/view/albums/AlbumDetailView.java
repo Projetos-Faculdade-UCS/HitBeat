@@ -7,6 +7,6 @@ public class AlbumDetailView extends GenericTrackList {
     public AlbumDetailView(Album album) {
         super();
 
-        this.setTracks(album.getTracks());
+        this.setTracksSupplier(() -> album.getTracks());
     }
 }

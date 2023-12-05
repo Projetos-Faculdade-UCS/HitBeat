@@ -8,6 +8,6 @@ public class FavoritesView extends GenericTrackList {
 
     public FavoritesView() {
         super();
-        this.setTracks(controller.getFavorites());
+        this.setTracksSupplier(() -> controller.getFavorites());
     }
 }

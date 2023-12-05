@@ -8,7 +8,7 @@ public class ArtistDetailView extends GenericTrackList {
     public ArtistDetailView(Artist artist) {
         super();
 
-        this.setTracks(artist.getTracks());
+        this.setTracksSupplier(() -> artist.getTracks());
     }
-    
+
 }

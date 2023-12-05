@@ -12,12 +12,10 @@ public class LoadingPage extends BorderPane {
 
     private LoadingComponent pulsingIcon;
 
-    private boolean playSound = true;
-
-    public LoadingPage() {
+    public LoadingPage(boolean playSound) {
         super();
 
-        pulsingIcon = new LoadingComponent();
+        pulsingIcon = new LoadingComponent(playSound);
 
         // Set center of the LoadingPage to the vbox
         this.setCenter(pulsingIcon);
@@ -25,10 +23,6 @@ public class LoadingPage extends BorderPane {
         if (playSound) {
             playCracklingSound();
         }
-    }
-
-    public void setPlaySound(boolean playSound) {
-        this.playSound = playSound;
     }
 
     private void playCracklingSound() {

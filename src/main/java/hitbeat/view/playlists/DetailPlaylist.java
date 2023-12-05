@@ -13,7 +13,7 @@ public class DetailPlaylist extends GenericTrackList {
     public DetailPlaylist(Playlist playlist) {
         super();
         this.playlist = playlist;
-        this.setTracks(controller.getAllTracks(playlist));
+        this.setTracksSupplier(() -> controller.getAllTracks(playlist));
     }
 
     @Override

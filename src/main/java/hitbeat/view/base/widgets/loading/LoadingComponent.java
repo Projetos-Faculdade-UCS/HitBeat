@@ -4,6 +4,7 @@ import io.github.palexdev.mfxcore.controls.Text;
 import javafx.animation.KeyFrame;
 import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,8 +19,9 @@ public class LoadingComponent extends VBox {
     private PulsingIcon pulsingIcon;
     private boolean playSound = true;
 
-    public LoadingComponent() {
+    public LoadingComponent(boolean playSound) {
         super();
+        this.playSound = playSound;
 
         // Create Text
         Text loadingText = new Text("Carregando...");
@@ -80,19 +82,21 @@ public class LoadingComponent extends VBox {
             scaleTransition.setCycleCount(ScaleTransition.INDEFINITE);
             scaleTransition.setAutoReverse(true);
 
-            if (playSound) {
-                pulseSound.setVolume(0.5);
-                // Manually handle the pulsing effect using a Timeline
-                pulseTimeline = new Timeline(
-                        new KeyFrame(Duration.seconds(0), event -> {
-                            pulseSound.seek(Duration.seconds(0));
-                            pulseSound.play();
-                        }),
-                        new KeyFrame(pulseDuration));
+            Platform.runLater(() -> {
+                if (playSound) {
+                    pulseSound.setVolume(0.5);
+                    // Manually handle the pulsing effect using a Timeline
+                    pulseTimeline = new Timeline(
+                            new KeyFrame(Duration.seconds(0), event -> {
+                                pulseSound.seek(Duration.seconds(0));
+                                pulseSound.play();
+                            }),
+                            new KeyFrame(pulseDuration));
 
-                pulseTimeline.setCycleCount(Timeline.INDEFINITE);
-                pulseTimeline.play();
-            }
+                    pulseTimeline.setCycleCount(Timeline.INDEFINITE);
+                    pulseTimeline.play();
+                }
+            });
 
             scaleTransition.play();
         }

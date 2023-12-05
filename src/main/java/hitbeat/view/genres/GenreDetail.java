@@ -10,6 +10,6 @@ public class GenreDetail extends GenericTrackList {
     public GenreDetail(Genre genre) {
         super();
 
-        this.setTracks(genreController.getTracks(genre));
+        this.setTracksSupplier(() -> genreController.getTracks(genre));
     }
 }

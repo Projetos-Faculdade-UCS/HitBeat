@@ -8,7 +8,7 @@ public class TracksView extends GenericTrackList {
 
     public TracksView() {
         super();
-        this.setTracks(controller.fetchAll());
+        this.setTracksSupplier(controller::fetchAll);
     }
 
 }

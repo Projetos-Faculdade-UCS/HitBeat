@@ -4,11 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import hitbeat.model.Track;
+import hitbeat.util.AsyncLoading;
 import hitbeat.view.BaseView;
 import hitbeat.view.base.widgets.listview.ListView;
 import hitbeat.view.tracks.TrackCell;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import io.github.palexdev.mfxcore.controls.Text;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.functions.Supplier;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -50,12 +53,19 @@ public class GenericTrackList extends MFXScrollPane implements BaseView {
 
     @Override
     public Map<String, Object> getData() {
-        return new HashMap<String, Object>() {{
-            put("tracks", tracks);
-        }};
+        return new HashMap<String, Object>() {
+            {
+                put("tracks", tracks);
+            }
+        };
     }
 
-    public void setTracks(ObservableList<Track> tracks) {
-        this.tracks.setAll(tracks);
+    public void setTracksSupplier(Supplier<ObservableList<Track>> tracksSupplier) {
+        Consumer<ObservableList<Track>> consumer = tracks -> {
+            this.tracks.setAll(tracks);
+            this.setContent(listView);
+        };
+
+        AsyncLoading.loadAsync(this, tracksSupplier, consumer);
     }
 }
