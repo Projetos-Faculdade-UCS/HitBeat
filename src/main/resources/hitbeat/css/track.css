@@ -32,9 +32,12 @@
 }
 
 .subtitle{
-    -fx-font-size: 14;
+    -fx-font-size: 12;
     -fx-text-fill: #fff;
 }
 .label{
     -fx-text-fill: #fff;
+}
+.title-playing{
+    -fx-text-fill: -hitbeat-main-color !important;
 }

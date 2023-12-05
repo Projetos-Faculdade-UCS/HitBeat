@@ -22,6 +22,8 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
@@ -50,34 +52,20 @@ public class TrackCell extends BaseCell<Track> {
 
     private void initUI() {
         // Create Leading
-        RoundedButton playBtn = new RoundedButton("");
-        SVGWidget svgPlay = new SVGWidget("/hitbeat/svg/play.svg", 25, Color.WHITE);
-        playBtn.setGraphic(svgPlay);
-
-        StackPane playbox = new StackPane(playBtn);
-        VBox.setVgrow(playbox, Priority.ALWAYS);
-
-        playbox.setAlignment(Pos.CENTER);
-        playbox.setPickOnBounds(false);
-
-        playBtn.setOnMouseClicked(event -> {
-            // get data must return a list of tracks
-            Object data = mioloController.getCurrentState().getData().get("tracks");
-            if (data instanceof List) {
-                List<Track> tracks = (List<Track>) data;
-                PlayerController.getInstance().play(tracks, this.track);
-            }
-        });
-
         title = new Label();
         subtitle = new Label();
-
+        
         title.getStyleClass().add("title");
         subtitle.getStyleClass().add("subtitle");
-
-        ListTile listTile = new ListTile(playbox, title, subtitle, getMenuBtns());
+    
+        ListTile listTile = new ListTile(getPlayBox(false), title, subtitle, getMenuBtns());
         this.getChildren().add(listTile);
         this.getStylesheets().add(getClass().getResource("/hitbeat/css/track.css").toExternalForm());
+        
+        PlayerController.getInstance().setOnSongStart(songStart -> {
+            boolean isPlaying = songStart != null && songStart.getTrack().myEquals(this.track);
+            ((ListTile) this.getChildren().get(0)).getChildren().set(0, getPlayBox(isPlaying));
+        });
     }
 
     public void setOnTrackRemoved(Consumer<Track> consumer) {
@@ -94,6 +82,10 @@ public class TrackCell extends BaseCell<Track> {
                 subtitle.setText(this.track.getAlbum().getArtist().getName()); // Update if Track has more data
             }
             favoriteBtn.setGraphic(icons.getFavorite(this.track.isFavorite()));
+            Track playing = PlayerController.getInstance().getTrack();
+            boolean isPlaying = this.track.myEquals(playing);
+            ((ListTile) this.getChildren().get(0)).getChildren().set(0, getPlayBox(isPlaying));
+
         } else {
             title.setText("");
             subtitle.setText("");
@@ -159,5 +151,39 @@ public class TrackCell extends BaseCell<Track> {
         });
 
         return addMenu;
+    }
+
+    public StackPane getPlayBox(boolean isPlaying) {
+        StackPane playbox = new StackPane();
+        VBox.setVgrow(playbox, Priority.ALWAYS);
+        playbox.setAlignment(Pos.CENTER);
+        playbox.setPickOnBounds(false);
+
+        if (isPlaying) {
+            System.out.println("Playing " + this.track.getName());
+            title.getStyleClass().add("title-playing");
+            Image flames = new Image("/hitbeat/gifs/fire2.gif");
+            ImageView flamesView = new ImageView(flames);
+            flamesView.setFitHeight(25);
+            flamesView.setFitWidth(25);
+            playbox.getChildren().add(flamesView);
+
+        }else{
+            title.getStyleClass().remove("title-playing");
+            RoundedButton playBtn = new RoundedButton("");
+            SVGWidget svgPlay = new SVGWidget("/hitbeat/svg/play.svg", 25, Color.WHITE);
+            playBtn.setGraphic(svgPlay);
+            playBtn.setOnMouseClicked(event -> {
+                // get data must return a list of tracks
+                Object data = mioloController.getCurrentState().getData().get("tracks");
+                if (data instanceof List) {
+                    List<Track> tracks = (List<Track>) data;
+                    PlayerController.getInstance().play(tracks, this.track);
+                }
+            });
+
+            playbox.getChildren().add(playBtn);
+        }
+        return playbox;
     }
 }
