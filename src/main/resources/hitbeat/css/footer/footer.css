@@ -115,3 +115,13 @@
     -fx-opacity: 1;
     opacity: 1;
 }
+
+.shuffle-btn .svg-path {
+    -fx-fill: white;
+    fill: white;
+}
+
+.shuffle-btn.shuffle .svg-path {
+    -fx-fill: -hitbeat-main-color;
+    fill: -hitbeat-main-color;
+}
