@@ -1,5 +1,6 @@
 package hitbeat.view.tracks;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import hitbeat.controller.Icons;
@@ -180,7 +181,8 @@ public class TrackCell extends BaseCell<Track> {
                 // get data must return a list of tracks
                 Object data = mioloController.getCurrentState().getData().get("tracks");
                 if (data instanceof List) {
-                    List<Track> tracks = (List<Track>) data;
+                    // deep copy
+                    List<Track> tracks = new ArrayList<>((List<Track>) data);
                     PlayerController.getInstance().play(tracks, this.track);
                 }
             });

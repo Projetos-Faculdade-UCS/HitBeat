@@ -21,6 +21,7 @@ public class MediaPlayerBox extends VBox {
 
         PlayPauseBtn playPauseBtn = new PlayPauseBtn();
         RepeatBtn repeatBtn = new RepeatBtn();
+        ShuffleBtn shuffleBtn = new ShuffleBtn();
         MFXButton stopBtn = getStopBtn();
         MFXButton nextBtn = new MFXButton("", svgNext);
 
@@ -43,7 +44,7 @@ public class MediaPlayerBox extends VBox {
         HBox.setHgrow(progressBar, Priority.ALWAYS);
 
         actionsTab.getChildren().addAll(
-                stopBtn, previousBtn, playPauseBtn, nextBtn, repeatBtn);
+                stopBtn, shuffleBtn, previousBtn, playPauseBtn, nextBtn, repeatBtn);
 
         actionsTab.setId("actionsTab");
         HBox.setHgrow(actionsTab, Priority.NEVER);

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import hitbeat.controller.playlist.PlaylistController;
 import hitbeat.dao.TrackDAO;
@@ -59,10 +60,15 @@ public class PlayerController {
         }
     }
 
+    public enum ShuffleMode {
+        NONE, SHUFFLE
+    }
+
     // Private member variables
+    private Random random = new Random();
     private MediaPlayer song;
     private Track currentTrack;
-    private final Deque<Track> playbackQueue = new ArrayDeque<>();
+    private final List<Track> playbackQueue = new ArrayList<>();
     private final Deque<Track> playedTracks = new ArrayDeque<>();
     private DoubleProperty volume = null;
     private final BehaviorSubject<MediaPlayer.Status> songStatusSubject = BehaviorSubject.create();
@@ -72,12 +78,15 @@ public class PlayerController {
     private final BehaviorSubject<Progress> progressSubject = BehaviorSubject.create();
     private final BehaviorSubject<SongStart> songStartSubject = BehaviorSubject.create();
     private final BehaviorSubject<Double> volumeChangedSubject = BehaviorSubject.create();
+    private final BehaviorSubject<ShuffleMode> shuffleModeSubject = BehaviorSubject.create();
 
     // Disposable listeners
     private Runnable endOfMediaListener;
     private Runnable onReadyListener;
     private ChangeListener<? super Duration> currentTimeListener;
     private ChangeListener<? super MediaPlayer.Status> statusListener;
+
+    private ShuffleMode shuffleMode = ShuffleMode.NONE;
 
     // Private constructor for Singleton
     private PlayerController() {
@@ -263,11 +272,16 @@ public class PlayerController {
 
         List<Track> queue = tracks.subList(index, tracks.size());
 
+        List<Track> onlyFirstTrack = new ArrayList<>();
+        onlyFirstTrack.add(queue.remove(0));
+
         clearQueue();
         this.playedTracks.clear();
         this.playedTracks.addAll(playedTracks);
-        addToQueue(queue);
+        addToQueue(onlyFirstTrack);
         playNextTrack();
+
+        addToQueue(queue);
     }
 
     public void play(List<Track> tracks, Track track) {
@@ -289,6 +303,14 @@ public class PlayerController {
         repeatStatusSubject.onNext(repeat);
     }
 
+    public void toggleShuffle() {
+        List<ShuffleMode> shuffleModes = new ArrayList<>(List.of(ShuffleMode.values()));
+        int index = shuffleModes.indexOf(shuffleMode);
+        index = (index + 1) % shuffleModes.size();
+        shuffleMode = shuffleModes.get(index);
+        shuffleModeSubject.onNext(shuffleMode);
+    }
+
     public void seek(double sTime) {
         if (hasSong()) {
             song.seek(Duration.seconds(sTime));
@@ -300,6 +322,10 @@ public class PlayerController {
         if (hasSong()) {
             song.volumeProperty().bind(sliderValue);
         }
+    }
+
+    public void setOnShuffleChange(Consumer<ShuffleMode> action) {
+        shuffleModeSubject.subscribe(action);
     }
 
     public void setOnRepeat(Consumer<RepeatMode> action) {
@@ -351,7 +377,7 @@ public class PlayerController {
         }
     }
 
-    public Deque<Track> getPlaybackQueue() {
+    public List<Track> getPlaybackQueue() {
         return playbackQueue;
     }
 
@@ -367,15 +393,23 @@ public class PlayerController {
 
     public void playNextTrack() {
         boolean shouldPushToPlayedTracks = true;
-        if (playbackQueue.isEmpty() && repeat == RepeatMode.REPEAT_ALL) {
-            playbackQueue.addAll(playedTracks.reversed());
-            playedTracks.clear();
-            playbackQueue.offer(currentTrack);
-            shouldPushToPlayedTracks = false;
-        }
 
+        if (shuffleMode == ShuffleMode.SHUFFLE) {
+            playNextTrackShuffleMode(shouldPushToPlayedTracks);
+        } else {
+            playNextTrackRegularMode(shouldPushToPlayedTracks);
+        }
+    }
+
+    private void playNextTrackShuffleMode(boolean shouldPushToPlayedTracks) {
         if (playbackQueue.isEmpty()) {
-            return;
+            // Check if both playbackQueue and playedTracks are empty
+            if (!playedTracks.isEmpty() && repeat == RepeatMode.REPEAT_ALL) {
+                playbackQueue.addAll(playedTracks.reversed());
+                playedTracks.clear();
+            } else {
+                return;
+            }
         }
 
         if (currentTrack != null && shouldPushToPlayedTracks) {
@@ -383,7 +417,31 @@ public class PlayerController {
         }
 
         disposeCurrentSong();
-        Track nextTrack = playbackQueue.poll();
+
+        int randomIndex = random.nextInt(playbackQueue.size());
+        Track nextTrack = playbackQueue.remove(randomIndex);
+
+        if (nextTrack != null) {
+            play(nextTrack);
+        }
+    }
+
+    private void playNextTrackRegularMode(boolean shouldPushToPlayedTracks) {
+        if (playbackQueue.isEmpty() && repeat == RepeatMode.REPEAT_ALL) {
+            playbackQueue.addAll(playedTracks.reversed());
+            playedTracks.clear();
+            playbackQueue.add(currentTrack);
+            shouldPushToPlayedTracks = false;
+        }
+
+        if (!playbackQueue.isEmpty() && currentTrack != null && shouldPushToPlayedTracks) {
+            playedTracks.push(currentTrack);
+        }
+
+        disposeCurrentSong();
+
+        Track nextTrack = playbackQueue.isEmpty() ? null : playbackQueue.remove(0);
+
         if (nextTrack != null) {
             play(nextTrack);
         }
@@ -394,7 +452,7 @@ public class PlayerController {
             Track previousTrack = playedTracks.pop();
 
             if (currentTrack != null && !currentTrack.equals(previousTrack)) {
-                playbackQueue.offerFirst(currentTrack);
+                playbackQueue.addFirst(currentTrack);
             }
 
             disposeCurrentSong();
@@ -417,7 +475,7 @@ public class PlayerController {
     }
 
     public void addToQueue(Track track) {
-        playbackQueue.offer(track);
+        playbackQueue.add(track);
     }
 
     public void addToQueue(List<Track> tracks) {
