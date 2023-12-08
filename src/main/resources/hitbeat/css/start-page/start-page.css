@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Pixelify+Sans:400,500,700&display=swap');
 
 .tutorial-card {
     -fx-background-color: #302f2f;
@@ -27,8 +26,9 @@
 .welcome-text-label {
     -fx-font-size: 20px;
     font-size: 20px;
-    -fx-text-fill: -hitbeat-main-color;
-    -fx-font-family: 'Pixelify Sans', sans-serif;
-    font-family: 'Pixelify Sans', sans-serif;
+    -fx-text-fill: white;
 }
 
+.content{
+    -fx-alignment: center;
+}

@@ -8,41 +8,33 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 public class StartPage extends Pane implements BaseView {
-
-    private Label contentLabel;
     private VBox tutorialCard;
     private TracksController tracksController = new TracksController();
 
     public StartPage() {
         VBox content = new VBox();
-        content.setAlignment(javafx.geometry.Pos.CENTER);
+        content.prefHeightProperty().bind(this.heightProperty());
         content.setSpacing(20);
-
         content.getStyleClass().add("content");
-        
-        contentLabel = new Label("Seja bem vindo!");
-        contentLabel.getStyleClass().add("welcome-text-label");
         this.getChildren().add(content);
+        
+        Region space1 = new Region();
+        space1.prefHeightProperty().bind(this.heightProperty());
 
-        HBox fogueiraBox = new HBox();
-        fogueiraBox.setAlignment(javafx.geometry.Pos.CENTER);
-        fogueiraBox.getChildren().addAll(getFogueira(), contentLabel);
-        fogueiraBox.setSpacing(10);
-        content.getChildren().addAll(getTitle(),fogueiraBox);
-
+        content.getChildren().addAll(getTitle(), space1, getFogueira());
         if (tracksController.fetchAll().size() == 0) {
             content.getChildren().add(getTutorialCard());
         }
+        Region space2 = new Region();
+        space2.prefHeightProperty().bind(this.heightProperty());
+        content.getChildren().addAll(space2, getWaves());
 
         // add stylesheets
         this.getStylesheets().add("/hitbeat/css/start-page/start-page.css");
-    }
-
-    public void setContentText(String text) {
-        contentLabel.setText(text);
     }
 
     @Override
@@ -70,25 +62,50 @@ public class StartPage extends Pane implements BaseView {
         return tutorialCardBox;
     }
 
-    public ImageView getFogueira(){
+    public HBox getFogueira(){
+        Label contentLabel = new Label("Seja bem vindo!");
+        contentLabel.getStyleClass().add("welcome-text-label");
+        
         Image fogueiraImg = new Image("/hitbeat/gifs/bonfire8.gif");
         ImageView fogueira = new ImageView(fogueiraImg);
         fogueira.setFitHeight(80);
         fogueira.setPreserveRatio(true);
-        //center de fogueira
-        fogueira.setLayoutX(0);
 
-        return fogueira;
+        HBox fogueiraBox = new HBox();
+        fogueiraBox.setSpacing(10);
+        fogueiraBox.setAlignment(javafx.geometry.Pos.CENTER);
+        fogueiraBox.getChildren().addAll(fogueira, contentLabel);
+
+        return fogueiraBox;
     }
 
-    public ImageView getTitle(){
-        Image titleImg = new Image("/hitbeat/images/hitbeat-title2.png");
+    public HBox getTitle(){
+        Image titleImg = new Image("/hitbeat/images/hitbeat-title.png");
         ImageView title = new ImageView(titleImg);
-        // bind title width to window width
-        title.fitWidthProperty().bind(this.widthProperty());
+        title.setFitHeight(100);
         title.setPreserveRatio(true);
-        //center de title
-        title.setLayoutX(0);
-        return title;
+
+        HBox titleBox = new HBox();
+        titleBox.setSpacing(10);
+        titleBox.setAlignment(javafx.geometry.Pos.CENTER);
+        titleBox.prefWidthProperty().bind(this.widthProperty());
+        titleBox.getChildren().add(title);
+        return titleBox;
+    }
+
+    public HBox getWaves(){
+        Image wavesImg = new Image("/hitbeat/images/song-waves.png");
+        ImageView waves = new ImageView(wavesImg);
+
+        //center de waves
+        waves.setFitHeight(50);
+        waves.setPreserveRatio(true);
+
+        HBox wavesBox = new HBox();
+        wavesBox.setSpacing(10);
+        wavesBox.setAlignment(javafx.geometry.Pos.CENTER);
+        wavesBox.prefWidthProperty().bind(this.widthProperty());
+        wavesBox.getChildren().add(waves);
+        return wavesBox;
     }
 }
