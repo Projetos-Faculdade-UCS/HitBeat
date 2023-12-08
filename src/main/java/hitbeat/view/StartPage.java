@@ -4,6 +4,8 @@ import java.util.Map;
 
 import hitbeat.controller.tracks.TracksController;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
@@ -15,20 +17,22 @@ public class StartPage extends Pane implements BaseView {
     private TracksController tracksController = new TracksController();
 
     public StartPage() {
+        VBox content = new VBox();
+        content.setAlignment(javafx.geometry.Pos.CENTER);
+        content.setSpacing(10);
+
+        content.getStyleClass().add("content");
+        
+
         contentLabel = new Label("Bem vindo ao HitBeat!");
-
         contentLabel.getStyleClass().add("welcome-text-label");
+        this.getChildren().add(content);
+        content.getChildren().addAll(getTitle(),getFogueira());
 
-        this.getChildren().add(contentLabel);
         if (tracksController.fetchAll().size() == 0) {
-            this.getChildren().add(getTutorialCard());
+            content.getChildren().add(getTutorialCard());
             labalHighDiff = 100;
         }
-
-        contentLabel.layoutXProperty().bind(
-                this.widthProperty().subtract(contentLabel.widthProperty()).divide(2));
-        contentLabel.layoutYProperty().bind(
-                this.heightProperty().subtract(contentLabel.heightProperty()).divide(2).subtract(labalHighDiff));
 
         // add stylesheets
         this.getStylesheets().add("/hitbeat/css/start-page/start-page.css");
@@ -56,12 +60,28 @@ public class StartPage extends Pane implements BaseView {
         tutorialContentLabel.getStyleClass().addAll("tutorial-content-label", "main-text");
         tutorialCard.getChildren().addAll(tutorialLabel, tutorialContentLabel);
 
-        // center the tutorial card
-        tutorialCard.layoutXProperty().bind(
-                this.widthProperty().subtract(tutorialCard.widthProperty()).divide(2));
-        tutorialCard.layoutYProperty().bind(
-                this.heightProperty().subtract(tutorialCard.heightProperty()).divide(2));
-
         return tutorialCard;
+    }
+
+    public ImageView getFogueira(){
+        Image fogueiraImg = new Image("/hitbeat/gifs/bonfire8.gif");
+        ImageView fogueira = new ImageView(fogueiraImg);
+        fogueira.setFitHeight(200);
+        fogueira.setFitWidth(200);
+        fogueira.setPreserveRatio(true);
+        //center de fogueira
+        fogueira.setLayoutX(0);
+
+        return fogueira;
+    }
+
+    public ImageView getTitle(){
+        Image titleImg = new Image("/hitbeat/images/hitbeat-title.png");
+        ImageView title = new ImageView(titleImg);
+        title.setFitHeight(150);
+        title.setPreserveRatio(true);
+        //center de title
+        title.setLayoutX(0);
+        return title;
     }
 }
