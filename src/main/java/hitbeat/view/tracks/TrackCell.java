@@ -29,6 +29,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 
 public class TrackCell extends BaseCell<Track> {
@@ -37,6 +38,9 @@ public class TrackCell extends BaseCell<Track> {
     private Label subtitle;
     private MyButton favoriteBtn;
     private ContextMenu contextMenu;
+    private StackPane playbox;
+    private RoundedButton playBtn;
+    private ImageView flamesView;
     private Icons icons = new Icons();
     private PlaylistController playlistController = new PlaylistController();
     private MioloController mioloController = MioloController.getInstance();
@@ -53,20 +57,51 @@ public class TrackCell extends BaseCell<Track> {
 
     private void initUI() {
         // Create Leading
+        playbox = new StackPane();
+        VBox.setVgrow(playbox, Priority.ALWAYS);
+        playbox.setAlignment(Pos.CENTER);
+        playbox.setPickOnBounds(false);
+
+        playBtn = new RoundedButton("");
+        SVGWidget svgPlay = new SVGWidget("/hitbeat/svg/play.svg", 25, Color.WHITE);
+        playBtn.setGraphic(svgPlay);
+        playBtn.setOnMouseClicked(event -> {
+            // get data must return a list of tracks
+            Object data = mioloController.getCurrentState().getData().get("tracks");
+            if (data instanceof List) {
+                // deep copy
+                List<Track> tracks = new ArrayList<>((List<Track>) data);
+                PlayerController.getInstance().play(tracks, this.track);
+            }
+        });
+
+        Image flames = new Image("/hitbeat/gifs/FIREBALL.gif");
+        flamesView = new ImageView(flames);
+        flamesView.getStyleClass().add("flames");
+        flamesView.setOpacity(0.6);
+        flamesView.setPreserveRatio(true);
+        flamesView.setFitHeight(30);
+        flamesView.setFitWidth(30);
+
+
         title = new Label();
         subtitle = new Label();
         
         title.getStyleClass().add("title");
         subtitle.getStyleClass().add("subtitle");
-    
-        ListTile listTile = new ListTile(getPlayBox(false), title, subtitle, getMenuBtns());
+        setPlayBox(false);
+        ListTile listTile = new ListTile(playbox, title, subtitle, getMenuBtns());
         this.getChildren().add(listTile);
         this.getStylesheets().add(getClass().getResource("/hitbeat/css/track.css").toExternalForm());
+
+        PlayerController.getInstance().setOnStatusChange(status -> {
+            if (this.track == null) return;
         
-        PlayerController.getInstance().setOnSongStart(songStart -> {
-            boolean isPlaying = songStart != null && songStart.getTrack().myEquals(this.track);
-            ((ListTile) this.getChildren().get(0)).getChildren().set(0, getPlayBox(isPlaying));
+            Track playing = PlayerController.getInstance().getTrack();
+            boolean isPlaying = this.track.myEquals(playing);
+            setPlayBox(status == MediaPlayer.Status.PLAYING && isPlaying);
         });
+
     }
 
     public void setOnTrackRemoved(Consumer<Track> consumer) {
@@ -83,10 +118,6 @@ public class TrackCell extends BaseCell<Track> {
                 subtitle.setText(this.track.getAlbum().getArtist().getName()); // Update if Track has more data
             }
             favoriteBtn.setGraphic(icons.getFavorite(this.track.isFavorite()));
-            Track playing = PlayerController.getInstance().getTrack();
-            boolean isPlaying = this.track.myEquals(playing);
-            ((ListTile) this.getChildren().get(0)).getChildren().set(0, getPlayBox(isPlaying));
-
         } else {
             title.setText("");
             subtitle.setText("");
@@ -154,41 +185,17 @@ public class TrackCell extends BaseCell<Track> {
         return addMenu;
     }
 
-    public StackPane getPlayBox(boolean isPlaying) {
-        StackPane playbox = new StackPane();
-        VBox.setVgrow(playbox, Priority.ALWAYS);
-        playbox.setAlignment(Pos.CENTER);
-        playbox.setPickOnBounds(false);
-
+    public void setPlayBox(boolean isPlaying) {
         if (isPlaying) {
             title.getStyleClass().remove("title-playing");
             title.getStyleClass().add("title-playing");
-            Image flames = new Image("/hitbeat/gifs/FIREBALL.gif");
-            ImageView flamesView = new ImageView(flames);
-            flamesView.getStyleClass().add("flames");
-            flamesView.setOpacity(0.6);
-            flamesView.setPreserveRatio(true);
-            flamesView.setFitHeight(30);
-            flamesView.setFitWidth(30);
+            playbox.getChildren().clear();
             playbox.getChildren().add(flamesView);
 
         }else{
             title.getStyleClass().remove("title-playing");
-            RoundedButton playBtn = new RoundedButton("");
-            SVGWidget svgPlay = new SVGWidget("/hitbeat/svg/play.svg", 25, Color.WHITE);
-            playBtn.setGraphic(svgPlay);
-            playBtn.setOnMouseClicked(event -> {
-                // get data must return a list of tracks
-                Object data = mioloController.getCurrentState().getData().get("tracks");
-                if (data instanceof List) {
-                    // deep copy
-                    List<Track> tracks = new ArrayList<>((List<Track>) data);
-                    PlayerController.getInstance().play(tracks, this.track);
-                }
-            });
-
+            playbox.getChildren().clear();
             playbox.getChildren().add(playBtn);
         }
-        return playbox;
     }
 }
