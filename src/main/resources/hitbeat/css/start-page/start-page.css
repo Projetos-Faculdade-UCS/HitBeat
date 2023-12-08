@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Pixelify+Sans:400,500,700&display=swap');
+
 .tutorial-card {
     -fx-background-color: #302f2f;
     background-color: #302f2f;
@@ -13,17 +15,20 @@
 }
 
 .tutorial-card .tutorial-label {
-    -fx-font-size: 20px;
-    font-size: 20px;
+    -fx-font-size: 16px;
+    font-size: 16px;
 }
 
 .tutorial-card .tutorial-content-label {
-    -fx-font-size: 15px;
-    font-size: 15px;
+    -fx-font-size: 12px;
+    font-size: 12px;
 }
 
 .welcome-text-label {
-    -fx-font-size: 28px;
-    font-size: 28px;
+    -fx-font-size: 20px;
+    font-size: 20px;
     -fx-text-fill: -hitbeat-main-color;
+    -fx-font-family: 'Pixelify Sans', sans-serif;
+    font-family: 'Pixelify Sans', sans-serif;
 }
+

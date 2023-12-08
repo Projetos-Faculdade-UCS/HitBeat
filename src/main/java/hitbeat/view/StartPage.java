@@ -6,32 +6,35 @@ import hitbeat.controller.tracks.TracksController;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 public class StartPage extends Pane implements BaseView {
 
     private Label contentLabel;
-    private int labalHighDiff = 0;
     private VBox tutorialCard;
     private TracksController tracksController = new TracksController();
 
     public StartPage() {
         VBox content = new VBox();
         content.setAlignment(javafx.geometry.Pos.CENTER);
-        content.setSpacing(10);
+        content.setSpacing(20);
 
         content.getStyleClass().add("content");
         
-
-        contentLabel = new Label("Bem vindo ao HitBeat!");
+        contentLabel = new Label("Seja bem vindo!");
         contentLabel.getStyleClass().add("welcome-text-label");
         this.getChildren().add(content);
-        content.getChildren().addAll(getTitle(),getFogueira());
+
+        HBox fogueiraBox = new HBox();
+        fogueiraBox.setAlignment(javafx.geometry.Pos.CENTER);
+        fogueiraBox.getChildren().addAll(getFogueira(), contentLabel);
+        fogueiraBox.setSpacing(10);
+        content.getChildren().addAll(getTitle(),fogueiraBox);
 
         if (tracksController.fetchAll().size() == 0) {
             content.getChildren().add(getTutorialCard());
-            labalHighDiff = 100;
         }
 
         // add stylesheets
@@ -47,7 +50,10 @@ public class StartPage extends Pane implements BaseView {
         return null;
     }
 
-    public VBox getTutorialCard() {
+    public HBox getTutorialCard() {
+        HBox tutorialCardBox = new HBox();
+        tutorialCardBox.setAlignment(javafx.geometry.Pos.CENTER);
+        
         tutorialCard = new VBox();
         tutorialCard.setSpacing(10);
         tutorialCard.getStyleClass().add("tutorial-card");
@@ -59,15 +65,15 @@ public class StartPage extends Pane implements BaseView {
                 "1. Entre em 'Minha Biblioteca'.\n2. Adicione uma pasta.\n3. Clique no disquete para salvar.");
         tutorialContentLabel.getStyleClass().addAll("tutorial-content-label", "main-text");
         tutorialCard.getChildren().addAll(tutorialLabel, tutorialContentLabel);
-
-        return tutorialCard;
+        
+        tutorialCardBox.getChildren().add(tutorialCard);
+        return tutorialCardBox;
     }
 
     public ImageView getFogueira(){
         Image fogueiraImg = new Image("/hitbeat/gifs/bonfire8.gif");
         ImageView fogueira = new ImageView(fogueiraImg);
-        fogueira.setFitHeight(200);
-        fogueira.setFitWidth(200);
+        fogueira.setFitHeight(80);
         fogueira.setPreserveRatio(true);
         //center de fogueira
         fogueira.setLayoutX(0);
@@ -76,9 +82,10 @@ public class StartPage extends Pane implements BaseView {
     }
 
     public ImageView getTitle(){
-        Image titleImg = new Image("/hitbeat/images/hitbeat-title.png");
+        Image titleImg = new Image("/hitbeat/images/hitbeat-title2.png");
         ImageView title = new ImageView(titleImg);
-        title.setFitHeight(150);
+        // bind title width to window width
+        title.fitWidthProperty().bind(this.widthProperty());
         title.setPreserveRatio(true);
         //center de title
         title.setLayoutX(0);
