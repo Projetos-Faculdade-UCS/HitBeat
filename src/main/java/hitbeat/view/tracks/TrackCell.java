@@ -118,6 +118,8 @@ public class TrackCell extends BaseCell<Track> {
                 subtitle.setText(this.track.getAlbum().getArtist().getName()); // Update if Track has more data
             }
             favoriteBtn.setGraphic(icons.getFavorite(this.track.isFavorite()));
+            Track playing = PlayerController.getInstance().getTrack();
+            setPlayBox(this.track.myEquals(playing));
         } else {
             title.setText("");
             subtitle.setText("");
