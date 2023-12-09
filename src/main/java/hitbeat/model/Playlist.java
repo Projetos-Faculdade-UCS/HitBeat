@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 
 import hitbeat.util.HibernateUtil;
@@ -29,7 +30,10 @@ import lombok.With;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "Playlist")
-@NamedQuery(name = "Playlist.getTracks", query = "SELECT pt.track FROM PlaylistTrack pt WHERE pt.playlist = :playlist")
+@NamedQueries({
+    @NamedQuery(name = "Playlist.getTracks", query = "SELECT pt.track FROM PlaylistTrack pt WHERE pt.playlist = :playlist"),
+    @NamedQuery(name = "Playlist.delete", query = "DELETE FROM Playlist p WHERE p = :playlist")
+})
 public class Playlist extends BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -74,6 +78,17 @@ public class Playlist extends BaseModel {
 
     public Playlist(String name) {
         this.name = name;
+    }
+
+    public Playlist(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    public Playlist(String name, String description, byte[] cover) {
+        this.name = name;
+        this.description = description;
+        this.cover = cover;
     }
 
     public Playlist(String name, String description, byte[] cover, Date pubDate, Set<PlaylistTrack> playlistTracks) {

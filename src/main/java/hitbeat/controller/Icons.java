@@ -37,4 +37,20 @@ public class Icons {
     public SVGWidget getAlbum(){
         return new SVGWidget("/hitbeat/svg/album.svg", 15, Color.WHITE);
     }
+
+    public SVGWidget getLib(){
+        return new SVGWidget("/hitbeat/svg/library.svg", 15, Color.WHITE);
+    }
+
+    public SVGWidget getSave(){
+        return new SVGWidget("/hitbeat/svg/save.svg", 20, Color.WHITE);
+    }
+    
+    public SVGWidget getDelete(){
+        return new SVGWidget("/hitbeat/svg/trash.svg", 15, Color.WHITE);
+    }
+
+    public SVGWidget getEdit(){
+        return new SVGWidget("/hitbeat/svg/pencil-square.svg", 30, Color.WHITE);
+    }
 }

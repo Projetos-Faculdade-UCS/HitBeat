@@ -1,51 +1,28 @@
 package hitbeat.view.playlists;
 
+import java.util.Map;
+
 import hitbeat.controller.playlist.PlaylistController;
 import hitbeat.model.Playlist;
-import hitbeat.model.Track;
-import hitbeat.view.BaseView;
-import hitbeat.view.base.widgets.listview.ListView;
-import hitbeat.view.tracks.TrackCell;
-import io.github.palexdev.materialfx.controls.MFXScrollPane;
-import javafx.collections.ObservableList;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
+import hitbeat.view.base.widgets.generic_list.GenericTrackList;
 
-public class DetailPlaylist extends MFXScrollPane implements BaseView{
-    private ObservableList<Track> tracks;
+public class DetailPlaylist extends GenericTrackList {
     private final PlaylistController controller = new PlaylistController();
     private Playlist playlist;
 
     public DetailPlaylist(Playlist playlist) {
-        super(null);
+        super();
         this.playlist = playlist;
-        tracks = controller.getAllTracks(playlist);
-
-        ListView<Track> listView = new ListView<>(tracks, track -> {
-            return new TrackCell(track);
-        });
-
-        listView.setItems(tracks);
-
-        HBox playlistHeader = new HBox();
-        playlistHeader.setPrefHeight(50);
-        Text title = new Text(playlist.getName());
-        title.setFill(Color.WHITE);
-        title.setStyle("-fx-font-weight: bold; -fx-font-size: 24;");
-        playlistHeader.getChildren().add(title);
-
-        this.setContent(new VBox(playlistHeader, listView));
-
-        // grow this pane to fill the parent
-        this.setFitToWidth(true);
-        this.setFitToHeight(true);
+        this.setTracks(controller.getAllTracks(playlist));
     }
 
     @Override
-    public Object getData() {
-        return this.playlist;
+    public Map<String, Object> getData() {
+        Map<String, Object> data = super.getData();
+
+        data.put("playlist", playlist);
+
+        return data;
     }
 
 }

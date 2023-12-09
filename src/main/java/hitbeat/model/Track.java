@@ -109,4 +109,11 @@ public class Track extends BaseModel {
         return this.album.getCover();
     }
 
+    public boolean myEquals(Track track) {
+        if (track == null) {
+            return false;
+        }
+        return this.filePath.equals(track.getFilePath());
+    }
+
 }

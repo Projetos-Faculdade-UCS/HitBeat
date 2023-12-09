@@ -1,5 +1,7 @@
 package hitbeat.view;
 
+import java.util.Map;
+
 public interface BaseView {
-    Object getData();
+    Map<String, Object> getData();
 }

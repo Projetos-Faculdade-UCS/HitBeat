@@ -1,5 +1,8 @@
 package hitbeat.view.tracks;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import hitbeat.controller.Icons;
 import hitbeat.controller.MioloController;
 import hitbeat.controller.player.PlayerController;
@@ -8,32 +11,41 @@ import hitbeat.controller.tracks.TracksController;
 import hitbeat.model.Playlist;
 import hitbeat.model.Track;
 import hitbeat.view.base.utils.MyButton;
-import hitbeat.view.base.utils.MyContextMenu;
-import hitbeat.view.base.utils.MyMenu;
-import hitbeat.view.base.utils.MyMenuItem;
 import hitbeat.view.base.widgets.ListTile;
 import hitbeat.view.base.widgets.RoundedButton;
 import hitbeat.view.base.widgets.SVGWidget;
 import hitbeat.view.base.widgets.listview.BaseCell;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 
 public class TrackCell extends BaseCell<Track> {
     private Track track;
-    private Label titleLabel;
-    private Label subtitleLabel;
+    private Label title;
+    private Label subtitle;
     private MyButton favoriteBtn;
+    private ContextMenu contextMenu;
+    private StackPane playbox;
+    private RoundedButton playBtn;
+    private ImageView flamesView;
     private Icons icons = new Icons();
     private PlaylistController playlistController = new PlaylistController();
     private MioloController mioloController = MioloController.getInstance();
     private TracksController tracksController = new TracksController();
+    private BehaviorSubject<Track> trackRemovedSubject = BehaviorSubject.create();
 
     public TrackCell(Track track) {
         // Initialize UI components
@@ -45,30 +57,55 @@ public class TrackCell extends BaseCell<Track> {
 
     private void initUI() {
         // Create Leading
-        RoundedButton playBtn = new RoundedButton("");
-        SVGWidget svgPlay = new SVGWidget("/hitbeat/svg/play.svg", 25, Color.WHITE);
-        playBtn.setGraphic(svgPlay);
-
-        StackPane playbox = new StackPane(playBtn);
+        playbox = new StackPane();
         VBox.setVgrow(playbox, Priority.ALWAYS);
-
         playbox.setAlignment(Pos.CENTER);
         playbox.setPickOnBounds(false);
 
+        playBtn = new RoundedButton("");
+        SVGWidget svgPlay = new SVGWidget("/hitbeat/svg/play.svg", 25, Color.WHITE);
+        playBtn.setGraphic(svgPlay);
         playBtn.setOnMouseClicked(event -> {
-            PlayerController.getInstance().playSingleTrack(this.track);
+            // get data must return a list of tracks
+            Object data = mioloController.getCurrentState().getData().get("tracks");
+            if (data instanceof List) {
+                // deep copy
+                List<Track> tracks = new ArrayList<>((List<Track>) data);
+                PlayerController.getInstance().play(tracks, this.track);
+            }
         });
 
-        // Create Title
-        titleLabel = new Label();
-        titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16; -fx-text-fill: white;");
+        Image flames = new Image("/hitbeat/gifs/FIREBALL.gif");
+        flamesView = new ImageView(flames);
+        flamesView.getStyleClass().add("flames");
+        flamesView.setOpacity(0.6);
+        flamesView.setPreserveRatio(true);
+        flamesView.setFitHeight(30);
+        flamesView.setFitWidth(30);
 
-        // Create Subtitle
-        subtitleLabel = new Label();
-        subtitleLabel.setStyle("-fx-font-size: 14; -fx-text-fill: white;");
 
-        ListTile listTile = new ListTile(playbox, titleLabel, subtitleLabel, getMenuBtns());
+        title = new Label();
+        subtitle = new Label();
+        
+        title.getStyleClass().add("title");
+        subtitle.getStyleClass().add("subtitle");
+        setPlayBox(false);
+        ListTile listTile = new ListTile(playbox, title, subtitle, getMenuBtns());
         this.getChildren().add(listTile);
+        this.getStylesheets().add(getClass().getResource("/hitbeat/css/track.css").toExternalForm());
+
+        PlayerController.getInstance().setOnStatusChange(status -> {
+            if (this.track == null) return;
+        
+            Track playing = PlayerController.getInstance().getTrack();
+            boolean isPlaying = this.track.myEquals(playing);
+            setPlayBox(status == MediaPlayer.Status.PLAYING && isPlaying);
+        });
+
+    }
+
+    public void setOnTrackRemoved(Consumer<Track> consumer) {
+        trackRemovedSubject.subscribe(consumer);
     }
 
     @Override
@@ -76,14 +113,16 @@ public class TrackCell extends BaseCell<Track> {
         this.track = track;
 
         if (track != null) {
-            titleLabel.setText(this.track.getName());
+            title.setText(this.track.getName());
             if (this.track.getAlbum().getArtist() != null) {
-                subtitleLabel.setText(this.track.getAlbum().getArtist().getName()); // Update if Track has more data
+                subtitle.setText(this.track.getAlbum().getArtist().getName()); // Update if Track has more data
             }
             favoriteBtn.setGraphic(icons.getFavorite(this.track.isFavorite()));
+            Track playing = PlayerController.getInstance().getTrack();
+            setPlayBox(this.track.myEquals(playing));
         } else {
-            titleLabel.setText("");
-            subtitleLabel.setText("");
+            title.setText("");
+            subtitle.setText("");
         }
     }
 
@@ -93,37 +132,29 @@ public class TrackCell extends BaseCell<Track> {
         favoriteBtn = new MyButton("", icons.getFavorite(false));
         MyButton optionsBtn = new MyButton("", trailingIcon);
 
-        MyContextMenu contextMenu = new MyContextMenu();
-        MyMenu addMenu = new MyMenu("Adicionar à playlist");
-
-        addMenu.getItems().add(new MenuItem("")); // nodo ancora
-        addMenu.setOnShowing(event -> {
-            addMenu.getItems().clear();
-            playlistController.fetchAll().forEach(playlist -> {
-                MyMenuItem item = new MyMenuItem(playlist.getName());
-                item.setOnAction(event1 -> {
-                    playlistController.addTrack(playlist, this.track);
-                });
-                addMenu.getItems().add(item);
-            });
-        });
+        contextMenu = new ContextMenu();
+        contextMenu.setAnchorLocation(ContextMenu.AnchorLocation.CONTENT_BOTTOM_RIGHT);
+        
         favoriteBtn.setOnMouseClicked(event -> {
             tracksController.toggleFavorite(this.track);
             favoriteBtn.setGraphic(icons.getFavorite(this.track.isFavorite()));
         });
-        contextMenu.getItems().addAll(addMenu);
-    
-        MyMenuItem removeItem = new MyMenuItem("Remover desta playlist");
-        Object data1 = mioloController.getCurrentState().getData();
+
+        contextMenu.getItems().add( this.getMenuAdd() );
+
+        MenuItem removeItem = new MenuItem("Remover da playlist");
+        Object data1 = mioloController.getCurrentState().getData().get("playlist");
+
         if (data1 instanceof Playlist) {
+            removeItem.getStyleClass().add("custom-menu-item");
             contextMenu.getItems().add(removeItem);
         }
         removeItem.setOnAction(event -> {
-            Object data = mioloController.getCurrentState().getData();
+            Object data = mioloController.getCurrentState().getData().get("playlist");
             if (data instanceof Playlist) {
                 Playlist playlist = (Playlist) data;
                 playlistController.removeTrack(playlist, this.track);
-                mioloController.loadPlayListDetailView(playlist);
+                trackRemovedSubject.onNext(track);
             }
         });
 
@@ -131,7 +162,42 @@ public class TrackCell extends BaseCell<Track> {
             contextMenu.show(optionsBtn, event.getScreenX(), event.getScreenY());
         });
         HBox menuBtns = new HBox(favoriteBtn, optionsBtn);
-
+        menuBtns.setAlignment(Pos.CENTER);
         return menuBtns;
+    }
+
+    public Menu getMenuAdd() {
+        Menu addMenu = new Menu("Adicionar à playlist");
+        addMenu.getStyleClass().add("custom-menu");
+
+        addMenu.getItems().add(new MenuItem("")); // nodo ancora
+        addMenu.setOnShowing(event -> {
+            addMenu.getItems().clear();
+            playlistController.fetchAll().forEach(playlist -> {
+                MenuItem item = new MenuItem(playlist.getName());
+                item.setOnAction(event1 -> {
+                    playlistController.addTrack(playlist, this.track);
+                });
+                
+                item.getStyleClass().add("custom-menu-item");
+                addMenu.getItems().add(item);
+            });
+        });
+
+        return addMenu;
+    }
+
+    public void setPlayBox(boolean isPlaying) {
+        if (isPlaying) {
+            title.getStyleClass().remove("title-playing");
+            title.getStyleClass().add("title-playing");
+            playbox.getChildren().clear();
+            playbox.getChildren().add(flamesView);
+
+        }else{
+            title.getStyleClass().remove("title-playing");
+            playbox.getChildren().clear();
+            playbox.getChildren().add(playBtn);
+        }
     }
 }

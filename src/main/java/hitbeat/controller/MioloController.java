@@ -1,24 +1,19 @@
 package hitbeat.controller;
 
-import hitbeat.model.Playlist;
+import java.util.Stack;
+
 import hitbeat.view.StartPage;
-import hitbeat.view.artists.ArtistsView;
 import hitbeat.view.base.widgets.FloatingActionButton;
 import hitbeat.view.base.widgets.Miolo;
-import hitbeat.view.favorites.FavoritesView;
-import hitbeat.view.genres.GenresView;
-import hitbeat.view.library.LibraryPage;
-import hitbeat.view.playlists.CreatePlaylist;
-import hitbeat.view.playlists.DetailPlaylist;
-import hitbeat.view.playlists.PlaylistView;
-import hitbeat.view.tracks.TracksView;
 import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import javafx.application.Platform;
+import javafx.scene.Node;
 
 public class MioloController {
     private BehaviorSubject<MioloState> contentChangedSubject = BehaviorSubject.create();
     private Miolo miolo;
+    private Stack<MioloStateMemento> mementoStack = new Stack<>();
 
     private MioloController() {
     }
@@ -49,51 +44,35 @@ public class MioloController {
 
     public void loadStartPage() {
         StartPage startPage = new StartPage();
-        updateMiolo(new MioloState(startPage, "index", "Início"));
+
+        MioloState state = new MioloState(startPage, "index", "Início");
+
+        
+            mementoStack.clear();
+
+            MioloStateMemento memento = state.createMemento();
+            mementoStack.push(memento);
+
+        updateMiolo(state, true);
     }
 
-    public void loadTracksView() {
-        TracksView tracksView = new TracksView();
-        updateMiolo(new MioloState(tracksView, "tracks", "Todas"));
+    public void push(Node node, String identifier, String title) {
+        MioloState state = new MioloState(node, identifier, title);
+        updateMiolo(state);
     }
 
-    public void loadGenresView() {
-        GenresView genresView = new GenresView();
-        updateMiolo(new MioloState(genresView, "genres", "Gêneros"));
+    public void push(Node node, String identifier, String title, FloatingActionButton fab) {
+        MioloState state = new MioloState(node, identifier, title, fab);
+        updateMiolo(state);
     }
 
-    public void loadLibraryView() {
-        LibraryPage libraryPage = new LibraryPage();
-        updateMiolo(new MioloState(libraryPage, "library", "Minha Biblioteca"));
-    }
+    private void updateMiolo(MioloState updatedContent, boolean... isStartPage) {
+        MioloState currentState = getCurrentState();
+        if (currentState != null && isStartPage.length == 0) {
+            mementoStack.push(currentState.createMemento());
+        }
 
-    public void loadArtistsView() {
-        ArtistsView artistsView = new ArtistsView();
-        updateMiolo(new MioloState(artistsView, "artists", "Artistas"));
-    }
-
-    public void loadPlaylistsView() {
-        PlaylistView playlistsView = new PlaylistView();
-        updateMiolo(new MioloState(playlistsView, "playlists", "Playlists", playlistsView.getFab()));
-    }
-
-    public void loadPlaylistCreateView() {
-        CreatePlaylist createPlaylist = new CreatePlaylist();
-        updateMiolo(new MioloState(createPlaylist, "createPlaylist", "Criar Playlist"));
-    }
-
-    public void loadPlayListDetailView(Playlist playlist) {
-        DetailPlaylist detailPlaylist = new DetailPlaylist(playlist);
-        updateMiolo(new MioloState(detailPlaylist, "detailPlaylist", playlist.getName()));
-    }
-
-    public void loadFavoritesView() {
-        FavoritesView favoritesView = new FavoritesView();
-        updateMiolo(new MioloState(favoritesView, "favorites", "Favoritas"));
-    }
-
-    private void updateMiolo(MioloState updatedContent) {
-        updatedContent.setShowBackButton(true);
+        updatedContent.setShowBackButton(mementoStack.size() > 1);
         contentChangedSubject.onNext(updatedContent);
     }
 
@@ -103,5 +82,26 @@ public class MioloController {
 
     public MioloState getCurrentState() {
         return contentChangedSubject.getValue();
+    }
+
+    public void restoreFromMemento() {
+        if (mementoStack.size() < 1) {
+            return;
+        }
+        MioloStateMemento memento = mementoStack.pop();
+        MioloState mioloState = new MioloState(memento.getContent(), memento.getIdentifier(), memento.getTitle(),
+                memento.getFab());
+        mioloState.setShowBackButton(memento.getShowBackButton());
+        contentChangedSubject.onNext(mioloState);
+    }
+
+    public void replace(MioloState mioloState) {
+        if (mementoStack.size() < 1) {
+            return;
+        }
+        mementoStack.pop();
+        
+        mioloState.setShowBackButton(mementoStack.size() > 1);
+        contentChangedSubject.onNext(mioloState);
     }
 }

@@ -29,6 +29,10 @@ public class FloatingActionButton extends Pane {
         button.setGraphic(new ImageView(icon));
     }
 
+    public void setIcon(SVGWidget icon) {
+        button.setGraphic(icon);
+    }
+
     public void setOnAction(EventHandler<ActionEvent> action) {
         button.setOnAction(action);
     }

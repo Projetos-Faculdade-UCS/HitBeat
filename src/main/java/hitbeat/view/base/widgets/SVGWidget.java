@@ -83,6 +83,7 @@ public class SVGWidget extends StackPane {
 
         for (String path : paths) {
             svgPath = new SVGPath();
+            svgPath.getStyleClass().add("svg-path");
             svgPath.setContent(path);
 
             double scaleX = width / svgPath.getBoundsInLocal().getWidth();

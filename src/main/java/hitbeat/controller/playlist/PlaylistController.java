@@ -2,6 +2,7 @@ package hitbeat.controller.playlist;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import hitbeat.controller.ModelController;
 import hitbeat.dao.PlaylistDAO;
@@ -10,9 +11,12 @@ import hitbeat.model.Playlist;
 import hitbeat.model.PlaylistTrack;
 import hitbeat.model.Track;
 import hitbeat.util.HibernateUtil;
+import hitbeat.util.Image2Bytes;
 import jakarta.persistence.EntityManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.image.Image;
+import javafx.stage.FileChooser;
 
 public class PlaylistController extends ModelController<Playlist>{
     public PlaylistController(){
@@ -27,9 +31,13 @@ public class PlaylistController extends ModelController<Playlist>{
         return FXCollections.observableArrayList(getDao().getAllTracks(playlist));
     }
 
-    public void createPlaylist(String name){
+    public void createPlaylist(String name, String description, Image image){
+        byte[] cover = null;
+        if (image != null) {
+            cover = Image2Bytes.convertImageToBytes(image);
+        }
         List<Playlist> playlists = new ArrayList<>();
-        playlists.add(new Playlist(name));
+        playlists.add(new Playlist(name, description, cover));
         getDao().bulkCreateOrUpdate(playlists, "name");
     }
 
@@ -50,5 +58,21 @@ public class PlaylistController extends ModelController<Playlist>{
                 .executeUpdate();
         em.getTransaction().commit();
 
+    }
+
+    public Optional<Image> getImageFromDisk(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Imagens", "*.png", "*.jpg", "*.jpeg"));
+        return Optional.ofNullable(new Image(fileChooser.showOpenDialog(null).toURI().toString()));
+        
+    }
+
+    public void delete(Playlist playlist) {
+        EntityManager em = HibernateUtil.getEntityManager();
+        em.getTransaction().begin();
+        em.createNamedQuery("Playlist.delete")
+                .setParameter("playlist", playlist)
+                .executeUpdate();
+        em.getTransaction().commit();
     }
 }

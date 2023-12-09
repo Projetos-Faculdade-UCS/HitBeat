@@ -7,7 +7,7 @@
     -fx-background-color: transparent;
     background-color: transparent;
     -mfx-background-color: transparent;
-    -fx-text-fill: white !important;
+    -fx-text-fill: white ;
 }
 
 .text-field-title {
@@ -49,8 +49,8 @@
 
 .library-page .button-raised {
     /* Your button styles here */
-    -fx-background-color: -main-color;
-    background-color: -main-color;
+    -fx-background-color: -hitbeat-main-color;
+    background-color: -hitbeat-main-color;
     -fx-text-fill: white;
 }
 
@@ -72,8 +72,8 @@
 .drag-and-drop.drag-over {
     -fx-background-color: #443F3F;
     background-color: #443F3F;
-    -fx-border-color: #8A2BE2;
-    border-color: #8A2BE2;
+    -fx-border-color: -hitbeat-main-color;
+    border-color: -hitbeat-main-color;
     -fx-border-width: 1px;
     border-width: 1px;
     -fx-border-radius: 10px;

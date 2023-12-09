@@ -1,21 +1,16 @@
 package hitbeat;
 
 import hitbeat.util.HibernateUtil;
-import hitbeat.view.IndexView;
+import hitbeat.view.MainApp;
 
-/**
- * Hello world!
- *
- */
 public class App {
     public static void main(String[] args) {
+
+        // Add shutdown hook to gracefully shutdown Hibernate
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             HibernateUtil.shutdown();
         }));
-
-        HibernateUtil.init();
-        IndexView.main(args);
-
-        HibernateUtil.shutdown();
+        MainApp.main(args);
     }
+
 }

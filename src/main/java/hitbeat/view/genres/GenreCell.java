@@ -1,5 +1,6 @@
 package hitbeat.view.genres;
 
+import hitbeat.controller.MioloController;
 import hitbeat.controller.player.PlayerController;
 import hitbeat.model.Genre;
 import hitbeat.view.base.widgets.Cover;
@@ -24,7 +25,7 @@ public class GenreCell extends BaseCell<Genre> {
 
     private void initUI() {
         cover = new Cover();
-        cover.setFit(50);
+        cover.setFit(100);
 
         cover.setOnMouseClicked(event -> {
             PlayerController.getInstance().play(this.genre);
@@ -35,11 +36,11 @@ public class GenreCell extends BaseCell<Genre> {
         titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16; -fx-text-fill: white;");
 
         // Create Subtitle
-        subtitleLabel = new Label();
+        subtitleLabel = new Label("");
         subtitleLabel.setStyle("-fx-font-size: 14; -fx-text-fill: white;");
 
         // Create Trailing
-        trailingLabel = new Label();
+        trailingLabel = new Label("");
         trailingLabel.setStyle("-fx-font-size: 14; -fx-text-fill: white;");
 
         ListTile listTile = new ListTile(cover, titleLabel, subtitleLabel, trailingLabel);
@@ -54,6 +55,11 @@ public class GenreCell extends BaseCell<Genre> {
         this.setOnMouseExited(e -> {
             cover.showPlayButton(false);
         });
+
+        this.setOnMouseClicked(event -> {
+            if (!cover.isMouseOverPlayButton())
+                MioloController.getInstance().push(new GenreDetail(genre), "genres", genre.getName());
+        });
     }
 
     @Override
@@ -62,8 +68,8 @@ public class GenreCell extends BaseCell<Genre> {
 
         if (genre != null) {
             titleLabel.setText(this.genre.getName());
-            subtitleLabel.setText("Subtitle text here"); // Update if Genre has more data
-            trailingLabel.setText("Trail"); // Update if Genre has more data
+            subtitleLabel.setText(""); // Update if Genre has more data
+            trailingLabel.setText(""); // Update if Genre has more data
 
             cover.setCoverImage(this.genre.getCover(50));
         } else {

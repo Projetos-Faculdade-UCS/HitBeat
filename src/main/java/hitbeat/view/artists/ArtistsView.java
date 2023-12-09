@@ -1,5 +1,7 @@
 package hitbeat.view.artists;
 
+import java.util.Map;
+
 import hitbeat.controller.artists.ArtistsController;
 import hitbeat.model.Artist;
 import hitbeat.view.BaseView;
@@ -7,7 +9,7 @@ import hitbeat.view.base.widgets.listview.ListView;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import javafx.collections.ObservableList;
 
-public class ArtistsView extends MFXScrollPane implements BaseView{
+public class ArtistsView extends MFXScrollPane implements BaseView {
     private ObservableList<Artist> artists;
     private final ArtistsController controller = new ArtistsController();
 
@@ -23,11 +25,10 @@ public class ArtistsView extends MFXScrollPane implements BaseView{
         this.getStyleClass().add("transparent");
         this.setFitToWidth(true);
         this.setFitToHeight(true);
- 
     }
 
     @Override
-    public Object getData() {
-        return null;
+    public Map<String, Object> getData() {
+        return Map.of("artists", artists);
     }
 }
